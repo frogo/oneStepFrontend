@@ -1,28 +1,31 @@
 import axios from 'axios'
 // import { Message } from 'element-ui'
+
+const httpClient = axios.create()
 // 环境转换
 if (process.env.NODE_ENV === 'development') {
-  axios.defaults.baseURL = ''
+  httpClient.defaults.baseURL = ''
 } else if (process.env.NODE_ENV === 'debug') {
-  axios.defaults.baseURL = ''
+  httpClient.defaults.baseURL = ''
 } else if (process.env.NODE_ENV === 'production') {
-  axios.defaults.baseURL = ''
+  httpClient.defaults.baseURL = ''
 }
+
 // 请求超时秒数
-axios.defaults.timeout = 10000
+httpClient.defaults.timeout = 1000 * 2
 
 // 携带cookies
-axios.defaults.withCredentials = true
+httpClient.defaults.withCredentials = true
 
 // post请求头
 
-axios.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
+httpClient.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
 /**
  * 请求拦截器
  * @param  {Object} config  config
  * @return {Promise}        Promise
  */
-axios.interceptors.request.use(config => {
+httpClient.interceptors.request.use(config => {
   // if (config.method === 'post') {
   //   if (config.url.indexOf('cooperate-case-server') > 0) { // 协同接口application/json
   //     config.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
@@ -40,7 +43,7 @@ axios.interceptors.request.use(config => {
  * @param  {Object} response response
  * @return {Promise}         Promise
  */
-axios.interceptors.response.use(function (response) {
+httpClient.interceptors.response.use(function (response) {
   // if (response.data.ret && response.data.ret === 302) {
   //   location.href = response.data.redirectUrl
   // }
@@ -56,12 +59,13 @@ axios.interceptors.response.use(function (response) {
  */
 export function get (url, params) {
   return new Promise((resolve, reject) => {
-    axios.get(url, {
+    httpClient.get(url, {
+      timeout: 1000 * 1,
       params: params
     }).then(res => {
       resolve(res.data)
     }).catch(err => {
-      reject(err.response.statusText)
+      reject(err)
     })
   })
 }
@@ -72,13 +76,13 @@ export function get (url, params) {
  */
 export function post (url, params) {
   return new Promise((resolve, reject) => {
-    axios.post(url, params)
+    httpClient.post(url, params)
       .then(res => {
         resolve(res.data)
       })
       .catch(err => {
-        reject(err.response.statusText)
+        reject(err)
       })
   })
 }
-export default axios
+export default httpClient

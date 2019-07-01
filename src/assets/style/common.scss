@@ -1,4 +1,46 @@
 
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409EFF;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
+.el-header{
+  background: #ededed;
+  .topBar{
+    width:1200px;
+    margin: 0 auto;
+    line-height: 48px;
+    ul.nav li{
+      display: inline-block;
+      padding: 0 2em;
+      font-size: 16px;
+      a{
+        display: inline-block;
+        color:#333;
+        text-decoration: none;
+        padding: 0 0.8em;
+        height:47px;
+        &.active,&:hover{
+          color:#EF6520;
+          border-bottom: 3px solid #EF6520;
+        }
+      }
+    }
+    .user{
+      span{
+        i{color:#a0a0a0;}
+        &.arrow{cursor: pointer}
+      }
+    }
+  }
+
+}
+.el-footer{background: #4c4c4c;height:100px}
+.el-footer p{line-height: 100px;color:#fff;text-align: center;font-family: "Microsoft YaHei";}
+
+
 /* Scrollbar */
 
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/

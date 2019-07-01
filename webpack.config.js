@@ -26,30 +26,30 @@ module.exports = {
     // Package path
     path: prod ? path.resolve(__dirname, 'dist') : path.resolve(__dirname, 'dist'),
     // Server access address
-    publicPath: prod ? '/' : '/',
+    publicPath: prod ? './' : '/',
     // Scripts file name
     filename: prod ? 'scripts/[chunkhash].js' : '[name].js?[hash:8]'
   },
   // Setting mode
   mode: prod ? 'production' : 'development',
   // source-map
-  devtool: prod ? '' : 'eval-source-map',
+  devtool: prod ? 'eval-source-map' : 'eval-source-map',
   devServer: {
     host: 'localhost',
-    port: 3000,
+    port: 3003,
     open: true,
     proxy: {
-      // '/api/flow': { // 工作流
-      //   // Real api
-      //   target: 'http://172.31.46.68:8099',
-      //   changeOrigin: true
-      // },
-      // '/cooperate-case-server': {// 协同
-      //   // Real api
-      //   target: 'http://172.31.237.106:5544',
-      //   // target: 'http://10.4.137.207:8082',
-      //   changeOrigin: true
-      // }
+      '/express/': { //
+        // Real api
+        target: 'http://localhost:3999',
+        changeOrigin: true
+      },
+      '/cooperate-case-server': {// 协同
+        // Real api
+        target: 'http://172.31.237.106:5544',
+        // target: 'http://10.4.137.207:8082',
+        changeOrigin: true
+      }
     },
     // vue-devtools open .vue file
     before (app) {
