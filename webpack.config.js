@@ -96,7 +96,12 @@ module.exports = {
         use: [
           prod ? MiniCssExtractPlugin.loader : 'vue-style-loader',
           prod ? 'css-loader' : 'css-loader?sourceMap',
-          prod ? 'sass-loader' : 'sass-loader?sourceMap',
+          {
+            loader: prod ? 'sass-loader' : 'sass-loader?sourceMap',
+            options: {
+              implementation: require('sass')
+            }
+          },
           {
             // https://stylelint.io/user-guide/configuration/#ignorefiles
             loader: prod ? 'postcss-loader' : 'postcss-loader?sourceMap'
