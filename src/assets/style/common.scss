@@ -1,4 +1,11 @@
+/* 改变主题色变量 */
+$--color-primary: #EF6520;
 
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "~element-ui/packages/theme-chalk/src/index";
+a{text-decoration: none}
 .el-dropdown-link {
   cursor: pointer;
   color: #409EFF;
@@ -37,9 +44,66 @@
   }
 
 }
-.el-footer{background: #4c4c4c;height:100px}
-.el-footer p{line-height: 100px;color:#fff;text-align: center;font-family: "Microsoft YaHei";}
+.el-footer{background: #4c4c4c;}
+.el-footer p{color:#949494;font-size: 12px; line-height:2em;text-align: center;margin-top: 20px}
+.el-main{width:1200px;margin: 0 auto}
+.home-title{text-align: center;margin: 2em 0}
 
+
+.page-register{
+  .el-main{
+    box-shadow: 0px 0px 5px #888888;
+    margin: 15px auto;
+    .register-box{
+      position: relative;
+      h2{font-size: 26px}
+      .title{margin: 25px 0;height:1px;position:relative;background:#f3f3f3;
+        span{display: inline-block;position: absolute;top:-10px;background: #fff;padding-right: 1em;color:$--color-primary}
+      }
+      .el-input{width:55%}
+      p.sub-text{color:#c1c1c1;font-size: 12px;line-height:2em}
+      .qr-code{position: absolute;right:200px;top:100px;color:#c1c1c1;font-size: 12px;line-height: 1.5em;text-align: center }
+    }
+  }
+
+}
+.page-login{
+
+  .el-main{
+    width:100%;border: none;
+    min-height: calc(100vh - 185px);
+    padding: 0;
+    .login-wrap{
+      width:100%;height: 475px;background: #000;
+      .login-banner{
+        width:1200px;margin: 0px auto;
+        position: relative;
+        .text{width:420px;height:80px;position: absolute;top:150px;left:300px;line-height: 2.5em;
+          p.cn{font-size: 36px;color:#fff;}
+          p.en{font-size: 18px;color:#bfbfbf}
+        }
+        .login-box{
+          width:330px;
+          background: #ccc;
+          position: absolute;
+          right:0;
+          top:50px;
+          padding: 25px 25px 0 25px;
+          border-radius: 5px;
+          h2{margin-bottom: 25px}
+          .small_spacing{margin-bottom: 10px}
+          .register{text-align: center}
+          .el-checkbox__input.is-checked + .el-checkbox__label{color:#666}
+          .forgot_password{ float: right}
+          .username_icon{width: 20px;height: 40px;display: inline-block; background: url("../img/username.png")  no-repeat center center;}
+          .password_icon{width: 20px;height: 40px;display: inline-block; background: url("../img/password.png")  no-repeat center center;}
+          a{color:#4771d4}
+        }
+      }
+    }
+
+  }
+}
 
 /* Scrollbar */
 
