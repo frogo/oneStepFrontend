@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "onestepfrontend",
   "version": "1.0.0",
   "description": "一步网前端",
@@ -35,8 +35,7 @@
     "sass": "^1.22.3",
     "vue": "^2.6.8",
     "vue-router": "^3.0.2",
-    "vuex": "^3.1.0",
-    "zf-frontend-lib": "git+http://pl.git.iflytek.com/vision/zf-frontend-lib.git"
+    "vuex": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
