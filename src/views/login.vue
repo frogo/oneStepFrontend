@@ -5,8 +5,8 @@
         <div class="topBar">
           <el-row :gutter="20">
             <el-col :span="4">
-              <div class="grid-content bg-purple">
-                logo
+              <div class="logo-box">
+                <a href="/"><img src="@/assets/img/logo.png"></a>
               </div>
             </el-col>
             <el-col :span="20" />

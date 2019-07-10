@@ -39,15 +39,9 @@ module.exports = {
     port: 3003,
     open: true,
     proxy: {
-      '/express/': { //
+      '/api/': { //
         // Real api
         target: 'http://localhost:3999',
-        changeOrigin: true
-      },
-      '/cooperate-case-server': {// 协同
-        // Real api
-        target: 'http://172.31.237.106:5544',
-        // target: 'http://10.4.137.207:8082',
         changeOrigin: true
       }
     },

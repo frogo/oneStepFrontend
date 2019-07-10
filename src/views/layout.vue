@@ -4,8 +4,8 @@
       <div class="topBar">
         <el-row :gutter="20">
           <el-col :span="4">
-            <div class="grid-content bg-purple">
-              logo
+            <div class="logo-box">
+              <a href="/"><img src="@/assets/img/logo.png"></a>
             </div>
           </el-col>
           <el-col :span="16">
@@ -16,7 +16,7 @@
             </ul>
           </el-col>
           <el-col :span="4">
-            <div class="user">
+            <div v-if="user" class="user">
               <span><i class="el-icon-user-solid" /></span>
               <span>杨帆</span>
               <el-dropdown>
@@ -25,7 +25,9 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item>个人中心</el-dropdown-item>
-                  <el-dropdown-item>退出登录</el-dropdown-item>
+                  <el-dropdown-item @click="logout">
+                    退出登录
+                  </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </div>
@@ -47,11 +49,11 @@
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-// import { getExpressUsers, postStatisticArchive } from '@/request/api'
+import { logout } from '@/request/api'
 export default {
   data () {
     return {
-
+      loginStatus: 0
     }
   },
   computed: {
@@ -63,6 +65,15 @@ export default {
 
   },
   methods: {
+    logout () {
+      logout().then(res => {
+        if (res.code && res.code === '1') {
+          localStorage.setItem('user', '')
+        }
+      }, error => {
+        error && this.$message.error(error)
+      })
+    },
     goto (path) {
       this.$router.push({ path: path })
     }

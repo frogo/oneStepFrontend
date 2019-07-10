@@ -1,8 +1,9 @@
-const CONTEXTPATH = '/express/'
+const CONTEXTPATH = '/api'
 
 export default {
   // 接口
-  MOCK: {
-    USERS: CONTEXTPATH + 'users'
-  }
+  USER: { LOGOUT: CONTEXTPATH + 'user/loginOut' },
+  TODO: CONTEXTPATH + '/message/stat',
+  STATUS: CONTEXTPATH + '/statistics/info'
+
 }

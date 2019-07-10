@@ -3,9 +3,11 @@ $--color-primary: #EF6520;
 
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
-
-@import "~element-ui/packages/theme-chalk/src/index";
+@import '~element-ui/packages/theme-chalk/src/index';
 a{text-decoration: none}
+/*清除浮动代码*/
+.clearFix:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+.clearFix{zoom:1}
 .el-dropdown-link {
   cursor: pointer;
   color: #409EFF;
@@ -19,6 +21,7 @@ a{text-decoration: none}
     width:1200px;
     margin: 0 auto;
     line-height: 48px;
+    .logo-box{padding-top: 10px}
     ul.nav li{
       display: inline-block;
       padding: 0 2em;
@@ -36,6 +39,7 @@ a{text-decoration: none}
       }
     }
     .user{
+      float:right;
       span{
         i{color:#a0a0a0;}
         &.arrow{cursor: pointer}
@@ -46,14 +50,15 @@ a{text-decoration: none}
 }
 .el-footer{background: #4c4c4c;}
 .el-footer p{color:#949494;font-size: 12px; line-height:2em;text-align: center;margin-top: 20px}
-.el-main{width:1200px;margin: 0 auto}
-.home-title{text-align: center;margin: 2em 0}
+.el-main{width:1240px;margin: 0 auto;padding: 8px 0;min-height: calc(100vh - 148px);}
+
 
 
 .page-register{
   .el-main{
     box-shadow: 0px 0px 5px #888888;
     margin: 15px auto;
+    padding: 20px;
     .register-box{
       position: relative;
       h2{font-size: 26px}
@@ -61,6 +66,7 @@ a{text-decoration: none}
         span{display: inline-block;position: absolute;top:-10px;background: #fff;padding-right: 1em;color:$--color-primary}
       }
       .el-input{width:55%}
+      .el-input .el-input__inner{color:red}
       p.sub-text{color:#c1c1c1;font-size: 12px;line-height:2em}
       .qr-code{position: absolute;right:200px;top:100px;color:#c1c1c1;font-size: 12px;line-height: 1.5em;text-align: center }
     }
@@ -68,11 +74,16 @@ a{text-decoration: none}
 
 }
 .page-login{
-
+  .el-header{
+    .topBar{
+      .logo-box{padding-top: 28px}
+    }
+  }
   .el-main{
     width:100%;border: none;
     min-height: calc(100vh - 185px);
     padding: 0;
+    margin: 0;
     .login-wrap{
       width:100%;height: 475px;background: #000;
       .login-banner{
@@ -104,7 +115,33 @@ a{text-decoration: none}
 
   }
 }
-
+.page-home{
+  .home-title{text-align: center;padding: 2em 0}
+  .banner-box{
+    width:1200px; margin: 0 auto;
+    .el-carousel{width:810px;float:left}
+    .ad-box{width:386px;float:right}
+  }
+  .todo-wrap,.status-wrap{width:1200px; margin: 0 auto 1em}
+  .card-list{
+    .el-card{
+      width:90%;
+      &:hover{border: 1px solid #EF6520}
+      .item-card{
+        display: flex;
+        .img{
+          img{margin-top: 50px}
+        }
+        .txt{
+          padding-left: 25px;
+          h3{font-size: 18px;color:#666;line-height: 2em}
+          .desc{font-size: 12px;color:#a7a7a7;line-height: 2em;margin-bottom: 20px}
+          .number{font-size: 36px;color:#e84d4d}
+        }
+      }
+    }
+  }
+}
 /* Scrollbar */
 
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
