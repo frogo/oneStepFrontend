@@ -1,6 +1,6 @@
 import axios from 'axios'
-// import { Message } from 'element-ui'
-
+import { Loading } from 'element-ui'
+let loadingInstance
 const httpClient = axios.create()
 // 环境转换
 if (process.env.NODE_ENV === 'development') {
@@ -26,15 +26,18 @@ httpClient.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
  * @return {Promise}        Promise
  */
 httpClient.interceptors.request.use(config => {
-  // if (config.method === 'post') {
-  //   if (config.url.indexOf('cooperate-case-server') > 0) { // 协同接口application/json
-  //     config.headers.post['Content-Type'] = 'application/json;charset=UTF-8'
-  //   } else {
-  //     config.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
-  //   }
-  // }
+  // element ui Loading方法
+  loadingInstance = Loading.service({
+    lock: true,
+    text: 'Loading',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0.3)',
+    customClass: 'mask-loading',
+    fullscreen: true
+  })
   return config
 }, function (error) {
+  loadingInstance.close()
   return Promise.reject(error)
 })
 
@@ -44,11 +47,10 @@ httpClient.interceptors.request.use(config => {
  * @return {Promise}         Promise
  */
 httpClient.interceptors.response.use(function (response) {
-  // if (response.data.ret && response.data.ret === 302) {
-  //   location.href = response.data.redirectUrl
-  // }
+  loadingInstance.close()
   return response
 }, function (error) {
+  loadingInstance.close()
   return Promise.reject(error)
 })
 

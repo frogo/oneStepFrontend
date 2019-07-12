@@ -1,12 +1,18 @@
-// import axios from '@/axios'
-// import api from '@/axios/api.js'
+import { login } from '@/request/api'
 
 export default {
-  syncUser ({ state, getters, commit }, params) {
-    // axios
-    //   .post(api.cat)
-    //   .then(res => {
-    //     this.cat = res.data.cat
-    //   })
+  syncLogin ({ commit }, user) {
+    login(user).then(res => {
+      const user = res.data.user
+      localStorage.setItem('user', user)
+      commit('auth_success', user)
+    }, error => {
+      alert(error)
+      commit('auth_error')
+      localStorage.removeItem('user')
+    })
+  },
+  logout ({ commit }, user) {
+
   }
 }

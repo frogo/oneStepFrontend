@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import App from '@/App.vue'
 import store from '@/store'
+import axios from '@/request/http'
 import router from '@/router'
 import ElementUI from 'element-ui'
-import axios from '@/request/http'
 import QS from 'qs'
 // i18n tool
 // import locale from 'element-ui/lib/locale'

@@ -25,7 +25,7 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item>个人中心</el-dropdown-item>
-                  <el-dropdown-item @click="logout">
+                  <el-dropdown-item @click="logoutHandler">
                     退出登录
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -65,7 +65,7 @@ export default {
 
   },
   methods: {
-    logout () {
+    logoutHandler () {
       logout().then(res => {
         if (res.code && res.code === '1') {
           localStorage.setItem('user', '')
@@ -73,9 +73,6 @@ export default {
       }, error => {
         error && this.$message.error(error)
       })
-    },
-    goto (path) {
-      this.$router.push({ path: path })
     }
   }
 }

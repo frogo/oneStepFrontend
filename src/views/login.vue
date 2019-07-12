@@ -65,18 +65,19 @@
   </div>
 </template>
 <script>
+import { login } from '@/request/api'
 export default {
   data () {
     return {
       logonForm: {
-        name: '',
+        username: '',
         password: '',
         remember: true
       },
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 3, max: 12, message: '长度在 3 到 12 个字符', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' }
@@ -96,7 +97,20 @@ export default {
   },
   methods: {
     login () {
-      console.log(this.registerForm)
+      login().then(res => {
+        if (res.code === '1') {
+          const redirect = this.$route.query.redirect
+          if (redirect) {
+            // 存在回跳地址就回跳
+            this.$router.push(redirect)
+          } else {
+            // 否则就跳到默认的首页
+            this.$router.push({
+              name: '/'
+            })
+          }
+        }
+      })
     }
   }
 }

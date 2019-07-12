@@ -2,14 +2,8 @@
 // 最好提前在你的 store 中初始化好所有所需属性。
 
 export default {
-  user: { // 测试用例1
-    name: '',
-    age: 0
-  },
-  profile: { // 测试用例2
-    email: '',
-    address: '',
-    father: '',
-    mother: ''
+  user: {
+    currentUser: null,
+    isLogin: false
   }
 }

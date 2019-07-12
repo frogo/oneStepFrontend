@@ -39,7 +39,7 @@ module.exports = {
     port: 3003,
     open: true,
     proxy: {
-      '/api/': { //
+      '/api00000/': { //
         // Real api
         target: 'http://localhost:3999',
         changeOrigin: true
@@ -129,6 +129,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     // Plugin that simplifies creation of HTML files to serve your bundles
     new HtmlWebpackPlugin({
+      // chunksSortMode: 'none',
       template: 'public/index.html',
       meta: { version: version },
       title: '一步网'
