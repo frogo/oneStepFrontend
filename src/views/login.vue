@@ -26,19 +26,19 @@
             </div>
             <div class="login-box">
               <h2>账号登陆</h2>
-              <el-form ref="ruleForm" :model="logonForm" :rules="rules" label-width="">
+              <el-form ref="loginForm" :model="loginForm" :rules="rules" label-width="">
                 <el-form-item label="" prop="username">
-                  <el-input v-model="logonForm.username" placeholder="账号">
+                  <el-input v-model="loginForm.username" placeholder="账号">
                     <i slot="prefix" class="username_icon" />
                   </el-input>
                 </el-form-item>
                 <el-form-item label="" prop="password" class="small_spacing">
-                  <el-input v-model="logonForm.password" placeholder="密码">
+                  <el-input v-model="loginForm.password" placeholder="密码" type="password">
                     <i slot="prefix" class="password_icon" />
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="remember" class="small_spacing">
-                  <el-checkbox v-model="logonForm.remember" label="记住用户" name="type" class="remember_user" />
+                  <el-checkbox v-model="loginForm.remember" label="记住用户" name="type" class="remember_user" />
                   <span class="forgot_password"><a href="#">忘记密码？</a> </span>
                 </el-form-item>
                 <el-form-item class="small_spacing">
@@ -69,7 +69,7 @@ import { login } from '@/request/api'
 export default {
   data () {
     return {
-      logonForm: {
+      loginForm: {
         username: '',
         password: '',
         remember: true
@@ -97,18 +97,24 @@ export default {
   },
   methods: {
     login () {
-      login().then(res => {
-        if (res.code === '1') {
-          const redirect = this.$route.query.redirect
-          if (redirect) {
-            // 存在回跳地址就回跳
-            this.$router.push(redirect)
-          } else {
-            // 否则就跳到默认的首页
-            this.$router.push({
-              name: '/'
-            })
-          }
+      this.$refs.loginForm.validate((valid) => {
+        if (valid) {
+          login(this.loginForm).then(res => {
+            if (res.code === '1') {
+              this.$store.commit('$_setUserStorage', res.data.name)
+              localStorage.setItem('user', res.data.name)
+              const redirect = this.$route.query.redirect
+              if (redirect) {
+                // 存在回跳地址就回跳
+                this.$router.push(redirect)
+              } else {
+                // 否则就跳到默认的首页
+                this.$router.push({
+                  path: '/'
+                })
+              }
+            }
+          })
         }
       })
     }

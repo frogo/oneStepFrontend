@@ -33,11 +33,14 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.path === '/login') {
+  if (to.path === '/login' || from.path === '/login') {
     next()
   } else {
     sessionVerify().then(res => {
       if (res.code === '1') {
+        if (!localStorage.getItem('user') || localStorage.getItem('user') !== res.data.name) {
+          localStorage.setItem('user', res.data.name)
+        }
         next()
       }
     }, error => {

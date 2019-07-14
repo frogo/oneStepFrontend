@@ -1,7 +1,10 @@
 export default {
-  // userName: (state, getter) => {
-  //   return state.user.name
-  // },
+  // user: (state, getter) => {
+  //   if (!state.user) {
+  //     state.user = JSON.parse(localStorage.getItem('user'))
+  //   }
+  //   return state.user
+  // }
   // userfamily: (state, getter) => {
   //   return {
   //     name: getter.userName,

@@ -18,15 +18,17 @@
           <el-col :span="4">
             <div v-if="user" class="user">
               <span><i class="el-icon-user-solid" /></span>
-              <span>杨帆</span>
+              <span>{{ user }}</span>
               <el-dropdown>
                 <span class="el-dropdown-link">
                   <i class="el-icon-arrow-down el-icon--right" />
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>个人中心</el-dropdown-item>
-                  <el-dropdown-item @click="logoutHandler">
-                    退出登录
+                  <el-dropdown-item>
+                    <span>个人中心</span>
+                  </el-dropdown-item>
+                  <el-dropdown-item>
+                    <span @click="logoutHandler">退出登录</span>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -48,7 +50,7 @@
   </el-container>
 </template>
 <script>
-// import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import { logout } from '@/request/api'
 export default {
   data () {
@@ -57,21 +59,36 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      user: 'user'
+    })
   },
   // 监听,当路由发生变化的时候执行
   watch: {
   },
-  mounted: function () {
+  created: function () {
 
+  },
+  mounted: function () {
+    this.$store.commit('$_setUserStorage', localStorage.getItem('user'))
   },
   methods: {
     logoutHandler () {
-      logout().then(res => {
-        if (res.code && res.code === '1') {
-          localStorage.setItem('user', '')
-        }
-      }, error => {
-        error && this.$message.error(error)
+      this.$confirm('您确定要退出吗?', '退出管理平台', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(() => {
+        logout().then(res => {
+          if (res.code && res.code === '1') {
+            this.$store.commit('$_removeUserStorage')
+            localStorage.removeItem('user')
+            this.$router.push({ path: '/login' })
+          }
+        }, error => {
+          error && this.$message.error(error)
+        })
+      }).catch(() => {
+
       })
     }
   }

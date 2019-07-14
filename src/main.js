@@ -22,6 +22,7 @@ Vue.use(ElementUI)
 // locale.use(lang)
 // Vue.config.productionTip = false
 Vue.prototype.$axios = axios
+Vue.prototype.$store = store
 Vue.prototype.QS = QS
 
 new Vue({

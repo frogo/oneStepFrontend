@@ -4,14 +4,10 @@
 // state.obj = { ...state.obj, newProp: 123 }
 
 export default {
-  login_success (state, user) {
-    state.loginStatus = true
-    state.user = user
+  $_setUserStorage (state, value) {
+    state.user = value
   },
-  login_error (state) {
-    state.loginStatus = false
+  $_removeUserStorage (state) {
+    state.user = null
   }
-  // updateUser (state, payload) {
-  //   state.templateList = Object.assign({}, state.templateList, payload.data)
-  // }
 }

@@ -2,8 +2,5 @@
 // 最好提前在你的 store 中初始化好所有所需属性。
 
 export default {
-  user: {
-    currentUser: null,
-    isLogin: false
-  }
+  user: null
 }
