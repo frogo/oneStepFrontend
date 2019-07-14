@@ -1,9 +1,9 @@
-
+﻿
 # Created by https://www.gitignore.io/api/vim,git,node,sass,nuxt,macos,linux,windows,webstorm,sublimetext,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=vim,git,node,sass,nuxt,macos,linux,windows,webstorm,sublimetext,visualstudiocode
 
 ### 用户自定义 ###
-mock.js
+
 
 ### Git ###
 # Created by git for backups. To disable backups in Git:
