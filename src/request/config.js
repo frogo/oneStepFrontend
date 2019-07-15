@@ -5,7 +5,9 @@ export default {
   USER: {
     LOGIN: CONTEXTPATH + '/user/login',
     LOGOUT: CONTEXTPATH + '/user/loginOut',
-    VERIFY: CONTEXTPATH + '/user/session'
+    VERIFY: CONTEXTPATH + '/user/session',
+    REGISTER: CONTEXTPATH + '/user/register',
+    FORGOT_PASSWORD: CONTEXTPATH + '/user/forgotPassword'
   },
   TODO: CONTEXTPATH + '/message/stat',
   STATUS: CONTEXTPATH + '/statistics/info'

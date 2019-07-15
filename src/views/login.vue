@@ -39,7 +39,7 @@
                 </el-form-item>
                 <el-form-item prop="remember" class="small_spacing">
                   <el-checkbox v-model="loginForm.remember" label="记住用户" name="type" class="remember_user" />
-                  <span class="forgot_password"><a href="#">忘记密码？</a> </span>
+                  <span class="forgot_password"><router-link to="/forgotPassword">忘记密码</router-link> </span>
                 </el-form-item>
                 <el-form-item class="small_spacing">
                   <el-button @click="login" type="primary" size="large" style="width:100%">
