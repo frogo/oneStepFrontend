@@ -121,3 +121,6 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .el-input.el-input--prefix ::v-deep .el-input__inner{height:200px}
+</style>
