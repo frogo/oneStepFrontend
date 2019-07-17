@@ -218,7 +218,7 @@ export default {
     onSubmit (registerForm) {
       this.$refs[registerForm].validate((valid) => {
         if (valid) {
-          register().then(res => {
+          register(this.registerParam).then(res => {
             if (res.code === '1') {
               this.$alert('注册成功', '提示', {
                 confirmButtonText: '知道了',

@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="page-home">
+  <el-main class="page-home">
     <div class="banner-box clearFix">
       <el-carousel trigger="click" height="260px">
         <el-carousel-item>
@@ -169,7 +169,7 @@
         </el-col>
       </el-row>
     </div>
-  </div>
+  </el-main>
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'

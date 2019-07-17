@@ -14,6 +14,11 @@ const router = new VueRouter({
           path: '',
           name: '首页',
           component: () => import('../views/home.vue')
+        },
+        { // 个人中心
+          path: '/userCenter',
+          name: '个人中心',
+          component: () => import('../views/changePassword.vue')
         }
       ]
     },

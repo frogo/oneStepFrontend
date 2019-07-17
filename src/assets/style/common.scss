@@ -51,7 +51,14 @@ a{text-decoration: none}
 .el-footer{background: #4c4c4c;}
 .el-footer p{color:#949494;font-size: 12px; line-height:2em;text-align: center;margin-top: 20px}
 .el-main{width:1240px;margin: 0 auto;padding: 8px 0;min-height: calc(100vh - 148px);}
-
+.page-changePassword{
+  .el-main{
+    h2{font-size: 26px}
+    .changForm{width:400px;margin-top: 50px;
+    .el-form-item{color:#666666}
+    }
+  }
+}
 .page-forgotPassword{
   .el-header{
     .topBar{
@@ -183,6 +190,29 @@ a{text-decoration: none}
         }
       }
     }
+  }
+}
+
+
+.el-container.main-content{
+  width:1240px;margin: 0 auto;padding: 20px 0;min-height: calc(100vh - 148px);
+  .el-aside{
+    padding: 8px 0;
+    border-right: 1px solid #ededed;
+    dl{
+      dt{ font-size: 16px;line-height: 2em}
+      dd{
+        text-indent: 5px;
+        font-size:14px; line-height: 2em;
+        i{ color:#EF6520;font-size: 16px}
+        .menu-link{color:#000}
+        .menu-link.router-link-active{color:#EF6520}
+      }
+    }
+  }
+  .el-main{
+    margin-left: 20px;
+    background: url('../img/indexBg.png') no-repeat center center;
   }
 }
 

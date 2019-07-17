@@ -25,7 +25,7 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item>
-                    <span>个人中心</span>
+                    <span><router-link to="/userCenter">个人中心</router-link></span>
                   </el-dropdown-item>
                   <el-dropdown-item>
                     <span @click="logoutHandler">退出登录</span>
@@ -37,9 +37,7 @@
         </el-row>
       </div>
     </el-header>
-    <el-main>
-      <router-view />
-    </el-main>
+    <router-view />
     <el-footer height="100px">
       <p>
         联系地址：武汉市洪山区邮科院路特1号 信息科技产业大厦506室 联系电话：027-87860866 网站备案：鄂ICP备15007189号-2

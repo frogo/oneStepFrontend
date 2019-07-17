@@ -51,3 +51,7 @@ Mock.mock('/api/user/forgotPassword', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '您输入的用户名和邮箱不存在，请核对后输入！'
 })
+Mock.mock('/api/user/passwd', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': ''
+})
