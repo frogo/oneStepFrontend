@@ -10,9 +10,21 @@
           </el-col>
           <el-col :span="16">
             <ul class="nav">
-              <li><a href="" class="active">首页</a> </li>
-              <li><a href="">企业课程库</a> </li>
-              <li><a href="">培训项目管理</a> </li>
+              <li>
+                <router-link to="/">
+                  首页
+                </router-link>
+              </li>
+              <li>
+                <router-link to="/enterpriseCourseLibrary">
+                  企业课程库
+                </router-link>
+              </li>
+              <li>
+                <router-link to="/userCenter">
+                  培训项目管理
+                </router-link>
+              </li>
             </ul>
           </el-col>
           <el-col :span="4">

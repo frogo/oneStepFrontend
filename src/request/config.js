@@ -8,7 +8,7 @@ export default {
     VERIFY: CONTEXTPATH + '/user/session',
     REGISTER: CONTEXTPATH + '/user/register',
     FORGOT_PASSWORD: CONTEXTPATH + '/user/forgotPassword',
-    RESET_PASSWORD: CONTEXTPATH + '/user/user/resetPwd',
+    RESET_PASSWORD: CONTEXTPATH + '/user/resetPwd',
     CHANGE_PASSWORD: CONTEXTPATH + '/user/passwd'
   },
   TODO: CONTEXTPATH + '/message/stat',

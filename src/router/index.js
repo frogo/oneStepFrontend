@@ -18,21 +18,40 @@ const router = new VueRouter({
         { // 个人中心
           path: '/userCenter',
           name: '个人中心',
-          component: () => import('../views/changePassword.vue')
+          component: () => import('../views/userCenter/changePassword.vue')
+        },
+        { // 企业课程库
+          path: '/enterpriseCourseLibrary',
+          name: '课程库首页',
+          component: () => import('../views/enterpriseCourseLibrary/index.vue')
+        },
+        { // 企业课程库-详情
+          path: '/enterpriseCourseLibrary/details',
+          name: '课程库详情',
+          component: () => import('../views/enterpriseCourseLibrary/details.vue')
+        },
+        { // 企业课程库-创建课程
+          path: '/enterpriseCourseLibrary/create',
+          name: '课程库创建',
+          component: () => import('../views/enterpriseCourseLibrary/create.vue')
         }
+
       ]
     },
     {
       path: '/login',
+      name: '登录',
       component: () => import('../views/login.vue')
     },
     {
       path: '/register',
-      component: () => import('../views/register.vue')
+      name: '注册',
+      component: () => import('../views/userCenter/register.vue')
     },
     {
       path: '/forgotPassword',
-      component: () => import('../views/forgotPassword.vue')
+      name: '忘记密码',
+      component: () => import('../views/userCenter/forgotPassword.vue')
     }
   ]
 })
