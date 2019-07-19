@@ -195,6 +195,10 @@ a{text-decoration: none}
 .page-course{
   .filter-box{
     margin: 20px 0;
+    .keyword-input{
+      .el-input{width:300px}
+    }
+
 /*    .search{
       display: flex;
       justify-content: space-between;
