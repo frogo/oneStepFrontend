@@ -1,7 +1,10 @@
 <template lang="html">
   <el-main class="page-course">
     <div class="filter-box">
-      <el-form ref="filterForm" :model="filterForm" label-width="80px" size="mini">
+      <el-button type="primary" class="add-button">
+        创建课程
+      </el-button>
+      <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
         <el-form-item label="" class="keyword-input">
           <el-input
             v-model="filterForm.keyword"
@@ -45,6 +48,8 @@
         </el-form-item>
       </el-form>
     </div>
+
+    <div class="course-list" />
   </el-main>
 </template>
 <script>
