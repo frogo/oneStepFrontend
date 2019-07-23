@@ -49,7 +49,57 @@
       </el-form>
     </div>
 
-    <div class="course-list" />
+    <div class="course-list">
+      <el-row>
+        <el-col :span="4" v-for="(o, index) in 14" :key="o" :offset="index%5 ==0 ? 0 : 1">
+          <el-card class="course-card">
+            <div class="img-area">
+              <div class="mask">
+                <div class="operate">
+                  <div class="item">
+                    <p class="icon">
+                      <i class="el-icon-edit" />
+                    </p>
+                    <p class="text">
+                      编辑标签
+                    </p>
+                  </div>
+                  <div class="item">
+                    <p class="icon">
+                      <i class="el-icon-download" />
+                    </p>
+                    <p class="text">
+                      课程下线
+                    </p>
+                  </div>
+                  <div class="item">
+                    <p class="icon">
+                      <i class="el-icon-delete" />
+                    </p>
+                    <p class="text">
+                      课程删除
+                    </p>
+                  </div>
+                </div>
+                <div class="statistics">
+                  <span>课时：20分钟</span>
+                  <span>学分：333</span>
+                </div>
+              </div>
+              <span class="status-block bg-gray">草稿</span>
+              <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+            </div>
+            <div class="text-area">
+              <span class="title">好吃的汉堡，傻傻的建外大街基督教舞蹈文件</span>
+              <div class="bottom clearFix">
+                <span class="up-num"><i class="el-icon-user" /> 158</span>
+                <span class="teacher">张老师</span>
+              </div>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
   </el-main>
 </template>
 <script>

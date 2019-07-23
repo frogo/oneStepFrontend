@@ -196,16 +196,86 @@ a{text-decoration: none}
   .filter-box{
     position: relative;
     margin: 20px 0;
+    .el-form{
+      .el-form-item{border-bottom: 1px dashed #ccc;padding-bottom: 10px; margin-bottom: 10px}
+    }
     .el-radio__input{display:none}
     .el-radio__label{padding-left: 6px}
     .el-checkbox-button__inner{padding: 8px 15px}
     .keyword-input{
+      border-bottom: none;
       .el-form-item__content{margin-left: 0!important;width:600px}
       .el-input{width:300px}
     }
     .el-radio{ margin-right: 0}
     .add-button{position: absolute;right:0;top:0}
   }
+  .course-list{
+    padding: 20px 0;
+    .course-card{
+      margin-bottom: 20px;
+      width:200px;
+      .el-card__body{
+        padding: 0;
+        .img-area{
+          position: relative;
+          height:110px;overflow: hidden;
+          .mask{display: none;}
+          &:hover {
+            .mask{
+              display: block;
+              position: absolute;
+              width:100%;
+              height: 100%;
+              background: rgba(0,0,0,0.75);
+              z-index: 2;
+              .operate{
+                z-index: 3;
+                justify-content:space-around;
+                display: flex;
+                .item{
+                  cursor: pointer;
+                  text-align: center;
+                  p{color:#fff;
+                    font-size: 12px;
+                    &.icon{font-size: 18px;margin: 10px 0}
+                  }
+                }
+              }
+              .statistics{
+                justify-content:space-between;
+                display: flex;
+                padding: 20px 10px;
+                span{color:#c1c1c1;font-size: 12px}
+              }
+            }
+          }
+
+          .status-block{
+            display: inline-block;
+            position: absolute;
+            z-index: 1;
+            left:0;
+            top:0;
+            font-size: 12px;
+            padding: 5px 16px;
+            border-radius: 0px 0px 3px 0 ;
+            color:#fff;
+            &.bg-gray{background: #afafaf}
+            &.bg-blue{background: #29ABE2}
+          }
+        }
+        .text-area{
+          padding: 10px;
+          .title{margin-bottom: 10px; line-height:1.6em;display: inline-block}
+          .up-num{font-size: 12px;color:#999}
+          .teacher{float:right;font-size: 12px;color:#999}
+        }
+      }
+
+    }
+  }
+
 }
 
 .el-container.main-content{
