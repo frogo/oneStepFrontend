@@ -4,17 +4,16 @@
       <el-button type="primary" class="add-button">
         创建课程
       </el-button>
+      <div class="keyword-input">
+        <el-input
+          v-model="keyword"
+          placeholder="请输入内容"
+          size="medium "
+        >
+          <i slot="suffix" class="el-input__icon el-icon-search" />
+        </el-input>
+      </div>
       <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
-        <el-form-item label="" class="keyword-input">
-          <el-input
-            v-model="filterForm.keyword"
-            placeholder="请输入内容"
-            size="medium "
-          >
-            <i slot="suffix" class="el-input__icon el-icon-search" />
-          </el-input>
-        </el-form-item>
-
         <el-form-item label="来源：">
           <el-radio-group v-model="filterForm.from">
             <el-radio :label="item" v-for="item in tags.from" border />
@@ -51,7 +50,7 @@
 
     <div class="course-list">
       <el-row>
-        <el-col :span="4" v-for="(o, index) in 14" :key="o" :offset="index%5 ==0 ? 0 : 1">
+        <el-col :span="4" v-for="(item, index) in courseList" :key="`lesson_${index}`" :offset="index%5 ==0 ? 0 : 1">
           <el-card class="course-card">
             <div class="img-area">
               <div class="mask">
@@ -82,18 +81,20 @@
                   </div>
                 </div>
                 <div class="statistics">
-                  <span>课时：20分钟</span>
-                  <span>学分：333</span>
+                  <span>课时：{{ item.minutes }}分钟</span>
+                  <span>学分：{{ item.credit }}</span>
                 </div>
               </div>
-              <span class="status-block bg-gray">草稿</span>
-              <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+              <span v-if="item.status === '0'" class="status-block bg-gray">下线</span>
+              <span v-else-if="item.status === '2'" class="status-block bg-blue">草稿</span>
+              <span v-else />
+              <img :src="item.cover" class="image">
             </div>
             <div class="text-area">
-              <span class="title">好吃的汉堡，傻傻的建外大街基督教舞蹈文件</span>
+              <span class="title">{{ item.name }}</span>
               <div class="bottom clearFix">
                 <span class="up-num"><i class="el-icon-user" /> 158</span>
-                <span class="teacher">张老师</span>
+                <span class="teacher">{{ item.teacher_info.name }}</span>
               </div>
             </div>
           </el-card>
@@ -104,12 +105,12 @@
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-// import { getStatus, getTodo } from '@/request/api'
+import { getCourseList } from '@/request/api'
 export default {
   data () {
     return {
+      keyword: '',
       filterForm: {
-        keyword: '',
         from: '外部',
         status: '',
         series: '',
@@ -124,16 +125,46 @@ export default {
         level: ['层级1', '层级2', '层级3'],
         department: ['职能1', '职能2', '职能3'],
         custom: ['职能1', '职能2', '职能3']
+      },
+      courseList: [],
+      getCourseListParam: {
+        keyword: '',
+        tag_id: [],
+        offset: 0,
+        limit: 10
       }
     }
   },
   computed: {
+    // getCourseListParam:function () {
+    //
+    // }
   },
   watch: {
+    filterForm: {
+      handler (newVal, oldVal) {
+        this.getCourseListParam.keyword = newVal.keyword
+        this.getCourseListParam.tag_id = newVal.level.concat(newVal.department, newVal.custom).push(newVal.from, newVal.status, newVal.series)
+        console.log(newVal)
+        this.getCourseList(this.getCourseListParam)
+      },
+      deep: true
+    }
   },
   mounted: function () {
+    this.getCourseList(this.getCourseListParam)
   },
   methods: {
+    getCourseList () {
+      getCourseList().then(res => {
+        this.courseList = res.data.list
+      }, error => {
+        error && this.$message.error(error)
+      })
+    }
+    // handleSearch (){
+    //
+    // }
   }
 }
 </script>

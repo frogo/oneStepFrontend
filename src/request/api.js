@@ -22,3 +22,5 @@ export const changePassword = p => post(CONFIG.USER.CHANGE_PASSWORD, p)
 export const getTodo = p => get(CONFIG.TODO, p)
 // 状态预览
 export const getStatus = p => get(CONFIG.STATUS, p)
+// 课程
+export const getCourseList = p => get(CONFIG.COURSE.COURSE_LIST, p)

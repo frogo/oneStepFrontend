@@ -12,6 +12,8 @@ export default {
     CHANGE_PASSWORD: CONTEXTPATH + '/user/passwd'
   },
   TODO: CONTEXTPATH + '/message/stat',
-  STATUS: CONTEXTPATH + '/statistics/info'
-
+  STATUS: CONTEXTPATH + '/statistics/info',
+  COURSE: {
+    COURSE_LIST: CONTEXTPATH + '/lesson/list'
+  }
 }
