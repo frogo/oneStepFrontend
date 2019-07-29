@@ -30,6 +30,28 @@
       <el-form-item label="课程简介" prop="">
         <el-input v-model="createForm.outline" type="textarea" />
       </el-form-item>
+      <el-form-item label="课程大纲" prop="">
+        <el-input v-model="createForm.intro" type="textarea" />
+      </el-form-item>
+      <el-form-item label="课程封面" prop="" class="cover">
+        <el-tabs v-model="activeTabName" @tab-click="handleTabClick" type="card">
+          <el-tab-pane label="默认封面" name="default">
+            <ul>
+              <li><img src="../../assets/img/cover-1.png"> </li>
+              <li><img src="../../assets/img/cover-1.png"> </li>
+              <li><img src="../../assets/img/cover-1.png"> </li>
+              <li><img src="../../assets/img/cover-1.png"> </li>
+              <li><img src="../../assets/img/cover-1.png"> </li>
+              <li><img src="../../assets/img/cover-1.png"> </li>
+              <li><img src="../../assets/img/cover-1.png"> </li>
+              <li><img src="../../assets/img/cover-1.png"> </li>
+            </ul>
+          </el-tab-pane>
+          <el-tab-pane label="自定义" name="custom">
+            配置管理
+          </el-tab-pane>
+        </el-tabs>
+      </el-form-item>
       <div class="title">
         <span>学习内容</span>
       </div>
@@ -50,7 +72,8 @@ export default {
         credit: '',
         intro: '',
         outline: ''
-      }
+      },
+      activeTabName: 'default'
     }
   },
   computed: {
@@ -60,6 +83,9 @@ export default {
   mounted: function () {
   },
   methods: {
+    handleTabClick (tab, event) {
+      console.log(tab, event)
+    }
   }
 }
 </script>
