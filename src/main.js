@@ -16,8 +16,10 @@ import QS from 'qs'
 import 'normalize.css/normalize.css'
 import 'minireset.css/minireset.css'
 import '@/assets/style/common.scss'
+import ECharts from 'vue-echarts'
 
 Vue.use(ElementUI)
+Vue.component('v-chart', ECharts)
 // Vue.use(zfFrontendLib)
 // locale.use(lang)
 // Vue.config.productionTip = false

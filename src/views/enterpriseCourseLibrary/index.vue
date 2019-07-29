@@ -1,16 +1,17 @@
 <template lang="html">
   <el-main class="page-course">
     <div class="filter-box">
-      <el-button type="primary" class="add-button">
+      <el-button @click="gotoCreate" type="primary" class="add-button">
         创建课程
       </el-button>
       <div class="keyword-input">
         <el-input
           v-model="keyword"
+          @keyup.enter.native="handleSearch"
           placeholder="请输入内容"
           size="medium "
         >
-          <i slot="suffix" class="el-input__icon el-icon-search" />
+          <i slot="suffix" @click="handleSearch" class="el-input__icon el-icon-search" />
         </el-input>
       </div>
       <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
@@ -100,6 +101,16 @@
           </el-card>
         </el-col>
       </el-row>
+
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[20, 30, 40, 50]"
+        :page-size="pageSize"
+        :total="total"
+        layout="total, sizes, prev, pager, next, jumper"
+      />
     </div>
   </el-main>
 </template>
@@ -111,60 +122,75 @@ export default {
     return {
       keyword: '',
       filterForm: {
-        from: '外部',
-        status: '',
-        series: '',
-        level: [''],
-        department: [''],
-        custom: ['']
+        from: '全部',
+        status: '全部',
+        series: '全部',
+        level: [],
+        department: [],
+        custom: []
       },
       tags: {
-        from: ['外部', '内部'],
-        status: ['状态1', '状态2', '状态3'],
-        series: [ '系列1', '系列2', '系列3' ],
+        from: ['全部', '外部', '内部'],
+        status: ['全部', '状态1', '状态2', '状态3'],
+        series: ['全部', '系列1', '系列2', '系列3'],
         level: ['层级1', '层级2', '层级3'],
         department: ['职能1', '职能2', '职能3'],
         custom: ['职能1', '职能2', '职能3']
       },
       courseList: [],
-      getCourseListParam: {
-        keyword: '',
-        tag_id: [],
-        offset: 0,
-        limit: 10
-      }
+      currentPage: 1,
+      pageSize: 20,
+      total: 0
     }
   },
   computed: {
-    // getCourseListParam:function () {
-    //
-    // }
+    getCourseListParam: function () {
+      let tags = this.filterForm.level.concat(this.filterForm.department, this.filterForm.custom)
+      tags.push(this.filterForm.from, this.filterForm.series, this.filterForm.status)
+      return {
+        keyword: this.keyword,
+        tag_id: tags,
+        offset: this.currentPage,
+        limit: this.pageSize
+      }
+    }
   },
   watch: {
     filterForm: {
       handler (newVal, oldVal) {
-        this.getCourseListParam.keyword = newVal.keyword
-        this.getCourseListParam.tag_id = newVal.level.concat(newVal.department, newVal.custom).push(newVal.from, newVal.status, newVal.series)
-        console.log(newVal)
-        this.getCourseList(this.getCourseListParam)
+        this.getCourseList()
       },
       deep: true
     }
   },
   mounted: function () {
-    this.getCourseList(this.getCourseListParam)
+    this.getCourseList()
   },
   methods: {
     getCourseList () {
-      getCourseList().then(res => {
+      let param = this.getCourseListParam
+      console.log(param)
+      getCourseList(param).then(res => {
         this.courseList = res.data.list
+        this.total = res.data.total
       }, error => {
-        error && this.$message.error(error)
+        error && this.$message.error(error.message)
       })
+    },
+    handleSearch () {
+      this.getCourseList()
+    },
+    handleSizeChange (val) {
+      this.pageSize = val
+      this.getCourseList()
+    },
+    handleCurrentChange (val) {
+      this.currentPage = val
+      this.getCourseList()
+    },
+    gotoCreate () {
+      this.$router.push({ path: '/enterpriseCourseLibrary/create' })
     }
-    // handleSearch (){
-    //
-    // }
   }
 }
 </script>
