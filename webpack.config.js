@@ -39,9 +39,9 @@ module.exports = {
     port: 3003,
     open: true,
     proxy: {
-      '/api00000/': { //
+      '/cooperate-case-server/': { //
         // Real api
-        target: 'http://localhost:3999',
+        target: 'http://10.101.7.53:5511/',
         changeOrigin: true
       }
     },
