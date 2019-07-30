@@ -192,30 +192,13 @@ a{text-decoration: none}
     }
   }
 }
-.page-courseCreate{
-  box-shadow: 0px 0px 5px #888888;
-  margin: 15px auto;
-  padding: 20px;
-  h2.pageName{font-size: 26px}
-  .el-form.createForm{
-    .title{margin: 25px 0;height:1px;position:relative;background:#f3f3f3;
-      span{display: inline-block;position: absolute;top:-10px;background: #fff;padding-right: 1em;color:$--color-primary}
-    }
-    .el-input{width:55%}
-    .cover{
-      ul li{
-        float:left
-      }
-    }
-  }
-}
 .page-course{
   .filter-box{
     position: relative;
     margin: 20px 0;
     .el-form{
       .el-form-item{border-bottom: 1px dashed #ccc;padding-bottom: 10px; margin-bottom: 10px;
-      &.keyword-input{      border-bottom: none;}
+        &.keyword-input{      border-bottom: none;}
       }
     }
     .el-radio__input{display:none}
@@ -295,6 +278,64 @@ a{text-decoration: none}
   }
 
 }
+.page-courseCreate{
+  box-shadow: 0px 0px 5px #888888;
+  margin: 15px auto;
+  padding: 20px;
+  h2.pageName{font-size: 26px}
+  .el-form.createForm{
+    .head-line{margin: 25px 0;height:1px;position:relative;background:#f3f3f3;
+      span.base-info{display: inline-block;position: absolute;top:-10px;background: #fff;padding-right: 1em;color:$--color-primary}
+    }
+    .el-input{width:55%}
+    .cover{
+      .el-radio{
+        margin: 0 0 8px 0;
+        .el-radio__label {
+          padding: 0 8px 10px 0;
+          img {
+            border: 2px solid #fff;
+            border-radius: 3px
+          }
+        }
+        &.is-checked{
+          .el-radio__label{
+            img{border: 2px solid #21a7ea;}
+          }
+        }
+        .el-radio__input{display: none}
+      }
+      .avatar-uploader{
+        .el-upload {
+          border: 1px dashed #d9d9d9;
+          border-radius: 6px;
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+        }
+        &:hover {
+          border-color: #409EFF;
+        }
+        .avatar-uploader-icon {
+          font-size: 28px;
+          color: #8c939d;
+          width: 162px;
+          height: 94px;
+          line-height: 94px;
+          text-align: center;
+        }
+        .avatar {
+          width: 162px;
+          height: 94px;
+          display: block;
+        }
+      }
+
+
+    }
+  }
+}
+
 
 
 .el-container.main-content{
