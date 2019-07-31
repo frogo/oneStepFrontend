@@ -151,74 +151,24 @@ Mock.mock('/api/lesson/list', {
     ]
   }
 })
-
-// 协同 （2.3.1.25)  统计查询电子卷宗流转
-Mock.mock('/test_xt/', function (options) {
-  if (JSON.parse(options.body).orgCode && JSON.parse(options.body).orgCode !== '100') {
-    return Mock.mock(
+Mock.mock('/api/question/list', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'total': 33,
+    'list|33': [
       {
-        'errorCode': '1',
-        'errorContent': null,
-        'datas': [
-          {
-            'orgCode': '20190528135841010012',
-            'orgName': '深圳市公安局',
-            'sendAmount': '0',
-            'hasChildren': true,
-            'sendErrorAmount': '0',
-            'sendEvidenceAmount': '0',
-            'sendDataAmount': '0M',
-            'sendAverageTime': '0秒',
-            'recvAmount': '0',
-            'recvErrorAmount': '0',
-            'recvEvidenceAmount': '0',
-            'recvDataAmount': '0M',
-            'recvAverageTime': '0秒'
-          }]
-      })
-  } else if (JSON.parse(options.body).orgCode && JSON.parse(options.body).orgCode === '100') {
-    return Mock.mock(
-      {
-        'errorCode': '1',
-        'errorContent': null,
-        'datas|1': [
-          {
-            'orgCode': '111100',
-            'orgName|1': ['公安', '法院', '检察院', '司法局'],
-            'sendAmount': '56789',
-            'hasChildren|1': ['true', 'false'],
-            'sendErrorAmount': '56789',
-            'sendEvidenceAmount': '56789',
-            'sendDataAmount': '10GB',
-            'sendAverageTime': '2分20秒',
-            'recvAmount': '56789',
-            'recvErrorAmount': '56789',
-            'recvEvidenceAmount': '56789',
-            'recvDataAmount': '1TB',
-            'recvAverageTime': '2分20秒'
-          }]
-      })
-  } else {
-    return Mock.mock(
-      {
-        'errorCode': '1',
-        'errorContent': null,
-        'datas|3': [
-          {
-            'orgCode|101-200': 200,
-            'orgName|1': ['公安', '法院', '检察院', '司法局'],
-            'hasChildren': 'true',
-            'sendAmount': '56789',
-            'sendErrorAmount': '56789',
-            'sendEvidenceAmount': '56789',
-            'sendDataAmount': '10GB',
-            'sendAverageTime': '2分20秒',
-            'recvAmount': '56789',
-            'recvErrorAmount': '56789',
-            'recvEvidenceAmount': '56789',
-            'recvDataAmount': '1TB',
-            'recvAverageTime': '2分20秒'
-          }]
-      })
+        'id': '3',
+        'bank_id': '24',
+        'type': 'single',
+        'subject': 'C#中的类与静态类',
+        'options': {
+          'number': '2345',
+          'content': '吃大餐商店出售的测试测试测试',
+          'istrue': '0'
+        },
+        'add_time': '2019.6.14'
+      }
+    ]
   }
 })

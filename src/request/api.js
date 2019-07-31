@@ -26,5 +26,4 @@ export const getStatus = p => get(CONFIG.STATUS, p)
 // 课程
 // 课程列表
 export const getCourseList = p => post(CONFIG.COURSE.COURSE_LIST, p)
-
-export const postStatisticArchive = p => post('/cooperate-case-server/statistic/archive', p)
+export const getQuestionList = p => get(CONFIG.COURSE.QUESTION_LIST, p)

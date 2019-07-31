@@ -15,5 +15,8 @@ export default {
   STATUS: CONTEXTPATH + '/statistics/info',
   COURSE: {
     COURSE_LIST: CONTEXTPATH + '/lesson/list'
+  },
+  QUESTION: {
+    QUESTION_LIST: CONTEXTPATH + '/question/list'
   }
 }
