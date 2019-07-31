@@ -151,7 +151,7 @@ Mock.mock('/api/lesson/list', {
     ]
   }
 })
-Mock.mock('/api/question/list', {
+Mock.mock('api/question/list?bank_id=&type=&keyword=', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -171,4 +171,18 @@ Mock.mock('/api/question/list', {
       }
     ]
   }
+})
+Mock.mock('/api/question/list?type=manual&limit=10&offset=1&keyword=', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'total': 33,
+    'list|10': [
+      {
+        'name': '创建对象中的类与子类',
+        'num': '24',
+        'rule': '手动出题',
+        'addtime': '2019.6.14'
+      }
+    ] }
 })

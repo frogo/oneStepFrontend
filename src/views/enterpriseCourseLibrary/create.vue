@@ -58,7 +58,7 @@
         </el-tabs>
       </el-form-item>
       <el-form-item label="讲师信息" prop="lecturer" class="lecturer">
-        <el-input v-model="createForm.lecturer" />
+        <el-input v-model="createForm.lecturer" placeholder="讲师姓名" />
         <div>尺寸：384*198 大小：2M 格式：JPG</div>
         <div class="lecturer-info">
           <el-upload
@@ -112,12 +112,13 @@
     <el-dialog :visible.sync="dialogExaminationVisible" title="试卷选择" class="examinationChoose">
       <div class="filter-box">
         <div class="left">
-          <el-select v-model="dialogExaminationData.type" placeholder="请选择" class="select" size="small">
+          <el-select v-model="dialogExaminationData.type" @change="handleExamRuleChange" placeholder="请选择" class="select" size="small">
             <el-option label="手动出题" value="manual" />
             <el-option label="随机抽题" value="random" />
           </el-select>
           <el-input
             v-model="dialogExaminationData.keyword"
+            @keyup.enter.native="handleKeywordFilter"
             size="small"
             class="input"
             placeholder="请输入内容"
@@ -130,11 +131,10 @@
           </el-button>
         </div>
       </div>
-      <el-table :data="dialogExaminationTableData" @selection-change="handleSelectionChange" stripe>
-        <el-table-column type="selection" width="55" />
-        <el-table-column property="lesson" show-overflow-tooltip label="试卷名称" width="150" />
-        <el-table-column property="createTime" show-overflow-tooltip label="创建时间" width="200" />
-        <el-table-column property="totalNum" show-overflow-tooltip label="试题数" />
+      <el-table :data="dialogExaminationTableData" @current-change="handleSelectionChange" highlight-current-row>
+        <el-table-column property="name" show-overflow-tooltip label="试卷名称" width="150" />
+        <el-table-column property="addtime" show-overflow-tooltip label="创建时间" width="200" />
+        <el-table-column property="num" show-overflow-tooltip label="试题数" />
         <el-table-column property="rule" show-overflow-tooltip label="试题规则" />
       </el-table>
 
@@ -142,8 +142,8 @@
         <el-pagination
           @current-change="handleExaminationPageChange"
           :current-page.sync="dialogExaminationData.currentPage"
-          :page-size="100"
-          :total="1000"
+          :page-size="dialogExaminationData.pageSize"
+          :total="dialogExaminationData.total"
           layout="total, prev, pager, next"
         />
       </div>
@@ -221,27 +221,24 @@ export default {
       // 试题弹窗
       dialogExaminationVisible: false,
       dialogExaminationData: { // 试题列表弹窗数据
-        type: '',
+        type: 'manual',
         keyword: '',
-        currentPage: 0,
-        multipleSelection: []
+        currentPage: 1,
+        pageSize: 10,
+        total: 0,
+        selection: ''
       },
-      dialogExaminationTableData: [
-        { lesson: 'C#创建对象中的类与子类', createTime: '2019.06.12', totalNum: '222', rule: '手动出题' },
-        { lesson: 'C#创建对象中的类与子类', createTime: '2019.06.12', totalNum: '222', rule: '手动出题' },
-        { lesson: 'C#创建对象中的类与子类', createTime: '2019.06.12', totalNum: '222', rule: '手动出题' },
-        { lesson: 'C#创建对象中的类与子类', createTime: '2019.06.12', totalNum: '222', rule: '手动出题' },
-        { lesson: 'C#创建对象中的类与子类', createTime: '2019.06.12', totalNum: '222', rule: '手动出题' },
-        { lesson: 'C#创建对象中的类与子类', createTime: '2019.06.12', totalNum: '222', rule: '手动出题' }
-      ]
+      dialogExaminationTableData: [],
+      typeMap: { random: '随机抽题', manual: '手动出题' }
     }
   },
   computed: {
     getQuestionListParam: function () {
       return {
-        bank_id: '',
-        type: '',
-        keyword: ''
+        type: this.typeMap[this.dialogExaminationData.type],
+        limit: this.dialogExaminationData.pageSize,
+        offset: this.dialogExaminationData.currentPage,
+        keyword: this.dialogExaminationData.keyword
       }
     }
   },
@@ -293,14 +290,26 @@ export default {
       console.log(fileList)
     },
     handleSelectionChange (val) {
-      this.dialogExaminationData.multipleSelection = val
+      this.dialogExaminationData.selection = val
     },
     handleExaminationPageChange (val) {
     },
+    handleExamRuleChange () {
+      this.getQuestionList()
+    },
+    handleKeywordFilter () {
+      this.getQuestionList()
+    },
     handleExaminationDialog () {
       this.dialogExaminationVisible = true
+      this.getQuestionList()
+    },
+    getQuestionList () {
       getQuestionList(this.getQuestionListParam).then(res => {
-        this.dialogExaminationTableData = res.data
+        if (res.code === '1') {
+          this.dialogExaminationTableData = res.data.list
+          this.dialogExaminationData.total = res.data.total
+        }
       }, error => {
         alert(error)
       })
