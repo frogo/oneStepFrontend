@@ -172,13 +172,14 @@ Mock.mock('api/question/list?bank_id=&type=&keyword=', {
     ]
   }
 })
-Mock.mock('/api/question/list?type=manual&limit=10&offset=1&keyword=', {
+Mock.mock('/api/examinationPaper/list?type=%E6%89%8B%E5%8A%A8%E5%87%BA%E9%A2%98&limit=10&offset=1&keyword=', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
     'total': 33,
     'list|10': [
       {
+        'id': '3',
         'name': '创建对象中的类与子类',
         'num': '24',
         'rule': '手动出题',

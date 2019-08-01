@@ -14,9 +14,11 @@ export default {
   TODO: CONTEXTPATH + '/message/stat',
   STATUS: CONTEXTPATH + '/statistics/info',
   COURSE: {
-    COURSE_LIST: CONTEXTPATH + '/lesson/list'
+    LIST: CONTEXTPATH + '/lesson/list',
+    ADD: CONTEXTPATH + '/lesson/add',
+    DRAFT_ADD: CONTEXTPATH + '/lessonDraft/add'
   },
-  QUESTION: {
-    QUESTION_LIST: CONTEXTPATH + '/question/list'
+  EXAMINATION_PAPER: {
+    LIST: CONTEXTPATH + '/examinationPaper/list'
   }
 }

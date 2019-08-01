@@ -79,12 +79,11 @@
       </div>
       <el-form-item label="课程文件" prop="courseFile">
         <el-upload
-          :limit="3"
+          :limit="1"
           :file-list="createForm.courseFileList"
           :on-success="handleCourseFileSuccess"
           class="upload-courseFile"
           action="https://jsonplaceholder.typicode.com/posts/"
-          multiple
         >
           <el-button size="small" type="primary">
             点击上传
@@ -98,14 +97,17 @@
         <el-button @click="handleExaminationDialog" type="primary" size="small">
           选择试卷
         </el-button>
+        <span v-if="dialogExaminationData.currentRow"><i class="el-icon-document" />{{ dialogExaminationData.currentRow.name }}</span>
       </el-form-item>
     </el-form>
     <div class="operation-bar">
-      <el-button>保存草稿</el-button>
+      <el-button @click="handleSaveCourseDraft">
+        保存草稿
+      </el-button>
       <el-button type="success">
         预览
       </el-button>
-      <el-button type="primary">
+      <el-button @click="handleSaveCourse" type="primary">
         完成
       </el-button>
     </div>
@@ -149,10 +151,10 @@
       </div>
 
       <div class="btn-box">
-        <el-button size="small">
-          取消
+        <el-button @click="cancelExaminationSelect" size="small">
+          清除
         </el-button>
-        <el-button type="primary" size="small">
+        <el-button @click="confirmExaminationSelect" type="primary" size="small">
           确定
         </el-button>
       </div>
@@ -161,7 +163,7 @@
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getQuestionList } from '@/request/api'
+import { getExaminationPaperList, addCourse, addCourseDraft } from '@/request/api'
 export default {
   data () {
     return {
@@ -169,22 +171,27 @@ export default {
         courseName: '',
         audience: '',
         target: '',
+        tags: [],
         hours: '',
         credit: '',
         intro: '',
         outline: '',
+        // 讲师
         lecturer: '',
-        lecturerIntro: '',
-        courseFile: '',
-        activeTabName: 'default',
-        radioCover: require('../../assets/img/cover-1.png'),
         lecturerImageUrl: '',
+        lecturerIntro: '',
+        // 默认封面
+        activeTabName: 'default',
         coverImageUrl: '',
+        radioCover: require('../../assets/img/cover-1.png'),
+        // 课程
+        // courseFile: '',
         courseFileList: [
           {
             name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
           }
-        ]
+        ],
+        examinationPaper: ''// 试卷ID
       },
 
       defaultCover: [
@@ -226,19 +233,42 @@ export default {
         currentPage: 1,
         pageSize: 10,
         total: 0,
-        selection: ''
+        currentRow: ''
       },
       dialogExaminationTableData: [],
       typeMap: { random: '随机抽题', manual: '手动出题' }
     }
   },
   computed: {
-    getQuestionListParam: function () {
+    getExaminationPaperListParam: function () {
       return {
         type: this.typeMap[this.dialogExaminationData.type],
         limit: this.dialogExaminationData.pageSize,
         offset: this.dialogExaminationData.currentPage,
         keyword: this.dialogExaminationData.keyword
+      }
+    },
+    addCourseParam: function () {
+      return {
+        name: this.createForm.courseName,
+        cover: (this.createForm.activeTabName === 'default') ? this.createForm.radioCover : this.createForm.coverImageUrl,
+        minutes: this.createForm.hours,
+        credit: this.createForm.credit,
+        obj: this.createForm.audience,
+        target: this.createForm.target,
+        tags: this.createForm.tags,
+        introduction: this.createForm.intro,
+        syllabus: this.createForm.outline,
+        teacher_info: {
+          name: this.createForm.lecturer,
+          pic: this.createForm.lecturerImageUrl,
+          introduction: this.createForm.lecturerIntro
+        },
+        attachment: {
+          url: this.createForm.courseFileList[0]['url'],
+          name: this.createForm.courseFileList[0]['name']
+        },
+        examination_id: this.createForm.examinationPaper
       }
     }
   },
@@ -290,28 +320,64 @@ export default {
       console.log(fileList)
     },
     handleSelectionChange (val) {
-      this.dialogExaminationData.selection = val
+      this.dialogExaminationData.currentRow = val
     },
     handleExaminationPageChange (val) {
     },
     handleExamRuleChange () {
-      this.getQuestionList()
+      this.getExaminationPaperList()
     },
     handleKeywordFilter () {
-      this.getQuestionList()
+      this.getExaminationPaperList()
     },
     handleExaminationDialog () {
       this.dialogExaminationVisible = true
-      this.getQuestionList()
+      this.getExaminationPaperList()
     },
-    getQuestionList () {
-      getQuestionList(this.getQuestionListParam).then(res => {
+    getExaminationPaperList () {
+      getExaminationPaperList(this.getExaminationPaperListParam).then(res => {
         if (res.code === '1') {
           this.dialogExaminationTableData = res.data.list
           this.dialogExaminationData.total = res.data.total
         }
       }, error => {
-        alert(error)
+        error && this.$message.error(error)
+      })
+    },
+    cancelExaminationSelect () {
+      this.dialogExaminationVisible = false
+      this.createForm.examinationPaper = ''
+    },
+    confirmExaminationSelect () {
+      this.dialogExaminationVisible = false
+      this.createForm.examinationPaper = this.dialogExaminationData.currentRow.id
+    },
+    handleSaveCourseDraft () {
+      addCourseDraft(this.addCourseParam).then(res => {
+        if (res.code === '1') {
+          this.$alert('保存草稿成功', '提示', {
+            confirmButtonText: '确定',
+            callback: action => {
+
+            }
+          })
+        }
+      }, error => {
+        error && this.$message.error(error)
+      })
+    },
+    handleSaveCourse () {
+      addCourse(this.addCourseParam).then(res => {
+        if (res.code === '1') {
+          this.$alert('保存草稿成功', '提示', {
+            confirmButtonText: '确定',
+            callback: action => {
+
+            }
+          })
+        }
+      }, error => {
+        error && this.$message.error(error)
       })
     }
   }
