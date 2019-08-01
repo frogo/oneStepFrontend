@@ -187,3 +187,11 @@ Mock.mock('/api/examinationPaper/list?type=%E6%89%8B%E5%8A%A8%E5%87%BA%E9%A2%98&
       }
     ] }
 })
+Mock.mock('/api/lesson/add', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': ''
+})
+Mock.mock('/api/lessonDraft/add', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': ''
+})

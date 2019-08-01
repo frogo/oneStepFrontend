@@ -101,11 +101,8 @@
       </el-form-item>
     </el-form>
     <div class="operation-bar">
-      <el-button @click="handleSaveCourseDraft">
+      <el-button @click="handleSaveCourseDraft" type="success">
         保存草稿
-      </el-button>
-      <el-button type="success">
-        预览
       </el-button>
       <el-button @click="handleSaveCourse" type="primary">
         完成
@@ -369,10 +366,12 @@ export default {
     handleSaveCourse () {
       addCourse(this.addCourseParam).then(res => {
         if (res.code === '1') {
-          this.$alert('保存草稿成功', '提示', {
+          this.$alert('保存成功', '提示', {
             confirmButtonText: '确定',
             callback: action => {
-
+              this.$router.push({
+                path: '/enterpriseCourseLibrary'
+              })
             }
           })
         }
