@@ -23,7 +23,7 @@
         <el-input v-model="createForm.target" placeholder="请输入" />
       </el-form-item>
       <el-form-item label="标签" prop="">
-        <el-button type="info" icon="el-icon-plus" plain size="small">
+        <el-button @click="dialogTagsEditorVisible = true" type="info" icon="el-icon-plus" plain size="small">
           添加
         </el-button>
       </el-form-item>
@@ -108,7 +108,7 @@
         完成
       </el-button>
     </div>
-    <el-dialog :visible.sync="dialogExaminationVisible" title="试卷选择" class="examinationChoose">
+    <el-dialog :visible.sync="dialogExaminationVisible" title="试卷选择" custom-class="examinationChoose">
       <div class="filter-box">
         <div class="left">
           <el-select v-model="dialogExaminationData.type" @change="handleExamRuleChange" placeholder="请选择" class="select" size="small">
@@ -156,12 +156,17 @@
         </el-button>
       </div>
     </el-dialog>
+    <tags-editor-dialog :dialogTagsEditorVisible="dialogTagsEditorVisible" @closeDialog="dialogTagsEditorVisible = false" />
   </el-main>
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
 import { getExaminationPaperList, addCourse, addCourseDraft } from '@/request/api'
+import TagsEditorDialog from '@/components/tagsEditorDialog'
 export default {
+  components: {
+    TagsEditorDialog
+  },
   data () {
     return {
       createForm: {
@@ -233,7 +238,9 @@ export default {
         currentRow: ''
       },
       dialogExaminationTableData: [],
-      typeMap: { random: '随机抽题', manual: '手动出题' }
+      typeMap: { random: '随机抽题', manual: '手动出题' },
+      // 编辑标签弹窗
+      dialogTagsEditorVisible: false
     }
   },
   computed: {

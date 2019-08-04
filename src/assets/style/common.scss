@@ -410,7 +410,24 @@ a{text-decoration: none}
   .btn-box{margin-top: 30px;display: flex;justify-content: flex-end}
   .pager-box{display: flex;justify-content: flex-end; margin-top: 15px}
 }
-
+.tagsEditor{
+     .tags-box{ margin: 6px 0}
+    .el-tag + .el-tag {
+      margin-left: 10px;
+    }
+    .button-new-tag {
+      margin-left: 10px;
+      height: 32px;
+      line-height: 30px;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+    .input-new-tag {
+      width: 90px;
+      margin-left: 10px;
+      vertical-align: bottom;
+    }
+}
 /* Scrollbar */
 
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
