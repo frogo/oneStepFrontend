@@ -8,78 +8,78 @@
     <div class="tags-box level">
       <span>层级:</span>
       <el-tag
-        :key="tag"
-        v-for="tag in levelTags"
+        :key="tag.name"
+        v-for="tag in tags.level.list"
         :disable-transitions="false"
-        @click="handleTagClick(levelTags, tag)"
-        @close="handleTagClose(levelTags, tag)"
-        effect="plain"
+        @click="handleTagClick('level', tag)"
+        @close="handleTagClose('level', tag)"
+        :effect="tag.active ? 'dark' : 'plain'"
         closable
       >
-        {{ tag }}
+        {{ tag.name }}
       </el-tag>
       <el-input
-        ref="saveTagInput"
-        v-if="inputVisible"
-        v-model="inputValue"
-        @keyup.enter.native="handleInputConfirm"
-        @blur="handleInputConfirm"
+        ref="level_saveTagInput"
+        v-if="tags.level.inputVisible"
+        v-model="tags.level.inputValue"
+        @keyup.enter.native="handleInputConfirm('level')"
+        @blur="handleInputConfirm('level')"
         class="input-new-tag"
         size="small"
       />
-      <el-button v-else @click="showInput" class="button-new-tag" size="small">
+      <el-button v-else @click="showInput('level')" class="button-new-tag" size="small">
         + New Tag
       </el-button>
     </div>
     <div class="tags-box function">
       <span>职能:</span>
       <el-tag
-        :key="tag"
-        v-for="tag in functionTags"
+        :key="tag.name"
+        v-for="tag in tags.function.list"
         :disable-transitions="false"
-        @click="handleTagClick(tag)"
-        @close="handleTagClose(tag)"
-        effect="plain"
+        @click="handleTagClick('function', tag)"
+        @close="handleTagClose('function', tag)"
+        :effect="tag.active ? 'dark' : 'plain'"
         closable
       >
-        {{ tag }}
+        {{ tag.name }}
       </el-tag>
       <el-input
-        ref="saveTagInput"
-        v-if="inputVisible"
-        v-model="inputValue"
-        @keyup.enter.native="handleInputConfirm"
-        @blur="handleInputConfirm"
+        ref="function_saveTagInput"
+        v-if="tags.function.inputVisible"
+        v-model="tags.function.inputValue"
+        @keyup.enter.native="handleInputConfirm('function')"
+        @blur="handleInputConfirm('function')"
         class="input-new-tag"
         size="small"
       />
-      <el-button v-else @click="showInput" class="button-new-tag" size="small">
+      <el-button v-else @click="showInput('function')" class="button-new-tag" size="small">
         + New Tag
       </el-button>
     </div>
     <div class="tags-box custom">
       <span>自定:</span>
       <el-tag
-        :key="tag"
-        v-for="(tag) in customTags"
+        :key="tag.name"
+        v-for="tag in tags.custom.list"
         :disable-transitions="false"
-        @click="handleTagClick(tag)"
-        @close="handleTagClose(tag)"
-        effect="plain"
+        @click="handleTagClick('custom', tag)"
+        @close="handleTagClose('custom', tag)"
+        :effect="tag.active ? 'dark' : 'plain'"
         closable
       >
-        {{ tag }}
+        {{ tag.name }}
       </el-tag>
       <el-input
-        ref="saveTagInput"
-        v-if="inputVisible"
-        v-model="inputValue"
-        @keyup.enter.native="handleInputConfirm"
-        @blur="handleInputConfirm"
+        ref="custom_saveTagInput"
+        v-if="tags.custom.inputVisible"
+        v-model="tags.custom.inputValue"
+        @keyup.enter.native="handleInputConfirm('custom')"
+        @blur="handleInputConfirm('custom')"
         class="input-new-tag"
         size="small"
       />
-      <el-button v-else @click="showInput" class="button-new-tag" size="small">
+      <el-button v-else @click="showInput('custom')" class="button-new-tag" size="small">
         + New Tag
       </el-button>
     </div>
@@ -98,35 +98,84 @@ export default {
   },
   data () {
     return {
-      levelTags: ['标签一', '标签二', '标签三'],
-      functionTags: ['标签一', '标签二', '标签三'],
-      customTags: ['标签一', '标签二', '标签三'],
-      inputVisible: false,
-      inputValue: ''
+      tags: {
+        level: {
+          list: [
+            {
+              name: '标签一',
+              id: '',
+              active: false
+            }
+          ],
+          selected: [],
+          inputVisible: false,
+          inputValue: ''
+        },
+        function: {
+          list: [
+            {
+              name: '标签一',
+              id: '',
+              active: false
+            }
+          ],
+          selected: [],
+          inputVisible: false,
+          inputValue: ''
+        },
+        custom: {
+          list: [
+            {
+              name: '标签一',
+              id: '',
+              active: false
+            }
+          ],
+          selected: [],
+          inputVisible: false,
+          inputValue: ''
+        }
+      }
     }
   },
   methods: {
     handleTagClose (tags, tag) {
-      this.tags.splice(this.tags.indexOf(tag), 1)
+      let tagList = this.tags[tags]['list']
+      tagList.splice(tagList.indexOf(tag), 1)
     },
     handleTagClick (tags, tag) {
-      this.tags.splice(this.tags.indexOf(tag), 1)
-    },
+      let tagList = this.tags[tags]['list']
+      let selected = this.tags[tags].selected
 
-    showInput () {
-      this.inputVisible = true
+      selected.map(item => {
+        if (item.name === tag) {
+          alert('')
+        } else {
+          selected.push(tag)
+          tagList.map(item => {
+            if (item.name === tag.name) {
+              item.active = true
+            }
+            return item
+          })
+        }
+      })
+      console.log(tagList)
+    },
+    showInput (type) {
+      this.tags[type].inputVisible = true
       this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus()
+        this.$refs[type + '_saveTagInput'].$refs.input.focus()
       })
     },
 
-    handleInputConfirm () {
-      let inputValue = this.inputValue
+    handleInputConfirm (type) {
+      let inputValue = this.tags[type].inputValue
       if (inputValue) {
-        // this.dynamicTags.push(inputValue)
+        this.tags[type].list.push({ name: inputValue, parent_id: '', id: '' })
       }
-      this.inputVisible = false
-      this.inputValue = ''
+      this.tags[type].inputVisible = false
+      this.tags[type].inputValue = ''
     },
     handleDialogCancel () {
       this.$emit('closeDialog')
