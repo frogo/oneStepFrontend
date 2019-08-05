@@ -156,7 +156,7 @@
         </el-button>
       </div>
     </el-dialog>
-    <tags-editor-dialog :dialogTagsEditorVisible="dialogTagsEditorVisible" @closeDialog="dialogTagsEditorVisible = false" />
+    <tags-editor-dialog :dialogTagsEditorVisible.sync="dialogTagsEditorVisible" @closeDialog="dialogTagsEditorVisible = false" />
   </el-main>
 </template>
 <script>

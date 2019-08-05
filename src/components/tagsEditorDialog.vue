@@ -1,6 +1,7 @@
 <template>
   <el-dialog
     :visible.sync="dialogTagsEditorVisible"
+    :before-close="handleDialogClose"
     title="编辑标签"
     width="60%"
     custom-class="tagsEditor"
@@ -94,7 +95,10 @@
 export default {
   name: 'TagsEditorDialog',
   props: {
-    dialogTagsEditorVisible: Boolean
+    dialogTagsEditorVisible: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {
@@ -138,29 +142,44 @@ export default {
       }
     }
   },
-  methods: {
-    handleTagClose (tags, tag) {
-      let tagList = this.tags[tags]['list']
-      tagList.splice(tagList.indexOf(tag), 1)
-    },
-    handleTagClick (tags, tag) {
-      let tagList = this.tags[tags]['list']
-      let selected = this.tags[tags].selected
+  mounted () {
 
-      selected.map(item => {
-        if (item.name === tag) {
-          alert('')
-        } else {
-          selected.push(tag)
-          tagList.map(item => {
-            if (item.name === tag.name) {
-              item.active = true
-            }
-            return item
-          })
+  },
+  methods: {
+    handleTagClose (type, tag) {
+      let tagList = this.tags[type]['list']
+      let selected = this.tags[type].selected
+      if (this.getTagIndex(tagList, tag) !== -1) {
+        tagList.splice(this.getTagIndex(tagList, tag), 1)
+      }
+      if (this.getTagIndex(selected, tag) !== -1) {
+        selected.splice(this.getTagIndex(selected, tag), 1)
+      }
+    },
+    getTagIndex (tags, tag) { // 获取index
+      let tagIndex = -1
+      tags.map((item, index, array) => {
+        if (item.name === tag.name) {
+          tagIndex = index
         }
       })
-      console.log(tagList)
+      return tagIndex
+    },
+    handleTagClick (type, tag) {
+      let tagList = this.tags[type]['list']
+      let selected = this.tags[type]['selected']
+      if (selected.length > 0) {
+        if (this.getTagIndex(selected, tag) === -1) {
+          selected.push(tag)
+          tagList[this.getTagIndex(tagList, tag)].active = true
+        } else {
+          selected.splice(this.getTagIndex(selected, tag), 1)
+          tagList[this.getTagIndex(tagList, tag)].active = false
+        }
+      } else {
+        selected.push(tag)
+        tagList[this.getTagIndex(tagList, tag)].active = true
+      }
     },
     showInput (type) {
       this.tags[type].inputVisible = true
@@ -172,7 +191,7 @@ export default {
     handleInputConfirm (type) {
       let inputValue = this.tags[type].inputValue
       if (inputValue) {
-        this.tags[type].list.push({ name: inputValue, parent_id: '', id: '' })
+        this.tags[type].list.push({ name: inputValue, parent_id: '', id: '', active: false })
       }
       this.tags[type].inputVisible = false
       this.tags[type].inputValue = ''
@@ -181,6 +200,9 @@ export default {
       this.$emit('closeDialog')
     },
     handleDialogConfirm () {
+      this.$emit('closeDialog')
+    },
+    handleDialogClose () {
       this.$emit('closeDialog')
     }
   }
