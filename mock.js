@@ -67,6 +67,7 @@ Mock.mock('/api/lesson/list', {
     'total': 33,
     'list|20': [
       {
+        'id': '3',
         'name': '入职课程',
         'cover': 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
         'minutes': '180',
@@ -194,4 +195,108 @@ Mock.mock('/api/lesson/add', {
 Mock.mock('/api/lessonDraft/add', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': ''
+})
+
+Mock.mock('/api/tag/list', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'tag': [
+      {
+        'id': 1,
+        'company_id': 0,
+        'name': '层级',
+        'readonly': 1,
+        'parent_id': 0,
+        'child': [
+          {
+            'id': 4,
+            'company_id': 0,
+            'name': '新员工',
+            'readonly': 1,
+            'parent_id': 1,
+            'child': null
+          },
+          {
+            'id': 5,
+            'company_id': 0,
+            'name': '一般员工',
+            'readonly': 1,
+            'parent_id': 1,
+            'child': null
+          }
+        ]
+      },
+      {
+        'id': 2,
+        'company_id': 0,
+        'name': '职能',
+        'readonly': 1,
+        'parent_id': 0,
+        'child': [
+          {
+            'id': 6,
+            'company_id': 0,
+            'name': '销售部',
+            'readonly': 1,
+            'parent_id': 2,
+            'child': null
+          }
+        ]
+      },
+      {
+        'id': 3,
+        'company_id': 0,
+        'name': '自定',
+        'readonly': 1,
+        'parent_id': 0,
+        'child': [
+          {
+            'id': 7,
+            'company_id': 0,
+            'name': '战略',
+            'readonly': 1,
+            'parent_id': 3,
+            'child': null
+          },
+          {
+            'id': 8,
+            'company_id': 0,
+            'name': '内部',
+            'readonly': 1,
+            'parent_id': 3,
+            'child': null
+          }
+        ]
+      }
+    ],
+    'status': [
+      {
+        'value': 4,
+        'name': '下载'
+      },
+      {
+        'value': 1,
+        'name': '正常'
+      },
+      {
+        'value': 2,
+        'name': '草稿'
+      },
+      {
+        'value': 3,
+        'name': '在线'
+      }
+    ],
+    'source': [
+      {
+        'value': 1,
+        'name': '外部'
+      },
+      {
+        'value': 2,
+        'name': '内部'
+      }
+    ]
+  }
 })

@@ -91,8 +91,8 @@
               <span v-else />
               <img :src="item.cover" class="image">
             </div>
-            <div class="text-area">
-              <span class="title">{{ item.name }}</span>
+            <div @click="gotoDetail(item.id)" class="text-area">
+              <span class="title">{{ item.name }} {{ item.id }}</span>
               <div class="bottom clearFix">
                 <span class="up-num"><i class="el-icon-user" /> 158</span>
                 <span class="teacher">{{ item.teacher_info.name }}</span>
@@ -190,6 +190,9 @@ export default {
     },
     gotoCreate () {
       this.$router.push({ path: '/enterpriseCourseLibrary/create' })
+    },
+    gotoDetail (lessonId) {
+      this.$router.push({ path: '/enterpriseCourseLibrary/details', query: { id: lessonId } })
     }
   }
 }

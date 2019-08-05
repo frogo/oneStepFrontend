@@ -371,7 +371,28 @@ a{text-decoration: none}
     .el-button{width:100px}
   }
 }
-
+.page-courseDetails{
+  .video-box{
+    width:710px;
+    display: flex;
+    justify-content: space-between;
+    .video{
+      width:500px;
+    }
+    .pieces{
+      width:180px;
+      h1{font-size: 22px}
+      ul.some{margin: 30px 0;
+        li{
+          font-size: 12px;
+          line-height: 2.8em;
+          color:#666;
+          .c999{color:#999}
+        }
+      }
+    }
+  }
+}
 
 
 .el-container.main-content{
