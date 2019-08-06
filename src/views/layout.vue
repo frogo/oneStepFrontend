@@ -21,7 +21,7 @@
                 </router-link>
               </li>
               <li>
-                <router-link to="/userCenter">
+                <router-link to="/projectManagement">
                   培训项目管理
                 </router-link>
               </li>

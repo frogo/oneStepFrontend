@@ -1,5 +1,5 @@
 import Mock from 'mockjs'
-Mock.mock('/api/statistics/info', {
+Mock.mock('/v1/statistics/info', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -9,7 +9,7 @@ Mock.mock('/api/statistics/info', {
     'lesson': 66
   }
 })
-Mock.mock('/api/message/stat', {
+Mock.mock('/v1/message/stat', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -18,7 +18,7 @@ Mock.mock('/api/message/stat', {
     'lesson': 66
   }
 })
-Mock.mock('/api/user/login', {
+Mock.mock('/v1/user/login', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -28,7 +28,7 @@ Mock.mock('/api/user/login', {
     'email': ''
   }
 })
-Mock.mock('/api/user/session', {
+Mock.mock('/v1/user/session', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -38,29 +38,29 @@ Mock.mock('/api/user/session', {
     'email': ''
   }
 })
-Mock.mock('/api/user/loginOut', {
+Mock.mock('/v1/user/loginOut', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': ''
 })
 
-Mock.mock('/api/user/register', {
+Mock.mock('/v1/user/register', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': ''
 })
-Mock.mock('/api/user/forgotPassword', {
+Mock.mock('/v1/user/forgotPassword', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '您输入的用户名和邮箱不存在，请核对后输入！'
 })
-Mock.mock('/api/user/passwd', {
+Mock.mock('/v1/user/passwd', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': ''
 })
-Mock.mock('/api/user/resetPwd', {
+Mock.mock('/v1/user/resetPwd', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': ''
 })
 
-Mock.mock('/api/lesson/list', {
+Mock.mock('/v1/lesson/list', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -152,7 +152,7 @@ Mock.mock('/api/lesson/list', {
     ]
   }
 })
-Mock.mock('api/question/list?bank_id=&type=&keyword=', {
+Mock.mock('v1/question/list?bank_id=&type=&keyword=', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -173,7 +173,7 @@ Mock.mock('api/question/list?bank_id=&type=&keyword=', {
     ]
   }
 })
-Mock.mock('/api/examinationPaper/list?type=%E6%89%8B%E5%8A%A8%E5%87%BA%E9%A2%98&limit=10&offset=1&keyword=', {
+Mock.mock('/v1/examinationPaper/list?type=%E6%89%8B%E5%8A%A8%E5%87%BA%E9%A2%98&limit=10&offset=1&keyword=', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -188,16 +188,16 @@ Mock.mock('/api/examinationPaper/list?type=%E6%89%8B%E5%8A%A8%E5%87%BA%E9%A2%98&
       }
     ] }
 })
-Mock.mock('/api/lesson/add', {
+Mock.mock('/v1/lesson/add', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': ''
 })
-Mock.mock('/api/lessonDraft/add', {
+Mock.mock('/v1/lessonDraft/add', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': ''
 })
 
-Mock.mock('/api/tag/list', {
+Mock.mock('/v1/tag/list', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -298,5 +298,39 @@ Mock.mock('/api/tag/list', {
         'name': '内部'
       }
     ]
+  }
+})
+
+Mock.mock('/v1/lesson/info?id=3', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'id': '3',
+    'name': '入职课程',
+    'cover': 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+    'minutes': '180',
+    'credit': '10',
+    'obj': '实习生',
+    'target': '目标',
+    'introduction': '介绍',
+    'syllabus': '大纲',
+    'teacher_info': {
+      'name': '王铮',
+      'pic': 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+      'introduction': '简介内容'
+    },
+    'examination_info': {
+      'id': '1',
+      'name': '试卷名称',
+      'num': '20',
+      'rule': '手动出题',
+      'add_time': '2019.6.13'
+    },
+    'attachment': {
+      'url': '/att/2898247/file.doc',
+      'name': '附加名称'
+    },
+    'status': '0',
+    'add_time': '2019.6.14'
   }
 })

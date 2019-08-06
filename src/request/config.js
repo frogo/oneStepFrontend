@@ -1,4 +1,4 @@
-const CONTEXTPATH = '/api'
+const CONTEXTPATH = '/v1'
 
 export default {
   // 接口
@@ -16,7 +16,8 @@ export default {
   COURSE: {
     LIST: CONTEXTPATH + '/lesson/list',
     ADD: CONTEXTPATH + '/lesson/add',
-    DRAFT_ADD: CONTEXTPATH + '/lessonDraft/add'
+    DRAFT_ADD: CONTEXTPATH + '/lessonDraft/add',
+    DETAILS: CONTEXTPATH + '/lesson/info'
   },
   EXAMINATION_PAPER: {
     LIST: CONTEXTPATH + '/examinationPaper/list'

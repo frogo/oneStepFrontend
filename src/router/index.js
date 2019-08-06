@@ -5,6 +5,7 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   // mode: 'history',
+  // linkActiveClass: 'current-highlight',
   routes: [
     {
       path: '/',
@@ -34,8 +35,12 @@ const router = new VueRouter({
           path: '/enterpriseCourseLibrary/create',
           name: '课程库创建',
           component: () => import('../views/enterpriseCourseLibrary/create.vue')
+        },
+        { // 项目管理
+          path: '/projectManagement',
+          name: '项目管理首页',
+          component: () => import('../views/projectManagement/index.vue')
         }
-
       ]
     },
     {

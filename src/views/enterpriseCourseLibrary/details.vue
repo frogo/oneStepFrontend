@@ -1,9 +1,15 @@
 <template lang="html">
   <el-main class="page-courseDetails">
-    <div class="video-box">
-      <div class="video" />
+    <div v-if="courseDetails" class="video-box">
+      <div class="video">
+        <video controls>
+          <source src="https://www.runoob.com/try/demo_source/movie.mp4" type="video/mp4">
+          <source src="https://www.runoob.com/try/demo_source/movie.ogg" type="video/ogg">
+          您的浏览器不支持 HTML5 video 标签。
+        </video>
+      </div>
       <div class="pieces">
-        <h1>管理情绪入门篇</h1>
+        <h1>{{ courseDetails.name }}</h1>
         <ul class="some">
           <li>
             <span style="margin-right: 30px" class="c999"><i class="el-icon-thumb" /> 158</span>
@@ -20,14 +26,49 @@
         </div>
       </div>
     </div>
+    <div v-if="courseDetails" class="introduction">
+      <div class="course-intro">
+        <el-tabs v-model="courseActiveName">
+          <el-tab-pane label="课程介绍" name="intro">
+            {{ courseDetails.introduction }}
+          </el-tab-pane>
+          <el-tab-pane label="课程大纲" name="outline">
+            {{ courseDetails.syllabus }}
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+      <div class="lecturer-intro">
+        <h2 class="intro">
+          讲师简介
+        </h2>
+        <div class="head">
+          <div class="avatar">
+            <el-avatar :src="courseDetails.teacher_info.pic" />
+          </div>
+          <div class="name">
+            <p>{{ courseDetails.teacher_info.name }}</p>
+            <p style="color:#c2c2c2; margin-top: 10px;">
+              <i class="el-icon-thumb" /> 158
+            </p>
+          </div>
+        </div>
+        <div class="section">
+          {{ courseDetails.teacher_info.introduction }}
+        </div>
+      </div>
+    </div>
   </el-main>
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-// import { getStatus, getTodo } from '@/request/api'
+import { getCourseDetails } from '@/request/api'
+import { GetUrlParam } from '@/utility'
+
 export default {
   data () {
     return {
+      courseActiveName: 'intro',
+      courseDetails: ''
     }
   },
   computed: {
@@ -35,7 +76,15 @@ export default {
   watch: {
   },
   mounted: function () {
-
+    let param = { id: GetUrlParam('id') }
+    getCourseDetails(param).then(res => {
+      if (res.code === '1') {
+        console.log(res)
+        this.courseDetails = res.data
+      }
+    }, error => {
+      error && this.$message(error)
+    })
   },
   methods: {
 

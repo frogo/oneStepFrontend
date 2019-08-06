@@ -39,9 +39,9 @@ module.exports = {
     port: 3003,
     open: true,
     proxy: {
-      '/cooperate-case-server/': { //
+      '/v1/': { //
         // Real api
-        target: 'http://10.101.7.53:5511/',
+        target: 'http://www.frogo.cn/',
         changeOrigin: true
       }
     },
