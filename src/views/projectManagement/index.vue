@@ -1,5 +1,5 @@
 <template lang="html">
-  <el-container class="main-content page-changePassword">
+  <el-container class="main-content page-project">
     <el-aside width="160px">
       <dl>
         <dt>项目培训</dt>
@@ -67,6 +67,74 @@
           </el-form-item>
         </el-form>
       </div>
+      <div class="project-list">
+        <el-tabs>
+          <el-tab-pane>
+            <span slot="label"><i class="el-icon-menu" /> </span>
+            <el-row>
+              <el-col :span="5" v-for="(item, index) in 14" :key="`project_${index}`" :offset="index%4 ==0 ? 0 : 1">
+                <el-card class="project-card">
+                  <div class="status-bg blue">
+                    <span class="special-status">待审批</span>
+                    编辑中
+                  </div>
+                  <div class="headline">
+                    孙子兵法实践训练初级人们-第一讲
+                  </div>
+                  <div class="date">
+                    <p>发布时间： 2019-05-01</p>
+                    <p>结束时间： 2019-05-29</p>
+                  </div>
+                  <div class="percent">
+                    <span class="person-num"><i class=" el-icon-user" /> 158</span>
+                    <el-progress :percentage="70" :stroke-width="3" />
+                  </div>
+                  <div class="mask">
+                    <div class="operate">
+                      <div class="item">
+                        <p class="icon">
+                          <i class="el-icon-edit" />
+                        </p>
+                        <p class="text">
+                          编辑
+                        </p>
+                      </div>
+                      <div class="item">
+                        <p class="icon">
+                          <i class="el-icon-view" />
+                        </p>
+                        <p class="text">
+                          预览
+                        </p>
+                      </div>
+                      <div class="item">
+                        <p class="icon">
+                          <i class="el-icon-download" />
+                        </p>
+                        <p class="text">
+                          下线
+                        </p>
+                      </div>
+                      <div class="item">
+                        <p class="icon">
+                          <i class="el-icon-delete" />
+                        </p>
+                        <p class="text">
+                          删除
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </el-card>
+              </el-col>
+            </el-row>
+          </el-tab-pane>
+          <el-tab-pane>
+            <span slot="label"><i class="el-icon-bank-card" /> </span>
+            <el-progress :percentage="70" :stroke-width="3" />
+          </el-tab-pane>
+        </el-tabs>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -80,7 +148,7 @@ export default {
       filterForm: {
         status: '全部'
       },
-      status: []
+      status: ['全部', '正常', '草稿', '下线']
     }
   },
   computed: {

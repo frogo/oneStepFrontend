@@ -10,7 +10,7 @@
         </dd>
       </dl>
     </el-aside>
-    <el-main>
+    <el-main class="bg">
       <h2>修改密码</h2>
       <el-form ref="changeForm" :model="changeForm" :rules="rules" label-position="left" status-icon label-width="100px" class="changForm">
         <el-form-item label="旧密码" prop="oldPassword">
