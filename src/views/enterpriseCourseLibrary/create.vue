@@ -37,7 +37,7 @@
         <el-tabs v-model="createForm.activeTabName" @tab-click="handleTabClick" type="card">
           <el-tab-pane label="默认封面" name="default">
             <el-radio-group v-model="createForm.radioCover">
-              <el-radio v-for="img in defaultCover" :label="img" @change="handleCoverClick">
+              <el-radio v-for="img in defaultCover" :label="img" @change="handleCoverClick" :key="img">
                 <img :src="img">
               </el-radio>
             </el-radio-group>

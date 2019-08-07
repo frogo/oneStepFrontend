@@ -339,8 +339,8 @@ Mock.mock('/v1/project/list', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
-    'total': 21,
-    'list': [
+    'total': 11,
+    'list|11': [
       {
         'id': 1,
         'name': '孙子兵法实践初级入门第一届',
@@ -369,6 +369,7 @@ Mock.mock('/v1/project/list', {
             'name': '王五'
           }
         ],
+        'ratio': 50,
         'status': 1,
         'add_time': '2019-09-21'
       }

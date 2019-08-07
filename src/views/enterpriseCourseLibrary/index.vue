@@ -17,17 +17,17 @@
       <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
         <el-form-item label="来源：">
           <el-radio-group v-model="filterForm.from">
-            <el-radio :label="item" v-for="item in tags.from" border />
+            <el-radio :label="item" v-for="item in tags.from" :key="item" border />
           </el-radio-group>
         </el-form-item>
         <el-form-item label="状态：">
           <el-radio-group v-model="filterForm.status">
-            <el-radio :label="item" v-for="item in tags.status" border />
+            <el-radio :label="item" v-for="item in tags.status" :key="item" border />
           </el-radio-group>
         </el-form-item>
         <el-form-item label="系列：">
           <el-radio-group v-model="filterForm.series">
-            <el-radio :label="item" v-for="item in tags.series" border />
+            <el-radio :label="item" v-for="item in tags.series" :key="item" border />
           </el-radio-group>
         </el-form-item>
 
@@ -38,12 +38,12 @@
         </el-form-item>
         <el-form-item label="职能：">
           <el-checkbox-group v-model="filterForm.department">
-            <el-checkbox-button :label="item" v-for="item in tags.department" name="type" />
+            <el-checkbox-button :label="item" v-for="item in tags.department" :key="item" name="type" />
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="自定：">
           <el-checkbox-group v-model="filterForm.custom">
-            <el-checkbox-button :label="item" v-for="item in tags.custom" name="type" />
+            <el-checkbox-button :label="item" v-for="item in tags.custom" :key="item" name="type" />
           </el-checkbox-group>
         </el-form-item>
       </el-form>

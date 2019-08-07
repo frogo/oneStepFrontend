@@ -1,49 +1,6 @@
 <template lang="html">
   <el-container class="main-content page-project">
-    <el-aside width="160px">
-      <dl>
-        <dt>项目培训333</dt>
-        <dd>
-          <i class="el-icon-monitor" />
-          <router-link to="/projectManagement" class="menu-link">
-            在线培训项目
-          </router-link>
-        </dd>
-        <dt>考试管理</dt>
-        <dd>
-          <i class="el-icon-edit-outline" />
-          <router-link to="/" class="menu-link">
-            题库管理
-          </router-link>
-        </dd>
-        <dd>
-          <i class="el-icon-document" />
-          <router-link to="/" class="menu-link">
-            试卷管理
-          </router-link>
-        </dd>
-        <dt>数据统计</dt>
-        <dd>
-          <i class="el-icon-s-data" />
-          <router-link to="/" class="menu-link">
-            培训统计
-          </router-link>
-        </dd>
-        <dd>
-          <i class="el-icon-full-screen" />
-          <router-link to="/" class="menu-link">
-            课程排行
-          </router-link>
-        </dd>
-        <dt>人员管理</dt>
-        <dd>
-          <i class="el-icon-coordinate" />
-          <router-link to="/" class="menu-link">
-            特殊学员
-          </router-link>
-        </dd>
-      </dl>
-    </el-aside>
+    <AsideMenu />
     <el-main>
       <div class="filter-box">
         <el-button @click="gotoCreate" type="primary" class="add-button">
@@ -62,7 +19,7 @@
         <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
           <el-form-item label="状态：">
             <el-radio-group v-model="filterForm.status">
-              <el-radio :label="item" v-for="item in status" border />
+              <el-radio :label="item" v-for="item in status" :key="item" border />
             </el-radio-group>
           </el-form-item>
         </el-form>
@@ -75,7 +32,7 @@
               <el-col :span="5" v-for="(item, index) in projectList" :key="`project_card_${index}`" :offset="index%4 ==0 ? 0 : 1">
                 <el-card class="project-card">
                   <div :class="`status-bg ${statusBgMap[item.status]}`">
-                    <span class="special-status">待审批</span>
+                    <span @click="handlePending" class="special-status">待审批</span>
                     编辑中
                   </div>
                   <div class="headline">
@@ -87,7 +44,7 @@
                   </div>
                   <div class="percent">
                     <span class="person-num"><i class=" el-icon-user" /> {{ item.personnel.length }}</span>
-                    <el-progress :percentage="70" :stroke-width="4" />
+                    <el-progress :percentage="item.ratio" :stroke-width="3" />
                   </div>
                   <div class="mask">
                     <div class="operate">
@@ -99,7 +56,7 @@
                           编辑
                         </p>
                       </div>
-                      <div class="item">
+                      <div @click="handleView" class="item">
                         <p class="icon">
                           <i class="el-icon-view" />
                         </p>
@@ -135,7 +92,7 @@
               <span class="pending">待审批</span>
               <el-row :gutter="20">
                 <el-col :span="2">
-                  <el-progress :percentage="50" type="circle" width="52" stroke-width="4" />
+                  <el-progress :percentage="50" :width="52" :stroke-width="4" type="circle" />
                 </el-col>
                 <el-col :span="16">
                   <div class="headline">
@@ -159,22 +116,149 @@
         </el-tabs>
       </div>
     </el-main>
+    <el-dialog
+      :visible.sync="viewDialogVisible"
+      title="提示"
+      width="50%"
+      class="projectViewDialog"
+    >
+      <div class="project-view-box">
+        <ul>
+          <li class="flex">
+            <span><i>参训对象：</i>一般员工</span> <span><i>目标人数：</i>26</span>
+          </li>
+          <li class="flex">
+            <span><i>开始日期：</i>2019-04-01</span> <span><i>结束日期：</i>2019-05-01</span>
+          </li>
+          <li>
+            <div class="head">
+              简介：
+            </div>
+            <div class="content">
+              洒落的骄傲的就看见了快速减肥涉及到法律
+            </div>
+          </li>
+          <li>
+            <div class="head">
+              包含课程：
+            </div>
+            <div class="content flex">
+              <div class="chapter">
+                <p>第一章课程介绍</p>
+                <p>第一章课程介绍</p>
+                <p>第一章课程介绍</p>
+                <p>第一章课程介绍</p>
+                <p>第一章课程介绍</p>
+              </div>
+              <div class="qrCode">
+                <img src="@/assets/img/qrCode.png">
+                <el-button type="primary" size="small">
+                  下载培训项目二维码
+                </el-button>
+              </div>
+            </div>
+          </li>
+          <li class="copyLink">
+            <el-input id="url" value="www.yibuwuyou.com" /> <el-button @click="copyUrl2">
+              复制链接
+            </el-button>
+          </li>
+        </ul>
+      </div>
+    </el-dialog>
+    <el-dialog
+      :visible.sync="approvalDialogVisible"
+      title="报名审批"
+      width="80%"
+      class="projectApprovalDialog"
+    >
+      <div class="btn-box">
+        <el-button type="success" size="small">
+          批量通过
+        </el-button> <el-button type="primary" size="small">
+          批量不通过
+        </el-button>
+      </div>
+
+      <el-table
+        ref="multipleTable"
+        :data="pendingTableData"
+        @selection-change="handleSelectionChange"
+        tooltip-effect="dark"
+        style="width: 100%"
+      >
+        <el-table-column
+          type="selection"
+          width="55"
+        />
+        <el-table-column
+          prop="name"
+          label="学员姓名"
+          width="120"
+        />
+        <el-table-column
+          prop="phone"
+          label="联系电话"
+          width="120"
+        />
+        <el-table-column
+          prop="add_time"
+          label="申请时间"
+        />
+        <el-table-column
+          label="操作"
+        >
+          <template slot-scope="scope">
+            <el-button
+              @click="handleEdit(scope.$index, scope.row)"
+              size="mini"
+            >
+              通过
+            </el-button>
+            <el-button
+              @click="handleDelete(scope.$index, scope.row)"
+              size="mini"
+              type="danger"
+            >
+              不通过
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="approvalDialogVisible = false" type="primary">退出</el-button>
+
+      </span>
+    </el-dialog>
   </el-container>
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
 import { getProjectList } from '@/request/api'
+import AsideMenu from '@/components/asideMenu'
 export default {
+  components: {
+    AsideMenu
+  },
   data () {
     return {
-      activeName: 'list',
+      activeName: 'card',
       keyword: '',
       filterForm: {
         status: '全部'
       },
       status: ['全部', '正常', '草稿', '下线'],
       projectList: [],
-      statusBgMap: { 0: 'gray', 1: 'green', 2: 'blue' }
+      statusBgMap: { 0: 'gray', 1: 'green', 2: 'blue' },
+      viewDialogVisible: false,
+      approvalDialogVisible: false,
+      pendingTableData: [{
+        add_time: '2016-05-02',
+        name: '王小虎',
+        phone: '13986189581'
+      }],
+      multiplePendingSelection: ''
     }
   },
   computed: {
@@ -210,7 +294,7 @@ export default {
 
     },
     handleView () {
-
+      this.viewDialogVisible = true
     },
     handleEdit () {
 
@@ -220,6 +304,18 @@ export default {
     },
     handleDelete () {
 
+    },
+    copyUrl2 () {
+      let Url2 = document.getElementById('url')
+      Url2.select() // 选择对象
+      document.execCommand('Copy') // 执行浏览器复制命令
+      alert('已复制好，可贴粘。')
+    },
+    handlePending () {
+      this.approvalDialogVisible = true
+    },
+    handleSelectionChange (val) {
+      this.multiplePendingSelection = val
     }
   }
 }
