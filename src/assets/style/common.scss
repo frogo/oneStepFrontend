@@ -521,6 +521,7 @@ a{text-decoration: none}
           }
         }
         .project-list{
+          &:hover{background: #fff0e9}
           padding: 10px 0;
           .el-row{
             .headline {
