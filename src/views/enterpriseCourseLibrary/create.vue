@@ -282,10 +282,10 @@ export default {
   },
   methods: {
     handleTabClick (tab, event) {
-      console.log(tab, event)
+      // console.log(tab, event)
     },
     handleCoverClick () {
-      console.log(this.createForm.radioCover)
+    // console.log(this.createForm.radioCover)
     },
     handleCoverSuccess (res, file) {
       this.createForm.coverImageUrl = URL.createObjectURL(file.raw)
@@ -304,7 +304,7 @@ export default {
     },
     handleLecturerSuccess (res, file) {
       this.createForm.lecturerImageUrl = URL.createObjectURL(file.raw)
-      console.log(this.createForm.lecturerImageUrl)
+      // console.log(this.createForm.lecturerImageUrl)
     },
     beforeLecturerUpload (file) {
       const isJPG = file.type === 'image/jpeg'
@@ -319,9 +319,9 @@ export default {
       return isJPG && isLt2M
     },
     handleCourseFileSuccess (response, file, fileList) {
-      console.log(response)
-      console.log(file)
-      console.log(fileList)
+      // console.log(response)
+      // console.log(file)
+      // console.log(fileList)
     },
     handleSelectionChange (val) {
       this.dialogExaminationData.currentRow = val

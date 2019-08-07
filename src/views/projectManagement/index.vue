@@ -2,7 +2,7 @@
   <el-container class="main-content page-project">
     <el-aside width="160px">
       <dl>
-        <dt>项目培训</dt>
+        <dt>项目培训333</dt>
         <dd>
           <i class="el-icon-monitor" />
           <router-link to="/projectManagement" class="menu-link">
@@ -72,22 +72,22 @@
           <el-tab-pane name="card">
             <span slot="label"><i class="el-icon-menu" /> </span>
             <el-row>
-              <el-col :span="5" v-for="(item, index) in 14" :key="`project_card_${index}`" :offset="index%4 ==0 ? 0 : 1">
+              <el-col :span="5" v-for="(item, index) in projectList" :key="`project_card_${index}`" :offset="index%4 ==0 ? 0 : 1">
                 <el-card class="project-card">
-                  <div class="status-bg blue">
+                  <div :class="`status-bg ${statusBgMap[item.status]}`">
                     <span class="special-status">待审批</span>
                     编辑中
                   </div>
                   <div class="headline">
-                    孙子兵法实践训练初级人们-第一讲
+                    {{ item.name }}
                   </div>
                   <div class="date">
-                    <p>发布时间： 2019-05-01</p>
-                    <p>结束时间： 2019-05-29</p>
+                    <p>发布时间： {{ item.start_time }}</p>
+                    <p>结束时间： {{ item.end_time }}</p>
                   </div>
                   <div class="percent">
-                    <span class="person-num"><i class=" el-icon-user" /> 158</span>
-                    <el-progress :percentage="70" :stroke-width="3" />
+                    <span class="person-num"><i class=" el-icon-user" /> {{ item.personnel.length }}</span>
+                    <el-progress :percentage="70" :stroke-width="4" />
                   </div>
                   <div class="mask">
                     <div class="operate">
@@ -132,11 +132,12 @@
           <el-tab-pane name="list">
             <span slot="label"><i class="el-icon-bank-card" /> </span>
             <div v-for="(item, index) in 7" :key="`project_list_${index}`" class="project-list">
+              <span class="pending">待审批</span>
               <el-row :gutter="20">
                 <el-col :span="2">
                   <el-progress :percentage="50" type="circle" width="52" stroke-width="4" />
                 </el-col>
-                <el-col :span="15">
+                <el-col :span="16">
                   <div class="headline">
                     <span class="status">[进行中]</span>孙子兵法实践初级入门第一届
                   </div>
@@ -144,12 +145,12 @@
                     <span>发布时间： 2019-8-22</span>  <span class="end-date">结束时间： 2019-9-29</span>  <span class="person-num"><i class=" el-icon-user" /> 158</span>
                   </div>
                 </el-col>
-                <el-col :span="7">
+                <el-col :span="6">
                   <div class="operate-item">
-                    <span><i class="el-icon-edit" /> 编辑</span>
-                    <span><i class="el-icon-view" /> 预览</span>
-                    <span><i class="el-icon-download" /> 下线</span>
-                    <span><i class="el-icon-delete" /> 删除</span>
+                    <span @click="handleEdit"><i class="el-icon-edit" /> 编辑</span>
+                    <span @click="handleView"><i class="el-icon-view" /> 预览</span>
+                    <span @click="handleOffline"><i class="el-icon-download" /> 下线</span>
+                    <span @click="handleDelete"><i class="el-icon-delete" /> 删除</span>
                   </div>
                 </el-col>
               </el-row>
@@ -162,7 +163,7 @@
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-// import { getCourseList } from '@/request/api'
+import { getProjectList } from '@/request/api'
 export default {
   data () {
     return {
@@ -171,20 +172,53 @@ export default {
       filterForm: {
         status: '全部'
       },
-      status: ['全部', '正常', '草稿', '下线']
+      status: ['全部', '正常', '草稿', '下线'],
+      projectList: [],
+      statusBgMap: { 0: 'gray', 1: 'green', 2: 'blue' }
     }
   },
   computed: {
+    getProjectListParam: function () {
+      return {
+        keyword: this.keyword,
+        status: this.status,
+        offset: this.currentPage,
+        limit: this.pageSize
+      }
+    }
   },
   watch: {
   },
   mounted: function () {
+    this.getProjectList()
   },
   methods: {
+    getProjectList () {
+      let param = this.getProjectListParam
+      // console.log(param)
+      getProjectList(param).then(res => {
+        this.projectList = res.data.list
+        this.total = res.data.total
+      }, error => {
+        error && this.$message.error(error.message)
+      })
+    },
     gotoCreate () {
       this.$router.push({ path: '/projectManagement/create' })
     },
     handleSearch () {
+
+    },
+    handleView () {
+
+    },
+    handleEdit () {
+
+    },
+    handleOffline () {
+
+    },
+    handleDelete () {
 
     }
   }

@@ -21,5 +21,8 @@ export default {
   },
   EXAMINATION_PAPER: {
     LIST: CONTEXTPATH + '/examinationPaper/list'
+  },
+  PROJECT: {
+    LIST: CONTEXTPATH + '/project/list'
   }
 }

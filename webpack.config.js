@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-
 // Production
 const prod = process.env.NODE_ENV === 'production'
 
@@ -37,7 +36,8 @@ module.exports = {
   devServer: {
     host: 'localhost',
     port: 3003,
-    open: true,
+    // open: true, // 自动挂起浏览器
+    hot: true, // 热加载
     proxy: {
       '/v1/': { //
         // Real api

@@ -169,7 +169,7 @@ export default {
   methods: {
     getCourseList () {
       let param = this.getCourseListParam
-      console.log(param)
+      // console.log(param)
       getCourseList(param).then(res => {
         this.courseList = res.data.list
         this.total = res.data.total

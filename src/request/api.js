@@ -30,3 +30,5 @@ export const getExaminationPaperList = p => get(CONFIG.EXAMINATION_PAPER.LIST, p
 export const addCourse = p => post(CONFIG.COURSE.ADD, p) // 入参缺少标签 课程文件是列表
 export const addCourseDraft = p => post(CONFIG.COURSE.DRAFT_ADD, p)// 入参缺少标签 课程文件是列表
 export const getCourseDetails = p => get(CONFIG.COURSE.DETAILS, p) // 课程详情
+// 项目
+export const getProjectList = p => post(CONFIG.PROJECT.LIST, p) // 修改接口为post

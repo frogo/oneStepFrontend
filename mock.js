@@ -334,3 +334,44 @@ Mock.mock('/v1/lesson/info?id=3', {
     'add_time': '2019.6.14'
   }
 })
+
+Mock.mock('/v1/project/list', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'total': 21,
+    'list': [
+      {
+        'id': 1,
+        'name': '孙子兵法实践初级入门第一届',
+        'start_time': '2019-02-21',
+        'end_time': '2019-09-21',
+        'introduction': '十四次撒擦色威威v菜市场但是速度测试',
+        'obj': '企业家老板',
+        'target_num': 12,
+        'lesson_info': [
+          {
+            'id': 3,
+            'name': '第一门课',
+            'teacher': '孙子',
+            'minute': '40',
+            'credit': '90'
+          }
+        ],
+        'is_review': 0,
+        'is_auth': 0,
+        'is_pwd': 0,
+        'is_sign': 0,
+        'passwd': 'S23EDC',
+        'personnel': [
+          {
+            'id': 1,
+            'name': '王五'
+          }
+        ],
+        'status': 1,
+        'add_time': '2019-09-21'
+      }
+    ]
+  }
+})
