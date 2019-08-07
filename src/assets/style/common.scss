@@ -444,7 +444,7 @@ a{text-decoration: none}
 
       .add-button{position: absolute;right:0;top:0}
     }
-    .project-list{
+    .project-block{
       .el-tabs{
         .el-tabs__nav-wrap::after{display: none}
         .el-tabs__active-bar{display: none}
@@ -462,6 +462,8 @@ a{text-decoration: none}
               text-align: center;
               line-height: 105px;
               &.blue{ background:#29ABE2 }
+              &.green{ background: #15D1A4}
+              &.gray{ background: #afafaf}
               span.special-status{
                 position: absolute;
                 top:0;left:0;
@@ -482,7 +484,9 @@ a{text-decoration: none}
               position: relative;
               .person-num{position: absolute;display: inline-block;width:60px;height:26px; line-height: 26px;color:#a0a0a0;font-size: 12px;top:-10px;right:-10px}
               .el-progress{position: relative;
-                .el-progress-bar{ padding-right: 0}
+                .el-progress-bar{ padding-right: 0;
+                .el-progress-bar__inner{ background: #51c8b6}
+                }
                .el-progress__text{position: absolute;left: 0;
                  margin-left: 0;
                  top: -15px;}
@@ -515,6 +519,24 @@ a{text-decoration: none}
               }
             }
           }
+        }
+        .project-list{
+          padding: 10px 0;
+          .el-row{
+            .headline {
+              margin: 1px 0 15px 0;
+              font-size: 16px;
+              color:#666;
+              .status{color:#15d1a4}
+            }
+            .pieces{font-size: 12px;color:#999;
+             .end-date{margin: 0 20px}
+            }
+
+            .operate-item{font-size: 12px; margin-top: 30px;color:#4771d4;span{ margin-left: 10px }}
+
+          }
+
         }
       }
     }

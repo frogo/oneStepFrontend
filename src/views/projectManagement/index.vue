@@ -67,12 +67,12 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="project-list">
-        <el-tabs>
-          <el-tab-pane>
+      <div class="project-block">
+        <el-tabs v-model="activeName">
+          <el-tab-pane name="card">
             <span slot="label"><i class="el-icon-menu" /> </span>
             <el-row>
-              <el-col :span="5" v-for="(item, index) in 14" :key="`project_${index}`" :offset="index%4 ==0 ? 0 : 1">
+              <el-col :span="5" v-for="(item, index) in 14" :key="`project_card_${index}`" :offset="index%4 ==0 ? 0 : 1">
                 <el-card class="project-card">
                   <div class="status-bg blue">
                     <span class="special-status">待审批</span>
@@ -129,9 +129,31 @@
               </el-col>
             </el-row>
           </el-tab-pane>
-          <el-tab-pane>
+          <el-tab-pane name="list">
             <span slot="label"><i class="el-icon-bank-card" /> </span>
-            <el-progress :percentage="70" :stroke-width="3" />
+            <div v-for="(item, index) in 7" :key="`project_list_${index}`" class="project-list">
+              <el-row :gutter="20">
+                <el-col :span="2">
+                  <el-progress :percentage="50" type="circle" width="52" stroke-width="4" />
+                </el-col>
+                <el-col :span="15">
+                  <div class="headline">
+                    <span class="status">[进行中]</span>孙子兵法实践初级入门第一届
+                  </div>
+                  <div class="pieces">
+                    <span>发布时间： 2019-8-22</span>  <span class="end-date">结束时间： 2019-9-29</span>  <span class="person-num"><i class=" el-icon-user" /> 158</span>
+                  </div>
+                </el-col>
+                <el-col :span="7">
+                  <div class="operate-item">
+                    <span><i class="el-icon-edit" /> 编辑</span>
+                    <span><i class="el-icon-view" /> 预览</span>
+                    <span><i class="el-icon-download" /> 下线</span>
+                    <span><i class="el-icon-delete" /> 删除</span>
+                  </div>
+                </el-col>
+              </el-row>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -144,6 +166,7 @@
 export default {
   data () {
     return {
+      activeName: 'list',
       keyword: '',
       filterForm: {
         status: '全部'
