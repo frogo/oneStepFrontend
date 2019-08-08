@@ -189,10 +189,10 @@ export default {
       this.getCourseList()
     },
     gotoCreate () {
-      this.$router.push({ path: '/enterpriseCourseLibrary/create' })
+      this.$router.push({ path: '/course/create' })
     },
     gotoDetail (lessonId) {
-      this.$router.push({ path: '/enterpriseCourseLibrary/details', query: { id: lessonId } })
+      this.$router.push({ path: '/course/details', query: { id: lessonId } })
     }
   }
 }

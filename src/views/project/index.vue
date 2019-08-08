@@ -117,7 +117,7 @@
       </div>
     </el-main>
     <el-dialog
-      :visible.sync="viewDialogVisible"
+      :visible.sync="viewProjectDialogVisible"
       title="提示"
       width="50%"
       class="projectViewDialog"
@@ -167,7 +167,7 @@
       </div>
     </el-dialog>
     <el-dialog
-      :visible.sync="approvalDialogVisible"
+      :visible.sync="approvalProjectDialogVisible"
       title="报名审批"
       width="80%"
       class="projectApprovalDialog"
@@ -227,7 +227,7 @@
       </el-table>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="approvalDialogVisible = false" type="primary">退出</el-button>
+        <el-button @click="approvalProjectDialogVisible = false" type="primary">退出</el-button>
 
       </span>
     </el-dialog>
@@ -251,8 +251,8 @@ export default {
       status: ['全部', '正常', '草稿', '下线'],
       projectList: [],
       statusBgMap: { 0: 'gray', 1: 'green', 2: 'blue' },
-      viewDialogVisible: false,
-      approvalDialogVisible: false,
+      viewProjectDialogVisible: false,
+      approvalProjectDialogVisible: false,
       pendingTableData: [{
         add_time: '2016-05-02',
         name: '王小虎',
@@ -288,13 +288,13 @@ export default {
       })
     },
     gotoCreate () {
-      this.$router.push({ path: '/projectManagement/create' })
+      this.$router.push({ path: '/project/create' })
     },
     handleSearch () {
 
     },
     handleView () {
-      this.viewDialogVisible = true
+      this.viewProjectDialogVisible = true
     },
     handleEdit () {
 
@@ -312,7 +312,7 @@ export default {
       alert('已复制好，可贴粘。')
     },
     handlePending () {
-      this.approvalDialogVisible = true
+      this.approvalProjectDialogVisible = true
     },
     handleSelectionChange (val) {
       this.multiplePendingSelection = val
@@ -320,3 +320,151 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .page-project{
+    .el-main{
+      .filter-box{
+        position: relative;
+        margin: 20px 0;
+        .el-form{
+          .el-form-item{border-bottom: 1px dashed #ccc;padding-bottom: 10px; margin-bottom: 10px;
+            &.keyword-input{      border-bottom: none;}
+            .el-radio{ margin-right: 0;
+              .el-radio__input{display:none}
+              .el-radio__label{padding-left: 6px}
+              .el-checkbox-button__inner{padding: 8px 15px}
+            }
+          }
+        }
+        .keyword-input{
+          margin-bottom: 10px;
+          .el-input{width:300px}
+        }
+
+        .add-button{position: absolute;right:0;top:0}
+      }
+      .project-block{
+        .el-tabs{
+          .el-tabs__nav-wrap::after{display: none}
+          .el-tabs__active-bar{display: none}
+          .el-tabs__item{ font-size: 20px;padding: 0 4px}
+          .project-card{
+            width:200px;
+            margin-bottom: 20px;
+            .el-card__body{
+              position: relative;
+              padding: 0;
+              .status-bg{
+                height:105px;position: relative;
+                color:#fff;
+                font-size: 12px;
+                text-align: center;
+                line-height: 105px;
+                &.blue{ background:#29ABE2 }
+                &.green{ background: #15D1A4}
+                &.gray{ background: #afafaf}
+                span.special-status{
+                  cursor:pointer;
+                  position: absolute;
+                  top:0;left:0;
+                  display: inline-block;
+                  width:60px;height:26px;
+                  line-height: 26px;
+                  color:#fff;background: #3e7fe5;
+                  text-align: center;
+                  font-size: 12px;
+                  border-radius: 0 0 3px 0;
+                }
+              }
+              .headline{padding: 10px; line-height: 1.4em; font-size: 14px;}
+              .date{padding:0 10px;font-size: 12px;color:#a0a0a0; line-height: 1.6em}
+              .percent{
+                padding: 5px 10px;margin-top: 20px;
+                width:100%;
+                position: relative;
+                .person-num{position: absolute;display: inline-block;width:60px;height:26px; line-height: 26px;color:#a0a0a0;font-size: 12px;top:-12px;right:-10px}
+                .el-progress{position: relative;
+                  .el-progress-bar{ padding-right: 0;
+                    .el-progress-bar__inner{ background: #51c8b6}
+                  }
+                  .el-progress__text{position: absolute;left: 0;
+                    margin-left: 0;
+                    top: -12px;}
+                }
+              }
+              .mask{display: none;}
+              &:hover {
+                .mask{
+                  display: block;
+                  position: absolute;
+                  width:100%;
+                  height: 80px;
+                  background: rgba(0,0,0,0.75);
+                  z-index: 2;
+                  bottom:0;
+                  left:0;
+                  .operate{
+                    z-index: 3;
+                    justify-content:space-around;
+                    display: flex;
+                    .item{
+                      cursor: pointer;
+                      text-align: center;
+                      p{color:#fff;
+                        font-size: 12px;
+                        &.icon{font-size: 18px;margin: 10px 0}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          .project-list{
+            border-bottom: 1px solid #fff;border-top: 1px solid #fff;
+            position: relative;
+            padding: 10px;
+            margin: 5px 0;
+            &:hover{background: #fff0e9;border-bottom: 1px solid #ef6520;border-top: 1px solid #ef6520}
+            .pending{display: inline-block;width:60px;height:26px; line-height: 26px; font-size: 12px; text-align: center;background: #15d1a4;color:#fff;position: absolute;top:10px;right:10px;border-radius:4px }
+            .el-row{
+              .headline {
+                margin: 4px 0 15px 0;
+                font-size: 14px;
+                color:#666;
+                .status{color:#15d1a4}
+              }
+              .pieces{font-size: 12px;color:#999;
+                .end-date{margin: 0 20px}
+              }
+              .operate-item{font-size: 12px; margin-top: 35px;color:#4771d4;span{ margin-left: 10px;cursor: pointer }}
+            }
+
+          }
+        }
+      }
+    }
+
+  }
+  .projectViewDialog{
+    .project-view-box{
+      ul li{
+        font-size: 12px;
+        line-height: 2em;
+        &.flex{ display: flex;justify-content: space-between;
+          span{display: inline-block;width:200px;
+            i{font-style: normal;color:#8c939d}
+          }
+        }
+        .head{color:#8c939d}
+        .content{
+          &.flex{display: flex;justify-content: space-between;
+            .chapter{width:70%}
+            .qrCode{width:30%;text-align: center;img{margin:0 auto 10px;display: block}}
+          }
+        }
+        &.copyLink{display: flex;justify-content: space-between; margin-top: 20px;.el-input{width:80%}}
+      }
+    }
+  }
+</style>

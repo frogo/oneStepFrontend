@@ -377,7 +377,7 @@ export default {
             confirmButtonText: '确定',
             callback: action => {
               this.$router.push({
-                path: '/enterpriseCourseLibrary'
+                path: '/course'
               })
             }
           })
