@@ -569,6 +569,17 @@ a{text-decoration: none}
   .el-main{
     margin-left: 20px;
     &.bg{background: url('../img/indexBg.png') no-repeat center center;}
+    h2{ margin-top: 20px}
+    .search-box{
+      margin: 20px 0;
+      padding: 15px 0;
+      display: flex;justify-content: space-between;
+      .el-input{width:300px;}
+    }
+    .list{ min-height: 400px;
+      .el-table th{ background:#fafafa }
+    }
+    .pager{ text-align: right}
 
   }
 }

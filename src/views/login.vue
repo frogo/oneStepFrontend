@@ -121,6 +121,3 @@ export default {
   }
 }
 </script>
-<style scoped>
-  /*.el-input.el-input--prefix ::v-deep .el-input__inner{color:green!important}*/
-</style>

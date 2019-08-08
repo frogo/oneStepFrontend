@@ -16,12 +16,12 @@
                 </router-link>
               </li>
               <li>
-                <router-link to="/enterpriseCourseLibrary">
+                <router-link to="/course">
                   企业课程库
                 </router-link>
               </li>
               <li>
-                <router-link to="/projectManagement">
+                <router-link to="/project">
                   培训项目管理
                 </router-link>
               </li>
@@ -37,7 +37,7 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item>
-                    <span><router-link to="/userCenter">个人中心</router-link></span>
+                    <span><router-link to="/user">个人中心</router-link></span>
                   </el-dropdown-item>
                   <el-dropdown-item>
                     <span @click="logoutHandler">退出登录</span>

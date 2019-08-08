@@ -17,29 +17,84 @@ const router = new VueRouter({
           component: () => import('../views/home.vue')
         },
         { // 个人中心
-          path: '/userCenter',
+          path: '/user',
           name: '个人中心',
-          component: () => import('../views/userCenter/changePassword.vue')
+          component: () => import('../views/user/changePassword.vue')
         },
         { // 企业课程库
-          path: '/enterpriseCourseLibrary',
-          name: '课程库首页',
-          component: () => import('../views/enterpriseCourseLibrary/index.vue')
+          path: '/course',
+          name: '课程库',
+          component: () => import('../views/course/index.vue')
         },
         { // 企业课程库-详情
-          path: '/enterpriseCourseLibrary/details',
-          name: '课程库详情',
-          component: () => import('../views/enterpriseCourseLibrary/details.vue')
+          path: '/course/details',
+          name: '课程库-详情',
+          component: () => import('../views/course/details.vue')
         },
         { // 企业课程库-创建课程
-          path: '/enterpriseCourseLibrary/create',
-          name: '课程库创建',
-          component: () => import('../views/enterpriseCourseLibrary/create.vue')
+          path: '/course/create',
+          name: '课程库-创建',
+          component: () => import('../views/course/create.vue')
         },
         { // 项目管理
-          path: '/projectManagement',
-          name: '项目管理首页',
-          component: () => import('../views/projectManagement/index.vue')
+          path: '/project',
+          name: '项目管理',
+          component: () => import('../views/project/index.vue')
+        },
+        { // 项目管理-创建项目
+          path: '/project/create',
+          name: '项目管理-创建项目',
+          component: () => import('../views/project/create.vue')
+        },
+        { // 题库管理
+          path: '/questions/management',
+          name: '题库管理',
+          component: () => import('../views/examination/questions/index.vue')
+        },
+        { // 题库管理-创建试题
+          path: '/questions/create',
+          name: '题库管理-创建试题',
+          component: () => import('../views/examination/questions/create.vue')
+        },
+        { // 题库管理-编辑试题
+          path: '/questions/edit',
+          name: '题库管理-编辑试题',
+          component: () => import('../views/examination/questions/edit.vue')
+        },
+        { // 试卷管理
+          path: '/paper/management',
+          name: '试卷管理',
+          component: () => import('../views/examination/paper/index.vue')
+        },
+        { // 试卷管理-创建试卷
+          path: '/paper/create',
+          name: '试卷管理-创建试卷',
+          component: () => import('../views/examination/paper/create.vue')
+        },
+        { // 试卷管理-编辑试卷
+          path: '/paper/edit',
+          name: '试卷管理-编辑试卷',
+          component: () => import('../views/examination/paper/edit.vue')
+        },
+        { // 特殊学员
+          path: '/student',
+          name: '特殊学员',
+          component: () => import('../views/student/index.vue')
+        },
+        { // 数据统计-培训统计
+          path: '/trainStatistics',
+          name: '培训统计',
+          component: () => import('../views/dataStatistics/trainStatistics/index.vue')
+        },
+        { // 数据统计-培训统计详情
+          path: '/trainStatisticsDetails',
+          name: '数据统计-培训统计详情',
+          component: () => import('../views/dataStatistics/trainStatistics/details.vue')
+        },
+        { // 数据统计-课程排行
+          path: '/courseRanking',
+          name: '数据统计-课程排行',
+          component: () => import('../views/dataStatistics/courseRanking/index.vue')
         }
       ]
     },
@@ -51,12 +106,12 @@ const router = new VueRouter({
     {
       path: '/register',
       name: '注册',
-      component: () => import('../views/userCenter/register.vue')
+      component: () => import('../views/user/register.vue')
     },
     {
       path: '/forgotPassword',
       name: '忘记密码',
-      component: () => import('../views/userCenter/forgotPassword.vue')
+      component: () => import('../views/user/forgotPassword.vue')
     }
   ]
 })

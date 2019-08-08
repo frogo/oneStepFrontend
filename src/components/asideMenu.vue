@@ -29,27 +29,27 @@ export default {
         {
           name: '项目培训',
           children: [
-            { name: '在线项目培训', link: '/projectManagement', icon: 'el-icon-monitor' }
+            { name: '在线项目培训', link: '/project', icon: 'el-icon-monitor' }
           ]
         },
         {
           name: '考试管理',
           children: [
-            { name: '题库管理', link: '/', icon: 'el-icon-edit-outline' },
-            { name: '试卷管理', link: '/', icon: 'el-icon-document' }
+            { name: '题库管理', link: '/questions/management', icon: 'el-icon-edit-outline' },
+            { name: '试卷管理', link: '/paper/management', icon: 'el-icon-document' }
           ]
         },
         {
           name: '数据统计',
           children: [
-            { name: '培训统计', link: '/', icon: 'el-icon-s-data' },
-            { name: '课程排行', link: '/', icon: 'el-icon-full-screen' }
+            { name: '培训统计', link: '/trainStatistics', icon: 'el-icon-s-data' },
+            { name: '课程排行', link: '/courseRanking', icon: 'el-icon-full-screen' }
           ]
         },
         {
           name: '人员管理',
           children: [
-            { name: '特殊学员', link: '/', icon: 'el-icon-coordinate' }
+            { name: '特殊学员', link: '/student', icon: 'el-icon-coordinate' }
           ]
         }
       ]
