@@ -1,257 +1,136 @@
 <template lang="html">
-  <el-main class="page-courseCreate">
+  <el-main class="page-projectCreate">
     <h2 class="pageName">
-      创建课程
+      创建项目
     </h2>
     <el-form ref="createForm" :model="createForm" :rules="rules" label-width="100px" class="createForm">
       <div class="head-line">
         <span class="base-info">基本信息</span>
       </div>
-      <el-form-item label="课程名称" prop="courseName">
-        <el-input v-model="createForm.courseName" placeholder="请输入" />
+      <el-form-item label="项目名称" prop="projectName">
+        <el-input v-model="createForm.projectName" placeholder="请输入" />
       </el-form-item>
-      <el-form-item label="课程对象" prop="audience">
-        <el-input v-model="createForm.audience" placeholder="请输入" />
+      <el-form-item label="项目周期" prop="projectCycle">
+        <el-date-picker
+          v-model="createForm.projectCycle"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+        />
       </el-form-item>
-      <el-form-item label="课时" prop="hours">
-        <el-input v-model="createForm.hours" placeholder="请输入" class="w200" /> <span>分钟</span>
+      <el-form-item label="参训对象" prop="participants">
+        <el-input v-model="createForm.participants" placeholder="请输入" />
       </el-form-item>
-      <el-form-item label="学分" prop="credit">
-        <el-input v-model="createForm.credit" placeholder="请输入" class="w200" /> <span>分</span>
+      <el-form-item label="目标人数" prop="number">
+        <el-input v-model="createForm.number" placeholder="请输入" />
       </el-form-item>
-      <el-form-item label="课程目标" prop="">
-        <el-input v-model="createForm.target" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="标签" prop="">
-        <el-button @click="dialogTagsEditorVisible = true" type="info" icon="el-icon-plus" plain size="small">
-          添加
-        </el-button>
-      </el-form-item>
-      <el-form-item label="课程简介" prop="">
-        <el-input v-model="createForm.outline" :rows="4" type="textarea" />
-      </el-form-item>
-      <el-form-item label="课程大纲" prop="">
-        <el-input v-model="createForm.intro" :rows="4" type="textarea" />
-      </el-form-item>
-      <el-form-item label="课程封面" prop="" class="cover">
-        <el-tabs v-model="createForm.activeTabName" @tab-click="handleTabClick" type="card">
-          <el-tab-pane label="默认封面" name="default">
-            <el-radio-group v-model="createForm.radioCover">
-              <el-radio v-for="img in defaultCover" :label="img" @change="handleCoverClick" :key="img">
-                <img :src="img">
-              </el-radio>
-            </el-radio-group>
-          </el-tab-pane>
-          <el-tab-pane label="自定义" name="custom">
-            <div>尺寸：384*198 大小：2M 格式：JPG</div>
-            <el-upload
-              :show-file-list="false"
-              :on-success="handleCoverSuccess"
-              :before-upload="beforeCoverUpload"
-              class="cover-uploader"
-              action="https://jsonplaceholder.typicode.com/posts/"
-            >
-              <img v-if="createForm.coverImageUrl" :src="createForm.coverImageUrl" class="cover">
-              <i v-else class="el-icon-plus cover-uploader-icon" />
-            </el-upload>
-          </el-tab-pane>
-        </el-tabs>
-      </el-form-item>
-      <el-form-item label="讲师信息" prop="lecturer" class="lecturer">
-        <el-input v-model="createForm.lecturer" placeholder="讲师姓名" />
-        <div>尺寸：384*198 大小：2M 格式：JPG</div>
-        <div class="lecturer-info">
-          <el-upload
-            :show-file-list="false"
-            :on-success="handleLecturerSuccess"
-            :before-upload="beforeLecturerUpload"
-            class="lecturer-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
-          >
-            <img v-if="createForm.lecturerImageUrl" :src="createForm.lecturerImageUrl" class="lecturer">
-            <i v-else class="el-icon-plus lecturer-uploader-icon" />
-          </el-upload>
-          <el-input v-model="createForm.lecturerIntro" :rows="4" type="textarea" placeholder="讲师简介" />
-        </div>
+      <el-form-item label="项目简介" prop="intro">
+        <el-input
+          :rows="4"
+          v-model="createForm.intro"
+          type="textarea"
+          placeholder="请输入内容"
+        />
       </el-form-item>
       <div class="head-line">
         <span class="base-info">学习内容</span>
       </div>
-      <el-form-item label="课程文件" prop="courseFile">
-        <el-upload
-          :limit="1"
-          :file-list="createForm.courseFileList"
-          :on-success="handleCourseFileSuccess"
-          class="upload-courseFile"
-          action="https://jsonplaceholder.typicode.com/posts/"
-        >
-          <el-button size="small" type="primary">
-            点击上传
+      <el-form-item class="chooseCourse">
+        <div class="btn-box">
+          <el-button @click="chooseCourseDialogVisible = true" size="mini" type="primary">
+            选择课程
           </el-button>
-          <div slot="tip" class="el-upload__tip">
-            只能上传jpg/png文件，且不超过500kb
-          </div>
-        </el-upload>
+          <span>已选课程数 <i>33</i> 总学分 <i>336</i> 总课时 <i>32</i></span>
+        </div>
+        <div class="list">
+          <el-table
+            :data="selectedCourseTableData"
+            style="width: 100%"
+          >
+            <el-table-column
+              prop="date"
+              label="课堂"
+            />
+            <el-table-column
+              prop="name"
+              label="讲师"
+              width="260"
+            />
+            <el-table-column
+              prop="address"
+              label="学分（分）"
+              width="260"
+            />
+            <el-table-column
+              prop="address"
+              label="课时（分钟）"
+              width="260"
+            />
+          </el-table>
+        </div>
       </el-form-item>
-      <el-form-item label="课后考试" prop="examination">
-        <el-button @click="handleExaminationDialog" type="primary" size="small">
-          选择试卷
-        </el-button>
-        <span v-if="dialogExaminationData.currentRow"><i class="el-icon-document" />{{ dialogExaminationData.currentRow.name }}</span>
+      <div class="head-line">
+        <span class="base-info">项目设置</span>
+      </div>
+      <el-form-item>
+        <span>学员认证
+          <el-switch
+            v-model="createForm.auth"
+            active-color="#EF6520"
+            inactive-color="gray"
+          /></span>
       </el-form-item>
     </el-form>
     <div class="operation-bar">
-      <el-button @click="handleSaveCourseDraft" type="success">
+      <el-button @click="handleSaveProjectDraft" type="success">
         保存草稿
       </el-button>
-      <el-button @click="handleSaveCourse" type="primary">
+      <el-button @click="handleSaveProject" type="primary">
         完成
       </el-button>
     </div>
-    <el-dialog :visible.sync="dialogExaminationVisible" title="试卷选择" custom-class="examinationChoose">
-      <div class="filter-box">
-        <div class="left">
-          <el-select v-model="dialogExaminationData.type" @change="handleExamRuleChange" placeholder="请选择" class="select" size="small">
-            <el-option label="手动出题" value="manual" />
-            <el-option label="随机抽题" value="random" />
-          </el-select>
-          <el-input
-            v-model="dialogExaminationData.keyword"
-            @keyup.enter.native="handleKeywordFilter"
-            size="small"
-            class="input"
-            placeholder="请输入内容"
-            suffix-icon="el-icon-search"
-          />
-        </div>
-        <div class="right">
-          <el-button type="primary" size="small">
-            创建试卷
-          </el-button>
-        </div>
-      </div>
-      <el-table :data="dialogExaminationTableData" @current-change="handleSelectionChange" highlight-current-row>
-        <el-table-column property="name" show-overflow-tooltip label="试卷名称" width="150" />
-        <el-table-column property="addtime" show-overflow-tooltip label="创建时间" width="200" />
-        <el-table-column property="num" show-overflow-tooltip label="试题数" />
-        <el-table-column property="rule" show-overflow-tooltip label="试题规则" />
-      </el-table>
-
-      <div class="pager-box">
-        <el-pagination
-          @current-change="handleExaminationPageChange"
-          :current-page.sync="dialogExaminationData.currentPage"
-          :page-size="dialogExaminationData.pageSize"
-          :total="dialogExaminationData.total"
-          layout="total, prev, pager, next"
-        />
-      </div>
-
-      <div class="btn-box">
-        <el-button @click="cancelExaminationSelect" size="small">
-          清除
-        </el-button>
-        <el-button @click="confirmExaminationSelect" type="primary" size="small">
-          确定
-        </el-button>
-      </div>
-    </el-dialog>
-    <tags-editor-dialog :dialogTagsEditorVisible.sync="dialogTagsEditorVisible" @closeDialog="dialogTagsEditorVisible = false" />
   </el-main>
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getExaminationPaperList, addCourse, addCourseDraft } from '@/request/api'
-import TagsEditorDialog from '@/components/tagsEditorDialog'
+// import { getExaminationPaperList, addCourse, addCourseDraft } from '@/request/api'
 export default {
-  components: {
-    TagsEditorDialog
-  },
   data () {
     return {
       createForm: {
-        courseName: '',
-        audience: '',
-        target: '',
-        tags: [],
-        hours: '',
-        credit: '',
+        projectName: '',
+        projectCycle: '',
+        participants: '',
+        number: '',
         intro: '',
-        outline: '',
-        // 讲师
-        lecturer: '',
-        lecturerImageUrl: '',
-        lecturerIntro: '',
-        // 默认封面
-        activeTabName: 'default',
-        coverImageUrl: '',
-        radioCover: require('../../assets/img/cover-1.png'),
-        // 课程
-        // courseFile: '',
-        courseFileList: [
-          {
-            name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-          }
-        ],
-        examinationPaper: ''// 试卷ID
-      },
+        auth: false,
+        sign: false,
+        approval: false,
+        password: '',
+        students: ''
 
-      defaultCover: [
-        require('../../assets/img/cover-1.png'),
-        require('../../assets/img/cover-2.png'),
-        require('../../assets/img/cover-3.png'),
-        require('../../assets/img/cover-4.png'),
-        require('../../assets/img/cover-5.png'),
-        require('../../assets/img/cover-6.png'),
-        require('../../assets/img/cover-7.png'),
-        require('../../assets/img/cover-8.png')], // 默认封面列表
+      },
       rules: {
-        courseName: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        projectName: [
+          { required: true, message: '请输入项目名称', trigger: 'blur' }
         ],
-        audience: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+        projectCycle: [
+          { required: true, message: '请指定项目周期', trigger: 'blur' }
         ],
-        hours: [
-          { required: true, message: '请输入课时', trigger: 'blur' }
+        participants: [
+          { required: true, message: '请输入参训对象', trigger: 'blur' }
         ],
-        credit: [
-          { required: true, message: '请输入学分', trigger: 'blur' }
-        ],
-        courseFile: [
-          { required: true }
-        ],
-        examination: [
-          { required: true }
+        number: [
+          { required: true, message: '请输入目标人数', trigger: 'blur' }
         ]
       },
       // 试题弹窗
-      dialogExaminationVisible: false,
-      dialogExaminationData: { // 试题列表弹窗数据
-        type: 'manual',
-        keyword: '',
-        currentPage: 1,
-        pageSize: 10,
-        total: 0,
-        currentRow: ''
-      },
-      dialogExaminationTableData: [],
-      typeMap: { random: '随机抽题', manual: '手动出题' },
-      // 编辑标签弹窗
-      dialogTagsEditorVisible: false
+      selectedCourseTableData: [],
+      chooseCourseDialogVisible: false
     }
   },
   computed: {
-    getExaminationPaperListParam: function () {
-      return {
-        type: this.typeMap[this.dialogExaminationData.type],
-        limit: this.dialogExaminationData.pageSize,
-        offset: this.dialogExaminationData.currentPage,
-        keyword: this.dialogExaminationData.keyword
-      }
-    },
     addCourseParam: function () {
       return {
         name: this.createForm.courseName,
@@ -281,111 +160,33 @@ export default {
   mounted: function () {
   },
   methods: {
-    handleTabClick (tab, event) {
-      // console.log(tab, event)
+    handleSaveProjectDraft () {
     },
-    handleCoverClick () {
-    // console.log(this.createForm.radioCover)
-    },
-    handleCoverSuccess (res, file) {
-      this.createForm.coverImageUrl = URL.createObjectURL(file.raw)
-    },
-    beforeCoverUpload (file) {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
-    },
-    handleLecturerSuccess (res, file) {
-      this.createForm.lecturerImageUrl = URL.createObjectURL(file.raw)
-      // console.log(this.createForm.lecturerImageUrl)
-    },
-    beforeLecturerUpload (file) {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
-    },
-    handleCourseFileSuccess (response, file, fileList) {
-      // console.log(response)
-      // console.log(file)
-      // console.log(fileList)
-    },
-    handleSelectionChange (val) {
-      this.dialogExaminationData.currentRow = val
-    },
-    handleExaminationPageChange (val) {
-    },
-    handleExamRuleChange () {
-      this.getExaminationPaperList()
-    },
-    handleKeywordFilter () {
-      this.getExaminationPaperList()
-    },
-    handleExaminationDialog () {
-      this.dialogExaminationVisible = true
-      this.getExaminationPaperList()
-    },
-    getExaminationPaperList () {
-      getExaminationPaperList(this.getExaminationPaperListParam).then(res => {
-        if (res.code === '1') {
-          this.dialogExaminationTableData = res.data.list
-          this.dialogExaminationData.total = res.data.total
-        }
-      }, error => {
-        error && this.$message.error(error)
-      })
-    },
-    cancelExaminationSelect () {
-      this.dialogExaminationVisible = false
-      this.createForm.examinationPaper = ''
-    },
-    confirmExaminationSelect () {
-      this.dialogExaminationVisible = false
-      this.createForm.examinationPaper = this.dialogExaminationData.currentRow.id
-    },
-    handleSaveCourseDraft () {
-      addCourseDraft(this.addCourseParam).then(res => {
-        if (res.code === '1') {
-          this.$alert('保存草稿成功', '提示', {
-            confirmButtonText: '确定',
-            callback: action => {
-
-            }
-          })
-        }
-      }, error => {
-        error && this.$message.error(error)
-      })
-    },
-    handleSaveCourse () {
-      addCourse(this.addCourseParam).then(res => {
-        if (res.code === '1') {
-          this.$alert('保存成功', '提示', {
-            confirmButtonText: '确定',
-            callback: action => {
-              this.$router.push({
-                path: '/enterpriseCourseLibrary'
-              })
-            }
-          })
-        }
-      }, error => {
-        error && this.$message.error(error)
-      })
+    handleSaveProject () {
     }
   }
 }
 </script>
+<style lang="scss">
+  .page-projectCreate{
+    box-shadow: 0px 0px 5px #888888;
+    margin: 15px auto;
+    padding: 20px;
+    h2.pageName{font-size: 26px}
+    .el-form.createForm{
+      .head-line{margin: 25px 0;height:1px;position:relative;background:#f3f3f3;
+        span.base-info{display: inline-block;position: absolute;top:-10px;background: #fff;padding-right: 1em;color:#EF6520}
+      }
+      .el-input{width:55%}
+      .el-input.w200{width:200px}
+      .el-textarea{width:400px}
+      .chooseCourse{
+        .btn-box{display: flex;justify-content: space-between;span{i{color:red;font-style: normal}}}
+      }
+    }
+    .operation-bar{
+      display: flex;justify-content:center;
+      .el-button{width:100px}
+    }
+  }
+</style>
