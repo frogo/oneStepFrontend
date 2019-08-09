@@ -46,6 +46,11 @@ const router = new VueRouter({
           name: '项目管理-创建项目',
           component: () => import('../views/project/create.vue')
         },
+        { // 项目管理-统计详情
+          path: '/project/details',
+          name: '项目管理-统计详情',
+          component: () => import('../views/project/details.vue')
+        },
         { // 题库管理
           path: '/questions/management',
           name: '题库管理',
