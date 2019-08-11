@@ -31,7 +31,7 @@
             <el-row>
               <el-col :span="5" v-for="(item, index) in projectList" :key="`project_card_${index}`" :offset="index%4 ==0 ? 0 : 1">
                 <el-card class="project-card">
-                  <div :class="`status-bg ${statusBgMap[item.status]}`">
+                  <div :class="`status-bg ${statusBgMap[item.status]}`" @click="gotoDetails(item)">
                     <span @click="handlePending" class="special-status">待审批</span>
                     编辑中
                   </div>
@@ -290,6 +290,9 @@ export default {
     gotoCreate () {
       this.$router.push({ path: '/project/create' })
     },
+    gotoDetails (item) {
+      this.$router.push({ path: '/project/details' })
+    },
     handleSearch () {
 
     },
@@ -355,6 +358,7 @@ export default {
               position: relative;
               padding: 0;
               .status-bg{
+                cursor: pointer;
                 height:105px;position: relative;
                 color:#fff;
                 font-size: 12px;

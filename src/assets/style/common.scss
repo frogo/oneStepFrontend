@@ -6,6 +6,7 @@ $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import '~element-ui/packages/theme-chalk/src/index';
 a{text-decoration: none}
 .red{color:red}
+.c666{color:#666}
 /*清除浮动代码*/
 .clearFix:after{display:block;clear:both;content:"";visibility:hidden;height:0}
 .clearFix{zoom:1}
@@ -451,7 +452,7 @@ a{text-decoration: none}
     .list{ min-height: 400px;
       .el-table th{ background:#fafafa }
     }
-    .pager{ text-align: right}
+    .pager{ text-align: right; margin-top: 20px}
 
   }
 }
