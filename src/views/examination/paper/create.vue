@@ -7,25 +7,26 @@
       <div class="head-line">
         <span class="base-info">基本信息</span>
       </div>
-      <el-form-item label="试卷名称" prop="paperName">
-        <el-input v-model="createForm.paperName" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item prop="qualifiedPercent" class="qualifiedPercent">
-        <div slot="label" class="label">
-          <span>合格分数比</span><el-popover
-            placement="top-start"
-            title="标题"
-            width="200"
-            trigger="hover"
-            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
-          >
-            <i slot="reference" class="el-icon-question" />
-          </el-popover>
-        </div>
+      <div class="inline-form">
+        <el-form-item label="试卷名称" prop="paperName">
+          <el-input v-model="createForm.paperName" placeholder="请输入" class="w200" />
+        </el-form-item>
+        <el-form-item prop="qualifiedPercent" class="qualifiedPercent">
+          <div slot="label" class="label">
+            <span>合格分数比</span><el-popover
+              placement="top-start"
+              title="标题"
+              width="200"
+              trigger="hover"
+              content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+            >
+              <i slot="reference" class="el-icon-question" />
+            </el-popover>
+          </div>
 
-        <el-input v-model="createForm.qualifiedPercent" placeholder="请输入" class="w200" /> %
-      </el-form-item>
-
+          <el-input v-model="createForm.qualifiedPercent" placeholder="请输入" class="w200" /> %
+        </el-form-item>
+      </div>
       <div class="head-line">
         <span class="base-info">考试设置
           <el-popover
@@ -83,6 +84,43 @@
             :value="item.value"
           />
         </el-select>
+
+        <div class="questionsChoose">
+          <div class="head">
+            <span>题库列表</span>
+            <span class="notice">C#中的类</span>
+          </div>
+          <div class="list">
+            <div class="questionLib">
+              <div class="keyword-input">
+                <el-input
+                  v-model="questionsLib.keyword"
+                  @keyup.enter.native="handleSearch"
+                  placeholder="请输入内容"
+                  size="medium "
+                >
+                  <i slot="suffix" @click="handleSearch" class="el-input__icon el-icon-search" />
+                </el-input>
+              </div>
+              <ul>
+                <li v-for="(item, index) in questionLibData" :key="`lib_${index}`">
+                  <el-radio v-model="questionsLib.radio" :label="item.id" /> <span class="name">{{ item.name }}</span> <span class="total">({{ item.total }})</span>
+                </li>
+              </ul>
+            </div>
+            <div class="questions">
+              <div class="manual">
+                <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
+                  <el-form-item label="状态：">
+                    <el-radio-group v-model="filterForm.type">
+                      <el-radio :label="item" v-for="item in type" :key="item" border />
+                    </el-radio-group>
+                  </el-form-item>
+                </el-form>
+              </div>
+            </div>
+          </div>
+        </div>
       </el-form-item>
     </el-form>
 
@@ -121,7 +159,20 @@ export default {
           { required: true, message: '请输入课时时长', trigger: 'blur' }
         ]
       },
-      paperRules: [{ label: '手动出题', value: 'manual' }, { label: '随机出题', value: 'random' }]
+      paperRules: [{ label: '手动出题', value: 'manual' }, { label: '随机出题', value: 'random' }],
+      questionsLib: {
+        keyword: '',
+        radio: 46
+      },
+      questionLibData: [
+        { name: '多大的', id: 45, total: 98 },
+        { name: '多大的', id: 46, total: 98 },
+        { name: '多大的', id: 47, total: 98 }
+      ],
+      filterForm: {
+        type: '不限'
+      },
+      type: ['不限', '单选', '多选', '判断']
     }
   },
   mounted: function () {
@@ -132,7 +183,8 @@ export default {
     },
     handleSavePaper () {
 
-    }
+    },
+    handleSearch () {}
   }
 }
 </script>
@@ -152,11 +204,38 @@ export default {
       span.base-info{display: inline-block;position: absolute;top:-10px;background: #fff;padding-right: 1em;color:#EF6520}
       i{color:#8c939d;}
     }
-    .el-input{width:55%}
     .el-input.w200{width:200px}
     .el-select.w200{width:200px}
     .el-textarea{width:400px}
     .qualifiedPercent{.label{display: inline-block;justify-content: flex-start;span{ margin-right: 5px;i{color:#8c939d;}}}}
+    .questionsChoose{
+      margin:20px 0;
+      .head{padding:0 15px;background: #fafafa;height:30px;line-height: 30px;display: flex;justify-content: space-between;
+        span{color:#999;display: inline-block;&:nth-child(1){width:28%}&:nth-child(2){width:70%}}
+      }
+      .list{
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid #efefef;
+        .questionLib{width:28%;border-right: 1px solid #efefef;.keyword-input{padding:15px 15px 0 15px}ul{padding: 15px;li{
+          line-height: 26px;
+          .el-radio{.el-radio__label{display: none}}
+          span{display: inline-block;&.name{width:130px;}&.total{width:60px;text-align: right }}
+        }}}
+        .questions{width:70%;
+          .el-form{
+            padding: 15px 0;
+            .el-form-item{border-bottom: 1px dashed #ccc;padding-bottom: 10px; margin-bottom: 10px;
+              .el-radio{ margin-right: 0;
+                .el-radio__input{display:none}
+                .el-radio__label{padding-left: 6px}
+                .el-checkbox-button__inner{padding: 8px 15px}
+              }
+            }
+          }
+        }
+      }
+    }
   }
   .operation-bar{
     display: flex;justify-content:center;
