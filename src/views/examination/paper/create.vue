@@ -113,22 +113,26 @@
                 <div class="selected-block">
                   <div class="operator">
                     <el-badge :value="12">
-                      <el-button size="small">
-                        已添加
+                      <el-button @click="boxShow = !boxShow" size="small">
+                        已添加  <i v-if="!boxShow" class="el-icon-arrow-up" />
+                        <i v-else class="el-icon-arrow-down" />
                       </el-button>
                     </el-badge>
                   </div>
-
-                  <el-tag
-                    v-for="tag in paperSelected"
-                    :key="tag.name"
-                    @close="handleClose(tag)"
-                    closable
-                    size="small"
-                    effect="plain"
-                  >
-                    {{ tag.name }}
-                  </el-tag>
+                  <transition name="myBox">
+                    <div v-show="boxShow" class="box">
+                      <el-tag
+                        v-for="tag in paperSelected"
+                        :key="tag.name"
+                        @close="handleClose(tag)"
+                        closable
+                        size="small"
+                        effect="plain"
+                      >
+                        {{ tag.name }}
+                      </el-tag>
+                    </div>
+                  </transition>
                 </div>
                 <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
                   <el-form-item label="题型：">
@@ -144,7 +148,7 @@
                   @selection-change="handlePaperSelectionChange"
                   tooltip-effect="dark"
                   style="width: 100%"
-                  height="200"
+                  height="260"
                   stripe
                 >
                   <el-table-column
@@ -212,6 +216,15 @@ export default {
       questionLibData: [
         { name: '多大的', id: 45, total: 98 },
         { name: '多大的', id: 46, total: 98 },
+        { name: '多大的', id: 47, total: 98 },
+        { name: '多大的', id: 47, total: 98 },
+        { name: '多大的', id: 47, total: 98 },
+        { name: '多大的', id: 47, total: 98 },
+        { name: '多大的', id: 47, total: 98 },
+        { name: '多大的', id: 47, total: 98 },
+        { name: '多大的', id: 47, total: 98 },
+        { name: '多大的', id: 47, total: 98 },
+        { name: '多大的', id: 47, total: 98 },
         { name: '多大的', id: 47, total: 98 }
       ],
       filterForm: {
@@ -245,7 +258,8 @@ export default {
       {
         name: '标签三'
       }
-      ]
+      ],
+      boxShow: false
     }
   },
   mounted: function () {
@@ -262,6 +276,9 @@ export default {
     },
     handlePaperSelectionChange () {
 
+    },
+    toggleBox () {
+      this.boxShow = !this.boxShow
     }
   }
 }
@@ -287,6 +304,7 @@ export default {
     .el-textarea{width:400px}
     .qualifiedPercent{.label{display: inline-block;justify-content: flex-start;span{ margin-right: 5px;i{color:#8c939d;}}}}
     .questionsChoose{
+
       margin:20px 0;
       .head{padding:0 15px;background: #fafafa;height:30px;line-height: 30px;display: flex;justify-content: space-between;
         span{color:#999;display: inline-block;&:nth-child(1){width:28%}&:nth-child(2){width:70%}}
@@ -295,28 +313,51 @@ export default {
         display: flex;
         justify-content: space-between;
         border: 1px solid #efefef;
-        .questionLib{width:28%;border-right: 1px solid #efefef;.keyword-input{padding:15px 15px 0 15px}ul{padding: 15px;li{
+        .questionLib{width:28%;border-right: 1px solid #efefef;
+          .keyword-input{padding:15px 15px 0 15px}
+          ul{padding: 15px;
+            height: 260px;
+            overflow: auto;
+            li{
           line-height: 26px;
-          .el-radio{.el-radio__label{display: none}}
+          .el-radio{
+            .el-radio__label{display: none}
+          }
           span{display: inline-block;&.name{width:130px;}&.total{width:60px;text-align: right }}
         }}}
         .questions{width:70%;
-          .manual{
-            height:400px;
-            position: relative;
-            /*.el-badge{ position: absolute;bottom:-5px;left:49%}*/
-            .selected-block{
-              /*box-shadow:inset 0px 15px 10px -15px #000;*/
-              padding: 10px;
-              border: 1px solid #efefef;
-              border-radius: 5px;
-              .operator{position: absolute;top:-30px;left:45%}
-              width:100%;
+          min-height: 400px;
+          position: relative;
+          /*.el-badge{ position: absolute;bottom:-5px;left:49%}*/
+          .selected-block{
+            /*box-shadow: 0px 0px 5px #888888;*/
+            box-shadow: 0px -12px 10px -10px #888888;
+            .box{
               height:200px;
-              position: absolute;
-              left:0;bottom:0;background: white;z-index: 2;
-            .el-tag{ margin-right: 10px}
+
+              overflow: hidden;
             }
+            .myBox-leave-active,.myBox-enter-active{
+              transition:  all 1s ease;
+            }
+            .myBox-leave-active,.myBox-enter{
+              height:0px !important;
+            }
+            .myBox-leave,.myBox-enter-active{
+              height: 200px;
+            }
+            /*box-shadow:inset 0px 15px 10px -15px #000;*/
+            padding: 10px;
+            border: 1px solid #efefef;
+            border-radius: 5px 5px 0 0 ;
+            .operator{position: absolute;top:-30px;left:45%}
+            width:100%;
+            height:auto;
+            position: absolute;
+            left:0;bottom:0;background:#efefef;;z-index: 2;
+            .el-tag{ margin-right: 10px}
+          }
+          .manual{
             .el-form{
               padding: 15px 0;
               .el-form-item{border-bottom: 1px dashed #ccc;padding-bottom: 10px; margin-bottom: 10px;
