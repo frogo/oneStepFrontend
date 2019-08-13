@@ -99,7 +99,7 @@
                   placeholder="请输入内容"
                   size="medium "
                 >
-                  <i slot="suffix" @click="handleSearch" class="el-input__icon el-icon-search" />
+                  <i slot="suffix" @click="handleQuestionsSearch" class="el-input__icon el-icon-search" />
                 </el-input>
               </div>
               <ul>
@@ -110,13 +110,58 @@
             </div>
             <div class="questions">
               <div class="manual">
+                <div class="selected-block">
+                  <div class="operator">
+                    <el-badge :value="12">
+                      <el-button size="small">
+                        已添加
+                      </el-button>
+                    </el-badge>
+                  </div>
+
+                  <el-tag
+                    v-for="tag in paperSelected"
+                    :key="tag.name"
+                    @close="handleClose(tag)"
+                    closable
+                    size="small"
+                    effect="plain"
+                  >
+                    {{ tag.name }}
+                  </el-tag>
+                </div>
                 <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
-                  <el-form-item label="状态：">
+                  <el-form-item label="题型：">
                     <el-radio-group v-model="filterForm.type">
                       <el-radio :label="item" v-for="item in type" :key="item" border />
                     </el-radio-group>
                   </el-form-item>
                 </el-form>
+
+                <el-table
+                  ref="multipleTable"
+                  :data="paperTableData"
+                  @selection-change="handlePaperSelectionChange"
+                  tooltip-effect="dark"
+                  style="width: 100%"
+                  height="200"
+                  stripe
+                >
+                  <el-table-column
+                    type="selection"
+                    width="55"
+                  />
+                  <el-table-column
+                    prop="title"
+                    label="题目"
+                    show-overflow-tooltip
+                  />
+                  <el-table-column
+                    prop="type"
+                    label="题型"
+                    width="120"
+                  />
+                </el-table>
               </div>
             </div>
           </div>
@@ -172,7 +217,35 @@ export default {
       filterForm: {
         type: '不限'
       },
-      type: ['不限', '单选', '多选', '判断']
+      type: ['不限', '单选', '多选', '判断'],
+      paperTableData: [
+        {
+          type: '单选',
+          title: '类与对象的关系'
+        },
+        {
+          type: '多选',
+          title: '类与对象'
+        },
+        {
+          type: '判断',
+          title: '静态类的声明'
+        },
+        {
+          type: '单选',
+          title: '类与对象的关系'
+        }
+      ],
+      paperSelected: [{
+        name: '标签一'
+      },
+      {
+        name: '标签二'
+      },
+      {
+        name: '标签三'
+      }
+      ]
     }
   },
   mounted: function () {
@@ -184,7 +257,12 @@ export default {
     handleSavePaper () {
 
     },
-    handleSearch () {}
+    handleQuestionsSearch () {
+
+    },
+    handlePaperSelectionChange () {
+
+    }
   }
 }
 </script>
@@ -223,16 +301,34 @@ export default {
           span{display: inline-block;&.name{width:130px;}&.total{width:60px;text-align: right }}
         }}}
         .questions{width:70%;
-          .el-form{
-            padding: 15px 0;
-            .el-form-item{border-bottom: 1px dashed #ccc;padding-bottom: 10px; margin-bottom: 10px;
-              .el-radio{ margin-right: 0;
-                .el-radio__input{display:none}
-                .el-radio__label{padding-left: 6px}
-                .el-checkbox-button__inner{padding: 8px 15px}
+          .manual{
+            height:400px;
+            position: relative;
+            /*.el-badge{ position: absolute;bottom:-5px;left:49%}*/
+            .selected-block{
+              /*box-shadow:inset 0px 15px 10px -15px #000;*/
+              padding: 10px;
+              border: 1px solid #efefef;
+              border-radius: 5px;
+              .operator{position: absolute;top:-30px;left:45%}
+              width:100%;
+              height:200px;
+              position: absolute;
+              left:0;bottom:0;background: white;z-index: 2;
+            .el-tag{ margin-right: 10px}
+            }
+            .el-form{
+              padding: 15px 0;
+              .el-form-item{border-bottom: 1px dashed #ccc;padding-bottom: 10px; margin-bottom: 10px;
+                .el-radio{ margin-right: 0;
+                  .el-radio__input{display:none}
+                  .el-radio__label{padding-left: 6px}
+                  .el-checkbox-button__inner{padding: 8px 15px}
+                }
               }
             }
           }
+
         }
       }
     }

@@ -126,7 +126,7 @@ export default {
       })
     },
     handleSizeChange () { //      条数改变
-      console.log(444444)
+
     },
     handleCurrentChange () { // 页数改变
 
