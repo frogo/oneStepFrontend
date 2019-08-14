@@ -49,6 +49,7 @@
         </el-row>
       </div>
     </el-header>
+    <bread-crumb />
     <router-view />
     <el-footer height="100px">
       <p>
@@ -62,10 +63,13 @@
 <script>
 import { mapState } from 'vuex'
 import { logout } from '@/request/api'
+import BreadCrumb from '@/components/breadCrumb'
 export default {
+  components: { BreadCrumb },
   data () {
     return {
-      loginStatus: 0
+      loginStatus: 0,
+      router: ''
     }
   },
   computed: {

@@ -9,6 +9,7 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
+      name: '首页',
       component: () => import('../views/layout.vue'),
       children: [
         { // 首页
