@@ -286,28 +286,39 @@ export default {
 
 <style lang="scss">
 .page-paperCreate{
-  box-shadow: 0px 0px 5px #888888;
+  box-shadow: 0 0 5px #888888;
   margin: 15px auto;
   padding: 20px;
   h2.pageName{font-size: 26px}
   .el-form.createForm{
     .inline-form{
       display: flex; justify-content:flex-start;
-      .el-form-item{ margin-right: 50px}
+      .el-form-item{
+        margin-right: 50px
+      }
     }
     .head-line{margin: 25px 0;height:1px;position:relative;background:#f3f3f3;
       span.base-info{display: inline-block;position: absolute;top:-10px;background: #fff;padding-right: 1em;color:#EF6520}
-      i{color:#8c939d;}
+      i{color:#8c939d}
     }
     .el-input.w200{width:200px}
     .el-select.w200{width:200px}
     .el-textarea{width:400px}
-    .qualifiedPercent{.label{display: inline-block;justify-content: flex-start;span{ margin-right: 5px;i{color:#8c939d;}}}}
+    .qualifiedPercent{
+      .label{
+        display: inline-block;justify-content: flex-start;
+          span{ margin-right: 5px;
+                 i{color:#8c939d}
+              }
+            }
+     }
     .questionsChoose{
-
       margin:20px 0;
       .head{padding:0 15px;background: #fafafa;height:30px;line-height: 30px;display: flex;justify-content: space-between;
-        span{color:#999;display: inline-block;&:nth-child(1){width:28%}&:nth-child(2){width:70%}}
+        span{color:#999;display: inline-block;
+          &:nth-child(1){width:28%}
+          &:nth-child(2){width:70%}
+        }
       }
       .list{
         display: flex;
@@ -323,38 +334,37 @@ export default {
           .el-radio{
             .el-radio__label{display: none}
           }
-          span{display: inline-block;&.name{width:130px;}&.total{width:60px;text-align: right }}
+          span{display: inline-block;
+            &.name{width:130px}
+            &.total{width:60px;text-align: right }
+          }
         }}}
-        .questions{width:70%;
+        .questions{
           min-height: 400px;
           position: relative;
-          /*.el-badge{ position: absolute;bottom:-5px;left:49%}*/
           .selected-block{
-            /*box-shadow: 0px 0px 5px #888888;*/
             box-shadow: 0px -12px 10px -10px #888888;
-            .box{
-              height:200px;
-
-              overflow: hidden;
-            }
-            .myBox-leave-active,.myBox-enter-active{
-              transition:  all 1s ease;
-            }
-            .myBox-leave-active,.myBox-enter{
-              height:0px !important;
-            }
-            .myBox-leave,.myBox-enter-active{
-              height: 200px;
-            }
-            /*box-shadow:inset 0px 15px 10px -15px #000;*/
             padding: 10px;
             border: 1px solid #efefef;
             border-radius: 5px 5px 0 0 ;
-            .operator{position: absolute;top:-30px;left:45%}
             width:100%;
             height:auto;
             position: absolute;
-            left:0;bottom:0;background:#efefef;;z-index: 2;
+            left:0;bottom:0;background:#fff;z-index: 2;
+            .operator{position: absolute;top:-30px;left:45%}
+            .box{
+              height:200px;
+              overflow: hidden
+            }
+            .myBox-leave-active,.myBox-enter-active{
+              transition:  all 1s ease
+            }
+            .myBox-leave-active,.myBox-enter{
+              height:0px !important
+            }
+            .myBox-leave,.myBox-enter-active{
+              height: 200px
+            }
             .el-tag{ margin-right: 10px}
           }
           .manual{
@@ -369,7 +379,6 @@ export default {
               }
             }
           }
-
         }
       }
     }

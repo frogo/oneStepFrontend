@@ -117,6 +117,11 @@ const router = new VueRouter({
       path: '/forgotPassword',
       name: '忘记密码',
       component: () => import('../views/user/forgotPassword.vue')
+    },
+    {
+      path: '/exTable',
+      name: '',
+      component: () => import('../views/exTableDemo.vue')
     }
   ]
 })
