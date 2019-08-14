@@ -76,7 +76,7 @@
       </div>
 
       <el-form-item>
-        <el-select v-model="createForm.rules" placeholder="请选择" style="width:200px">
+        <el-select v-model="createForm.rules" @change="handleRulesSwitch(createForm.rules)" placeholder="请选择" style="width:200px">
           <el-option
             v-for="item in paperRules"
             :key="item.value"
@@ -88,28 +88,50 @@
         <div class="questionsChoose">
           <div class="head">
             <span>题库列表</span>
-            <span class="notice">C#中的类</span>
+            <span v-if="createForm.rules === 'manual'" class="notice">C#中的类</span>
+            <span v-else class="notice" title="提示：各题库题型后面的数字，左边为抽取题数，右边为题库中该题型的总数，抽取题数不得大于题型总数，请填写需要抽取的题型整数">提示：各题库题型后面的数字，左边为抽取题数，右边为题库中该题型的总数，抽取题数不得大于题型总数，请填写需要抽取的题型整数</span>
           </div>
           <div class="list">
-            <div class="questionLib">
-              <div class="keyword-input">
-                <el-input
-                  v-model="questionsLib.keyword"
-                  @keyup.enter.native="handleSearch"
-                  placeholder="请输入内容"
-                  size="medium "
+            <div v-show="createForm.rules === 'manual'" class="manual">
+              <div class="questionLib">
+                <div class="keyword-input">
+                  <el-input
+                    v-model="questionsLib.keyword"
+                    @keyup.enter.native="handleSearch"
+                    placeholder="请输入内容"
+                    size="medium "
+                  >
+                    <i slot="suffix" @click="handleQuestionsSearch" class="el-input__icon el-icon-search" />
+                  </el-input>
+                </div>
+                <el-table
+                  :data="questionLibDataRemote"
+                  @current-change="handleQuestionCurrentChange"
+                  tooltip-effect="dark"
+                  highlight-current-row
+                  height="320"
+                  style="width: 100%"
                 >
-                  <i slot="suffix" @click="handleQuestionsSearch" class="el-input__icon el-icon-search" />
-                </el-input>
+                  <el-table-column
+                    type="index"
+                    width="55"
+                  />
+                  <el-table-column
+                    prop="name"
+                    label="题库名称"
+                  />
+                  <el-table-column
+                    prop="total"
+                    label="试题数"
+                  />
+                </el-table>
+                <!--                <ul>-->
+                <!--                  <li v-for="(item, index) in questionLibData" :key="`lib_${index}`">-->
+                <!--                    <el-radio v-model="questionsLib.radio" :label="item.id" /> <span class="name">{{ item.name }}</span> <span class="total">({{ item.total }})</span>-->
+                <!--                  </li>-->
+                <!--                </ul>-->
               </div>
-              <ul>
-                <li v-for="(item, index) in questionLibData" :key="`lib_${index}`">
-                  <el-radio v-model="questionsLib.radio" :label="item.id" /> <span class="name">{{ item.name }}</span> <span class="total">({{ item.total }})</span>
-                </li>
-              </ul>
-            </div>
-            <div class="questions">
-              <div class="manual">
+              <div class="questions">
                 <div class="selected-block">
                   <div class="operator">
                     <el-badge :value="12">
@@ -141,7 +163,6 @@
                     </el-radio-group>
                   </el-form-item>
                 </el-form>
-
                 <el-table
                   ref="multipleTable"
                   :data="paperTableData"
@@ -166,6 +187,62 @@
                     width="120"
                   />
                 </el-table>
+              </div>
+            </div>
+
+            <div v-show="createForm.rules === 'random'" class="random">
+              <div class="questionLib">
+                <div class="keyword-input">
+                  <el-input
+                    v-model="questionsLib.keyword"
+                    @keyup.enter.native="handleSearch"
+                    placeholder="请输入内容"
+                    size="medium "
+                  >
+                    <i slot="suffix" @click="handleQuestionsSearch" class="el-input__icon el-icon-search" />
+                  </el-input>
+                </div>
+                <el-table
+                  ref="multipleTable"
+                  :data="questionLibDataRemote"
+                  @selection-change="handleQuestionSelectionChange"
+                  tooltip-effect="dark"
+                  height="320"
+                  style="width: 100%"
+                >
+                  <el-table-column
+                    type="selection"
+                    width="55"
+                  />
+                  <el-table-column
+                    prop="name"
+                    label="题库名称"
+                  />
+                  <el-table-column
+                    prop="total"
+                    label="试题数"
+                  />
+                </el-table>
+              </div>
+              <div class="questions">
+                <div class="collect">
+                  <span><i>总试题：</i>80</span>
+                  <span><i>单项选择题：</i>59</span>
+                  <span><i>多项选择题：</i>11</span>
+                  <span><i>判断题：</i>10</span>
+                </div>
+                <ul>
+                  <li v-for="item in questionSelected" :key="item.name">
+                    <p class="title">
+                      {{ item.name }}
+                    </p>
+                    <p class="input">
+                      <span><i class="red">*</i> 单项选择题 <el-input v-model="item.singleValue" size="mini" /> / {{ item.singleTotal }}</span>
+                      <span><i class="red">*</i> 多项选择题 <el-input v-model="item.multiValue" size="mini" /> / {{ item.multiTotal }}</span>
+                      <span><i class="red">*</i> 判断题 <el-input v-model="item.trueFalseValue" size="mini" /> / {{ item.trueFalseTotal }}</span>
+                    </p>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
@@ -213,7 +290,7 @@ export default {
         keyword: '',
         radio: 46
       },
-      questionLibData: [
+      questionLibDataRemote: [
         { name: '多大的', id: 45, total: 98 },
         { name: '多大的', id: 46, total: 98 },
         { name: '多大的', id: 47, total: 98 },
@@ -247,11 +324,15 @@ export default {
         {
           type: '单选',
           title: '类与对象的关系'
+        },
+        {
+          type: '单选',
+          title: '类与对象的关系4'
         }
-      ],
+      ], // 手动出题，当前已经选择的题库
       paperSelected: [{
         name: '标签一'
-      },
+      }, // 手动出题，试卷已选择
       {
         name: '标签二'
       },
@@ -259,6 +340,26 @@ export default {
         name: '标签三'
       }
       ],
+      questionSelected: [
+        {
+          singleTotal: 23,
+          multiTotal: 34,
+          trueFalseTotal: 45,
+          name: '测试试题题目',
+          singleValue: 0,
+          multiValue: 0,
+          trueFalseValue: 0
+        },
+        {
+          singleTotal: 23,
+          multiTotal: 34,
+          trueFalseTotal: 45,
+          name: '测试试题题目3',
+          singleValue: 0,
+          multiValue: 0,
+          trueFalseValue: 0
+        }
+      ], // 随机出题，当前已经选择题库
       boxShow: false
     }
   },
@@ -274,11 +375,17 @@ export default {
     handleQuestionsSearch () {
 
     },
-    handlePaperSelectionChange () {
+    handlePaperSelectionChange () { // 手动选题右侧试卷选择
 
     },
-    toggleBox () {
-      this.boxShow = !this.boxShow
+    handleQuestionSelectionChange (val) { // 随机选题左侧题库选择
+      this.questionSelected = val
+    },
+    handleQuestionCurrentChange () {
+
+    },
+    handleRulesSwitch () {
+
     }
   }
 }
@@ -317,69 +424,109 @@ export default {
       .head{padding:0 15px;background: #fafafa;height:30px;line-height: 30px;display: flex;justify-content: space-between;
         span{color:#999;display: inline-block;
           &:nth-child(1){width:28%}
-          &:nth-child(2){width:70%}
+          &:nth-child(2){width:70%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
         }
       }
       .list{
-        display: flex;
-        justify-content: space-between;
-        border: 1px solid #efefef;
-        .questionLib{width:28%;border-right: 1px solid #efefef;
-          .keyword-input{padding:15px 15px 0 15px}
-          ul{padding: 15px;
-            height: 260px;
-            overflow: auto;
-            li{
-          line-height: 26px;
-          .el-radio{
-            .el-radio__label{display: none}
+        .manual{
+          display: flex;
+          justify-content: space-between;
+          border: 1px solid #efefef;
+          .questionLib{width:28%;border-right: 1px solid #efefef;
+            .keyword-input{padding:15px 15px 0 15px}
+            ul{padding: 15px;
+              height: 260px;
+              overflow: auto;
+              li{
+                line-height: 26px;
+                .el-radio{
+                  .el-radio__label{display: none}
+                }
+                span{display: inline-block;
+                  &.name{width:130px}
+                  &.total{width:60px;text-align: right }
+                }
+              }}}
+          .questions{
+            width:70%;
+            min-height: 400px;
+            position: relative;
+            .selected-block{
+              box-shadow: 0px -12px 10px -10px #888888;
+              padding: 10px;
+              border: 1px solid #efefef;
+              border-radius: 5px 5px 0 0 ;
+              width:100%;
+              height:auto;
+              position: absolute;
+              left:0;bottom:0;background:#fff;z-index: 2;
+              .operator{position: absolute;top:-30px;left:45%}
+              .box{
+                height:200px;
+                overflow: hidden
+              }
+              .myBox-leave-active,.myBox-enter-active{
+                transition:  all 1s ease
+              }
+              .myBox-leave-active,.myBox-enter{
+                height:0px !important
+              }
+              .myBox-leave,.myBox-enter-active{
+                height: 200px
+              }
+              .el-tag{ margin-right: 10px}
+            }
+              .el-form{
+                padding: 15px 0;
+                .el-form-item{border-bottom: 1px dashed #ccc;padding-bottom: 10px; margin-bottom: 10px;
+                  .el-radio{ margin-right: 0;
+                    .el-radio__input{display:none}
+                    .el-radio__label{padding-left: 6px}
+                    .el-checkbox-button__inner{padding: 8px 15px}
+                  }
+                }
+              }
           }
-          span{display: inline-block;
-            &.name{width:130px}
-            &.total{width:60px;text-align: right }
+        }
+        .random{
+          display: flex;
+          justify-content: space-between;
+          border: 1px solid #efefef;
+          .questionLib {
+            width: 28%;
+            border-right: 1px solid #efefef;
+            .keyword-input {
+              padding: 15px 15px 0 15px
+            }
+           /* .el-table td, .el-table th{padding: 6px 0}*/
           }
-        }}}
-        .questions{
-          min-height: 400px;
-          position: relative;
-          .selected-block{
-            box-shadow: 0px -12px 10px -10px #888888;
-            padding: 10px;
-            border: 1px solid #efefef;
-            border-radius: 5px 5px 0 0 ;
-            width:100%;
-            height:auto;
-            position: absolute;
-            left:0;bottom:0;background:#fff;z-index: 2;
-            .operator{position: absolute;top:-30px;left:45%}
-            .box{
-              height:200px;
-              overflow: hidden
-            }
-            .myBox-leave-active,.myBox-enter-active{
-              transition:  all 1s ease
-            }
-            .myBox-leave-active,.myBox-enter{
-              height:0px !important
-            }
-            .myBox-leave,.myBox-enter-active{
-              height: 200px
-            }
-            .el-tag{ margin-right: 10px}
-          }
-          .manual{
-            .el-form{
+          .questions{
+            width:70%;
+            min-height: 400px;
+            position: relative;
+            .collect{
+              display: flex;
+              justify-content: space-around;
               padding: 15px 0;
-              .el-form-item{border-bottom: 1px dashed #ccc;padding-bottom: 10px; margin-bottom: 10px;
-                .el-radio{ margin-right: 0;
-                  .el-radio__input{display:none}
-                  .el-radio__label{padding-left: 6px}
-                  .el-checkbox-button__inner{padding: 8px 15px}
+              border-bottom: 1px solid #efefef;
+              span{display: inline-block;color:red;font-size: 24px;position: relative;width:25%;text-align: center;height:40px;
+              i{position: absolute;left:0;top:0;font-style: normal;font-size: 12px;display: inline-block;height:20px;color:#999;line-height: 20px}
+              }
+            }
+            ul{
+              height:260px;overflow: auto;
+              li {
+                border-bottom: 1px dashed #efefef;
+                padding: 10px 0;
+                .title{ font-size: 16px;color:#666}
+                .input{display: flex;justify-content: space-between;
+                  span{width:33%;color:#999;i{font-style: normal;}.el-input{width:45px;}}
                 }
               }
             }
           }
         }
+
       }
     }
   }
