@@ -1,6 +1,6 @@
 <template>
   <el-breadcrumb separator-class="el-icon-arrow-right">
-    <el-breadcrumb-item v-for="(item, index) in levelList" :key="index + item.path" :to="item.redirect || item.path">
+    <el-breadcrumb-item v-for="(item, index) in levelList" :key="index + item.path" :to="{path: item.path}">
       {{ item.name }}
     </el-breadcrumb-item>
   </el-breadcrumb>
@@ -34,10 +34,11 @@ export default {
     getBreadcrumb () {
       let matched = this.$route.matched.filter(item => item.name)// $route.matched 将会是一个包含从上到下的所有对象 (副本)。
       // eslint-disable-next-line no-console
-      console.log(matched)
+      console.log(this.$route.matched)
+
       const first = matched[0]
       if (first && first.name !== '首页') { // $route.name当前路由名称  ；$route.redirectedFrom重定向来源的路由的名字
-        matched = [{ path: '/', meta: { title: 'dashboard' } }].concat(matched)
+        matched = [{ path: '/', name: '' }].concat(matched)
       }
       this.levelList = matched
     }

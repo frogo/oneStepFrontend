@@ -9,118 +9,133 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      name: '首页',
+      redirect: 'home',
       component: () => import('../views/layout.vue'),
       children: [
         { // 首页
-          path: '',
-          name: '首页',
+          path: 'home',
+          name: '主页',
           component: () => import('../views/home.vue')
         },
         { // 个人中心
-          path: '/user',
+          path: 'user',
           name: '个人中心',
           component: () => import('../views/user/changePassword.vue')
         },
-        { // 企业课程库
-          path: '/course',
-          name: '课程库',
-          component: () => import('../views/course/index.vue')
-        },
-        { // 企业课程库-详情
-          path: '/course/details',
-          name: '课程库-详情',
-          component: () => import('../views/course/details.vue')
-        },
-        { // 企业课程库-创建课程
-          path: '/course/create',
-          name: '课程库-创建',
-          component: () => import('../views/course/create.vue')
-        },
         { // 项目管理
-          path: '/project',
+          path: 'project',
           name: '项目管理',
-          component: () => import('../views/project/index.vue')
-        },
-        { // 项目管理-创建项目
-          path: '/project/create',
-          name: '项目管理-创建项目',
-          component: () => import('../views/project/create.vue')
-        },
-        { // 项目管理-统计详情
-          path: '/project/details',
-          name: '项目管理-统计详情',
-          component: () => import('../views/project/details.vue')
+          component: () => import('../views/project/index.vue'),
+          children: [
+            { // 项目管理-创建项目
+              path: '/project/create',
+              name: '创建项目',
+              component: () => import('../views/project/create.vue')
+            },
+            { // 项目管理-统计详情
+              path: '/project/details',
+              name: '统计详情',
+              component: () => import('../views/project/details.vue')
+            }
+          ]
         },
         { // 题库管理
-          path: '/questions/management',
+          path: 'questions',
           name: '题库管理',
-          component: () => import('../views/examination/questions/index.vue')
-        },
-        { // 题库管理-创建试题
-          path: '/questions/create',
-          name: '题库管理-创建试题',
-          component: () => import('../views/examination/questions/create.vue')
-        },
-        { // 题库管理-编辑试题
-          path: '/questions/edit',
-          name: '题库管理-编辑试题',
-          component: () => import('../views/examination/questions/edit.vue')
+          component: () => import('../views/examination/questions/index.vue'),
+          children: [
+            { // 创建试题
+              path: '/questions/create',
+              name: '题库管理-创建试题',
+              component: () => import('../views/examination/questions/create.vue')
+            },
+            { // 编辑试题
+              path: '/questions/edit',
+              name: '题库管理-编辑试题',
+              component: () => import('../views/examination/questions/edit.vue')
+            }
+          ]
         },
         { // 试卷管理
-          path: '/paper/management',
+          path: 'paper',
           name: '试卷管理',
-          component: () => import('../views/examination/paper/index.vue')
-        },
-        { // 试卷管理-创建试卷
-          path: '/paper/create',
-          name: '试卷管理-创建试卷',
-          component: () => import('../views/examination/paper/create.vue')
-        },
-        { // 试卷管理-编辑试卷
-          path: '/paper/edit',
-          name: '试卷管理-编辑试卷',
-          component: () => import('../views/examination/paper/edit.vue')
+          component: () => import('../views/examination/paper/index.vue'),
+          children: [
+            { // 试卷管理-创建试卷
+              path: '/paper/create',
+              name: '创建试卷',
+              component: () => import('../views/examination/paper/create.vue')
+            },
+            { // 试卷管理-编辑试卷
+              path: '/paper/edit',
+              name: '编辑试卷',
+              component: () => import('../views/examination/paper/edit.vue')
+            }
+          ]
         },
         { // 特殊学员
-          path: '/student',
+          path: 'specialStudent',
           name: '特殊学员',
           component: () => import('../views/student/index.vue')
         },
-        { // 数据统计-培训统计
-          path: '/trainStatistics',
+        { // 培训统计
+          path: 'trainStatistics',
           name: '培训统计',
-          component: () => import('../views/dataStatistics/trainStatistics/index.vue')
+          component: () => import('../views/dataStatistics/trainStatistics/index.vue'),
+          children: [
+            { // 数据统计-培训统计详情
+              path: '/trainStatistics/details',
+              name: '培训项目统计详情',
+              component: () => import('../views/dataStatistics/trainStatistics/details.vue')
+            }
+          ]
         },
-        { // 数据统计-培训统计详情
-          path: '/trainStatisticsDetails',
-          name: '数据统计-培训统计详情',
-          component: () => import('../views/dataStatistics/trainStatistics/details.vue')
-        },
-        { // 数据统计-课程排行
-          path: '/courseRanking',
-          name: '数据统计-课程排行',
+        { // 课程排行
+          path: 'courseRanking',
+          name: '课程排行',
           component: () => import('../views/dataStatistics/courseRanking/index.vue')
         }
       ]
     },
+    { // 企业课程库
+      path: '/course',
+      redirect: '/course',
+      component: () => import('../views/layout.vue'),
+      children: [
+        { // 企业课程库-
+          path: '',
+          name: '企业课程库',
+          component: () => import('../views/course/index.vue')
+        },
+        { // 企业课程库-详情
+          path: '/course/details',
+          name: '课程详情',
+          component: () => import('../views/course/details.vue')
+        },
+        { // 企业课程库-创建课程
+          path: '/course/create',
+          name: '课程创建',
+          component: () => import('../views/course/create.vue')
+        }
+      ]
+    },
     {
-      path: '/login',
+      path: 'login',
       name: '登录',
       component: () => import('../views/login.vue')
     },
     {
-      path: '/register',
+      path: 'register',
       name: '注册',
       component: () => import('../views/user/register.vue')
     },
     {
-      path: '/forgotPassword',
+      path: 'forgotPassword',
       name: '忘记密码',
       component: () => import('../views/user/forgotPassword.vue')
     },
     {
-      path: '/exTable',
+      path: 'exTable',
       name: '',
       component: () => import('../views/exTableDemo.vue')
     }

@@ -35,8 +35,8 @@ export default {
         {
           name: '考试管理',
           children: [
-            { name: '题库管理', link: '/questions/management', icon: 'el-icon-edit-outline' },
-            { name: '试卷管理', link: '/paper/management', icon: 'el-icon-document' }
+            { name: '题库管理', link: '/questions', icon: 'el-icon-edit-outline' },
+            { name: '试卷管理', link: '/paper', icon: 'el-icon-document' }
           ]
         },
         {
@@ -49,7 +49,7 @@ export default {
         {
           name: '人员管理',
           children: [
-            { name: '特殊学员', link: '/student', icon: 'el-icon-coordinate' }
+            { name: '特殊学员', link: '/specialStudent', icon: 'el-icon-coordinate' }
           ]
         }
       ]
