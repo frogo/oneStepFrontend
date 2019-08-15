@@ -21,59 +21,97 @@
         </div>
       </div>
       <div class="list">
-        <el-table
-          ref="multipleTable"
-          :data="questionsTableData"
-          tooltip-effect="dark"
-          style="width: 100%"
-        >
-          <el-table-column
-            prop="name"
-            label="题库名"
-          />
-          <el-table-column
-            prop="add_time"
-            label="创建时间"
-            width="180"
-          />
-          <el-table-column
-            prop="count"
-            label="试题数"
-            width="180"
-          />
-          <el-table-column
-            label="操作"
-            width="180"
-          >
-            <template slot-scope="scope">
-              <el-button
-                @click="handleEdit(scope.$index, scope.row)"
-                size="mini"
-              >
-                编辑
-              </el-button>
-              <el-button
-                @click="handleDelete(scope.$index, scope.row)"
-                size="mini"
-                type="danger"
-              >
-                删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+        <div class="exTable">
+          <ex-table ref="exTable" :data="questionsTableData" :search-method="handleSearch" show-pagination stripe>
+            <el-table-column
+              prop="name"
+              label="题库名"
+            />
+            <el-table-column
+              prop="add_time"
+              label="创建时间"
+              width="180"
+            />
+            <el-table-column
+              prop="count"
+              label="试题数"
+              width="180"
+            />
+            <el-table-column
+              label="操作"
+              width="180"
+            >
+              <template slot-scope="scope">
+                <el-button
+                  @click="handleEdit(scope.$index, scope.row)"
+                  size="mini"
+                >
+                  编辑
+                </el-button>
+                <el-button
+                  @click="handleDelete(scope.$index, scope.row)"
+                  size="mini"
+                  type="danger"
+                >
+                  删除
+                </el-button>
+              </template>
+            </el-table-column>
+          </ex-table>
+        </div>
+        <!--        <el-table-->
+        <!--          ref="multipleTable"-->
+        <!--          :data="questionsTableData"-->
+        <!--          tooltip-effect="dark"-->
+        <!--          style="width: 100%"-->
+        <!--        >-->
+        <!--          <el-table-column-->
+        <!--            prop="name"-->
+        <!--            label="题库名"-->
+        <!--          />-->
+        <!--          <el-table-column-->
+        <!--            prop="add_time"-->
+        <!--            label="创建时间"-->
+        <!--            width="180"-->
+        <!--          />-->
+        <!--          <el-table-column-->
+        <!--            prop="count"-->
+        <!--            label="试题数"-->
+        <!--            width="180"-->
+        <!--          />-->
+        <!--          <el-table-column-->
+        <!--            label="操作"-->
+        <!--            width="180"-->
+        <!--          >-->
+        <!--            <template slot-scope="scope">-->
+        <!--              <el-button-->
+        <!--                @click="handleEdit(scope.$index, scope.row)"-->
+        <!--                size="mini"-->
+        <!--              >-->
+        <!--                编辑-->
+        <!--              </el-button>-->
+        <!--              <el-button-->
+        <!--                @click="handleDelete(scope.$index, scope.row)"-->
+        <!--                size="mini"-->
+        <!--                type="danger"-->
+        <!--              >-->
+        <!--                删除-->
+        <!--              </el-button>-->
+        <!--            </template>-->
+        <!--          </el-table-column>-->
+        <!--        </el-table>-->
       </div>
-      <div class="pager">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="pager.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="pager.pageSize"
-          :total="pager.total"
-          layout="total, sizes, prev, pager, next, jumper"
-        />
-      </div>
+      <!--      <div class="pager">-->
+      <!--        <el-pagination-->
+      <!--          @size-change="handleSizeChange"-->
+      <!--          @current-change="handleCurrentChange"-->
+      <!--          :current-page="pager.currentPage"-->
+      <!--          :page-sizes="[10, 20, 50]"-->
+      <!--          :page-size="pager.pageSize"-->
+      <!--          :total="pager.total"-->
+      <!--          layout="total, sizes, prev, pager, next, jumper"-->
+      <!--        />-->
+      <!--      </div>-->
       <el-dialog
         :visible.sync="createQuestionsDialogVisible"
         title="创建题库"
@@ -91,9 +129,11 @@
 
 <script>
 import AsideMenu from '@/components/asideMenu'
+import ExTable from '@/components/exTable.js'
 export default {
   components: {
-    AsideMenu
+    AsideMenu,
+    ExTable
   },
   data () {
     return {
@@ -149,5 +189,8 @@ export default {
 <style lang="scss">
 .page-questions{
  padding: 0;
+  .exTable{
+    .el-pagination{margin-top: 20px;text-align: right}
+  }
 }
 </style>

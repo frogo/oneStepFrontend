@@ -32,7 +32,7 @@ module.exports = {
   // Setting mode
   mode: prod ? 'production' : 'development',
   // source-map
-  devtool: prod ? 'eval-source-map' : 'eval-source-map',
+  devtool: prod ? '' : 'eval-source-map',
   devServer: {
     host: 'localhost',
     port: 3003,
