@@ -2,5 +2,9 @@
 // 最好提前在你的 store 中初始化好所有所需属性。
 
 export default {
-  user: null
+  user: null,
+  breadCrumb: {
+    isShow: false,
+    list: []
+  } // 面包屑
 }

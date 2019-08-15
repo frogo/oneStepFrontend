@@ -6,7 +6,13 @@
 
 <script>
 export default {
-  name: 'Edit'
+  name: 'Edit',
+  mounted: function () {
+    this.$store.commit('$_setBreadCrumb', { isShow: true,
+      list: [
+        { name: '首页', path: '/' }, { name: '试卷管理', path: '/paper' }, { name: '编辑试卷', path: '/paper/edit' }
+      ] })
+  }
 }
 </script>
 

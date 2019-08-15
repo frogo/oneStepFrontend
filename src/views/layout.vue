@@ -65,7 +65,9 @@ import { mapState } from 'vuex'
 import { logout } from '@/request/api'
 import BreadCrumb from '@/components/breadCrumb'
 export default {
-  components: { BreadCrumb },
+  components: {
+    BreadCrumb
+  },
   data () {
     return {
       loginStatus: 0,
@@ -84,7 +86,11 @@ export default {
 
   },
   mounted: function () {
-    this.$store.commit('$_setUserStorage', localStorage.getItem('user'))
+    if (localStorage.getItem('user')) {
+      this.$store.commit('$_setUserStorage', localStorage.getItem('user'))
+    } else {
+      this.$router.push({ path: '/login' })
+    }
   },
   methods: {
     logoutHandler () {

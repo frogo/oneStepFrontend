@@ -9,5 +9,8 @@ export default {
   },
   $_removeUserStorage (state) {
     state.user = null
+  },
+  $_setBreadCrumb (state, value) { // 赋值面包屑
+    state.breadCrumb = value
   }
 }

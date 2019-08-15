@@ -109,9 +109,14 @@ export default {
   },
 
   mounted: function () {
+    this.$store.commit('$_setBreadCrumb', { isShow: true,
+      list: [
+        { name: '首页', path: '/' }, { name: '题库管理', path: '/questions' }, { name: '创建试题', path: '/questions/create' }
+      ] })
   },
   methods: {
     submit () {
+      // eslint-disable-next-line no-console
       console.log(this.createForm)
     }
   }
@@ -121,7 +126,7 @@ export default {
 <style lang="scss">
 .page-questionCreate{
   box-shadow: 0px 0px 5px #888888;
-  margin: 15px auto;
+  margin: 0 auto 20px;
   padding: 20px;
   h2.pageName{font-size: 26px}
   .el-form.createForm{

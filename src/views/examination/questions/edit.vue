@@ -109,6 +109,10 @@ export default {
   watch: {
   },
   mounted: function () {
+    this.$store.commit('$_setBreadCrumb', { isShow: true,
+      list: [
+        { name: '首页', path: '/' }, { name: '题库管理', path: '/questions' }, { name: '试题编辑', path: '/questions/edit' }
+      ] })
   },
   methods: {
     handleSearch () {
@@ -130,7 +134,7 @@ export default {
 <style lang="scss">
   .page-questionEdit{
       box-shadow: 0px 0px 5px #888888;
-      margin: 15px auto;
+      margin: 0 auto 20px;
       padding: 20px;
         position: relative;
         h2 {

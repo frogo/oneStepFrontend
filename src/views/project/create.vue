@@ -352,6 +352,10 @@ export default {
   watch: {
   },
   mounted: function () {
+    this.$store.commit('$_setBreadCrumb', { isShow: true,
+      list: [
+        { name: '首页', path: '/' }, { name: '培训项目管理', path: '/project' }, { name: '创建项目', path: '/project/create' }
+      ] })
     this.getCourseList()
   },
   methods: {
@@ -387,7 +391,7 @@ export default {
 <style lang="scss">
   .page-projectCreate{
     box-shadow: 0px 0px 5px #888888;
-    margin: 15px auto;
+    margin: 0 auto 20px;
     padding: 20px;
     h2.pageName{font-size: 26px}
     .el-form.createForm{

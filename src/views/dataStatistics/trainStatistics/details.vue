@@ -17,6 +17,10 @@ export default {
   watch: {
   },
   mounted: function () {
+    this.$store.commit('$_setBreadCrumb', { isShow: true,
+      list: [
+        { name: '首页', path: '/' }, { name: '培训统计', path: '/trainStatistics' }, { name: '培训统计详情', path: '/trainStatistics/details' }
+      ] })
   },
   methods: {
 

@@ -275,6 +275,10 @@ export default {
   },
   mounted: function () {
     this.getProjectList()
+    this.$store.commit('$_setBreadCrumb', { isShow: true,
+      list: [
+        { name: '首页', path: '/' }, { name: '培训项目管理', path: '/project' }
+      ] })
   },
   methods: {
     getProjectList () {

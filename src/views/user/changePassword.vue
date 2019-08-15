@@ -4,7 +4,7 @@
       <dl>
         <dt>账号信息</dt>
         <dd>
-          <i class="el-icon-lock" /> <router-link to="/userCenter" class="menu-link">
+          <i class="el-icon-lock" /> <router-link to="/user" class="menu-link">
             修改密码
           </router-link>
         </dd>
@@ -89,7 +89,10 @@ export default {
   watch: {
   },
   mounted: function () {
-
+    this.$store.commit('$_setBreadCrumb', { isShow: true,
+      list: [
+        { name: '首页', path: '/' }, { name: '修改密码', path: '/changePassword' }
+      ] })
   },
   methods: {
     submitForm (formName) {

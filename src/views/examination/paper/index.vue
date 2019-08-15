@@ -103,6 +103,10 @@ export default {
   watch: {
   },
   mounted: function () {
+    this.$store.commit('$_setBreadCrumb', { isShow: true,
+      list: [
+        { name: '首页', path: '/' }, { name: '试卷管理', path: '/paper' }
+      ] })
   },
   methods: {
     handleCreate () { // 创建试卷

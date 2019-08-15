@@ -279,6 +279,12 @@ export default {
   watch: {
   },
   mounted: function () {
+    this.$store.commit('$_setBreadCrumb', { isShow: true,
+      list: [
+        { name: '首页', path: '/' },
+        { name: '企业课程库', path: '/course' },
+        { name: '创建课程', path: '/course/create' }
+      ] })
   },
   methods: {
     handleTabClick (tab, event) {

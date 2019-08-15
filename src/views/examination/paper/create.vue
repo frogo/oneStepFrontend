@@ -364,6 +364,10 @@ export default {
     }
   },
   mounted: function () {
+    this.$store.commit('$_setBreadCrumb', { isShow: true,
+      list: [
+        { name: '首页', path: '/' }, { name: '试卷管理', path: '/paper' }, { name: '创建试卷', path: '/paper/create' }
+      ] })
   },
   methods: {
     handleSavePaperDraft () {
@@ -394,7 +398,7 @@ export default {
 <style lang="scss">
 .page-paperCreate{
   box-shadow: 0 0 5px #888888;
-  margin: 15px auto;
+  margin: 0 auto 20px;
   padding: 20px;
   h2.pageName{font-size: 26px}
   .el-form.createForm{

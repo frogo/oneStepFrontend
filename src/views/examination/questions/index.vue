@@ -110,6 +110,10 @@ export default {
   watch: {
   },
   mounted: function () {
+    this.$store.commit('$_setBreadCrumb', { isShow: true,
+      list: [
+        { name: '首页', path: '/' }, { name: '题库管理', path: '/questions' }
+      ] })
   },
   methods: {
     handleCreate () { // 创建题库
