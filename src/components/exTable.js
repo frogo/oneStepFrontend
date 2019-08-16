@@ -22,7 +22,7 @@ export default {
       type: Array,
       default: () => [10, 25, 50, 100]
     },
-    searchMethod: {
+    reloadMethod: {
       type: Function,
       default: () => {}
     }
@@ -46,7 +46,7 @@ export default {
       }
     },
     fetchData () {
-      this.searchMethod(this.pagination, {
+      this.reloadMethod(this.pagination, {
         currentPage: this.pagination.currentPage,
         pageSize: this.pagination.pageSize
       })
@@ -55,7 +55,7 @@ export default {
       const container = document.createElement('div')
       const parent = this.$el.parentNode
       if (parent.lastChild === this.$el) {
-        parent.appentChild(container)
+        parent.appendChild(container)
       } else {
         parent.insertBefore(container, this.$el.nextSibling)
       }

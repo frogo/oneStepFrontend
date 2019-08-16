@@ -432,7 +432,7 @@ a{text-decoration: none}
     padding: 0 0 8px 0;
     border-right: 1px solid #ededed;
     dl{
-      dt{ font-size: 16px;line-height: 2em;
+      dt{ font-size: 16px;line-height: 2em;margin-top: 15px;
       &:not(:first-child){margin-top: 15px}
       }
       dd{
@@ -447,9 +447,9 @@ a{text-decoration: none}
   .el-main{
     margin-left: 20px;
     &.bg{background: url('../img/indexBg.png') no-repeat center center;}
-    h2{ margin-top: 20px}
+    h2{ margin-top: 20px; font-size: 16px}
     .search-box{
-      margin: 20px 0;
+      margin: 20px 0 0;
       padding: 15px 0;
       display: flex;justify-content: space-between;
       .el-input{width:300px;}

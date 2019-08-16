@@ -36,55 +36,47 @@
       </el-button>
     </div>
     <div class="list">
-      <el-table
-        ref="multipleTable"
-        :data="questionsTableData"
-        @selection-change="handleSelectionChange"
-        tooltip-effect="dark"
-        style="width: 100%"
-      >
-        <el-table-column
-          type="selection"
-          width="55"
-        />
-        <el-table-column
-          prop="name"
-          label="题型"
-          width="120"
-        />
-        <el-table-column
-          prop="address"
-          label="题目"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          prop="name"
-          label="创建人"
-          width="120"
-        />
-        <el-table-column
-          prop="name"
-          label="创建时间"
-          width="120"
-        />
-        <el-table-column
-          prop="name"
-          label="操作"
-          width="120"
-        />
-      </el-table>
-    </div>
-
-    <div class="pager">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pager.currentPage"
-        :page-sizes="[10, 20, 50]"
-        :page-size="pager.pageSize"
-        :total="pager.total"
-        layout="total, sizes, prev, pager, next, jumper"
-      />
+      <div class="exTable">
+        <ex-table ref="exTable" :data="questionsTableData" :reload-method="handleReload" show-pagination stripe>
+          <el-table-column
+            prop="type"
+            label="题型"
+          />
+          <el-table-column
+            prop="subject"
+            label="题目"
+          />
+          <el-table-column
+            prop="creator"
+            label="创始人"
+          />
+          <el-table-column
+            prop="add_time"
+            label="创建时间"
+            width="180"
+          />
+          <el-table-column
+            label="操作"
+            width="180"
+          >
+            <template slot-scope="scope">
+              <el-button
+                @click="handleEdit(scope.$index, scope.row)"
+                size="mini"
+              >
+                编辑
+              </el-button>
+              <el-button
+                @click="handleDelete(scope.$index, scope.row)"
+                size="mini"
+                type="danger"
+              >
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </ex-table>
+      </div>
     </div>
   </el-main>
 </template>
@@ -98,12 +90,7 @@ export default {
         type: '不限'
       },
       type: ['不限', '单选', '多选', '判断'],
-      questionsTableData: [],
-      pager: {
-        currentPage: 1,
-        pageSize: 10,
-        total: 100
-      }
+      questionsTableData: []
     }
   },
   watch: {
@@ -159,6 +146,9 @@ export default {
       }
     }
     .btn-box{display: flex;justify-content: flex-end; margin: 20px 0}
-    .pager{ text-align: right; margin-top: 20px}
+
+    .exTable{
+      .el-pagination{margin-top: 20px;text-align: right}
+    }
   }
 </style>

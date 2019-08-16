@@ -19,8 +19,14 @@ export default {
     DRAFT_ADD: CONTEXTPATH + '/lessonDraft/add',
     DETAILS: CONTEXTPATH + '/lesson/info'
   },
-  EXAMINATION_PAPER: {
-    LIST: CONTEXTPATH + '/examinationPaper/list'
+  EXAMINATION: {
+    PAPER: { LIST: CONTEXTPATH + '/examinationPaper/list' },
+    QUESTION: {
+      QUESTION_LIB: CONTEXTPATH + '/questionBank/list',
+      ADD_QUESTION_LIB: CONTEXTPATH + '/questionBank/add',
+      DELETE_QUESTION_LIB: CONTEXTPATH + '/questionBank/delete'
+    }
+
   },
   PROJECT: {
     LIST: CONTEXTPATH + '/project/list'

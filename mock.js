@@ -339,8 +339,8 @@ Mock.mock('/v1/project/list', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
-    'total': 11,
-    'list|11': [
+    'total': 31,
+    'list|10': [
       {
         'id': 1,
         'name': '孙子兵法实践初级入门第一届',
@@ -375,4 +375,29 @@ Mock.mock('/v1/project/list', {
       }
     ]
   }
+})
+
+Mock.mock('/v1/questionBank/list?keyword=&offset=1&limit=10', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'total': 31,
+    'list|10': [
+      {
+        'id': 1,
+        'name': '孙子兵法实践初级入门第一届',
+        'add_time': '2019-02-21',
+        'num': 12
+      }
+    ]
+  }
+})
+Mock.mock('/v1/questionBank/add', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'id': 1
+})
+Mock.mock('/v1/questionBank/delete', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': ''
 })
