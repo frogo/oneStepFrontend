@@ -37,3 +37,6 @@ export const getProjectList = p => post(CONFIG.PROJECT.LIST, p) // 修改接口�
 export const getQuestionLibList = p => get(CONFIG.EXAMINATION.QUESTION.QUESTION_LIB, p) // 题库列表
 export const addQuestionLib = p => post(CONFIG.EXAMINATION.QUESTION.ADD_QUESTION_LIB, p) // 增加题库
 export const deleteQuestionLib = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QUESTION_LIB, p) // 删除题库
+export const getQuestionList = p => post(CONFIG.EXAMINATION.QUESTION.QUESTION_LIST, p) // 试题列表
+export const deleteQuestion = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QUESTION, p) // 删除试题
+export const deleteQuestionAll = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QUESTION_ALL, p) // 批量删除试题

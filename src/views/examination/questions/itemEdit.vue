@@ -111,7 +111,7 @@ export default {
   mounted: function () {
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
-        { name: '首页', path: '/' }, { name: '题库管理', path: '/questionLib' }, { name: '创建试题', path: '/questions/create' }
+        { name: '首页', path: '/' }, { name: '题库管理', path: '/questionLib' }, { name: '编辑试题', path: '/questions/itemEdit' }
       ] })
   },
   methods: {

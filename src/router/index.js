@@ -55,9 +55,9 @@ const router = new VueRouter({
           name: 'project-details',
           component: () => import('../views/project/details.vue')
         },
-        { // 首页
-          path: 'questions',
-          name: 'questions',
+        { // 题库管理首页
+          path: 'questionLib',
+          name: 'questionLib',
           component: () => import('../views/examination/questions/index.vue')
         },
         { // 创建试题
@@ -68,6 +68,11 @@ const router = new VueRouter({
         { // 编辑试题
           path: '/questions/edit',
           name: 'questions-edit',
+          component: () => import('../views/examination/questions/itemEdit.vue')
+        },
+        { // 编辑题库
+          path: '/questionLib/edit',
+          name: 'questionLib-edit',
           component: () => import('../views/examination/questions/edit.vue')
         },
         { // 试卷管理-首页

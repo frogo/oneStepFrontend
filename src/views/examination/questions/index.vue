@@ -93,11 +93,6 @@ export default {
     return {
       keyword: '',
       questionLibTableData: [],
-      pager: {
-        currentPage: 1,
-        pageSize: 10,
-        total: 100
-      },
       createQuestionsDialogVisible: false,
       form: {
         name: ''
@@ -115,10 +110,10 @@ export default {
 
   },
   mounted: function () {
-    this.fetchRemoteData()
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
+    this.fetchRemoteData() // 初始化数据
+    this.$store.commit('$_setBreadCrumb', { isShow: true, // 面包屑
       list: [
-        { name: '首页', path: '/' }, { name: '题库管理', path: '/questions' }
+        { name: '首页', path: '/' }, { name: '题库管理', path: '/questionLib' }
       ] })
   },
   methods: {
@@ -167,7 +162,7 @@ export default {
           addQuestionLib(this.form.name).then(res => {
             if (res.code === '1') {
               this.$message.success('添加成功')
-              this.$router.push({ path: '/questions/edit', query: { id: res.id } })
+              this.$router.push({ path: '/questionLib/edit', query: { id: res.id } })
             }
             this.createQuestionsDialogVisible = false
           }, error => {
@@ -182,7 +177,7 @@ export default {
       this.fetchRemoteData()
     },
     handleEdit (index, row) { // 编辑
-      this.$router.push({ path: '/questions/edit', query: { id: row.id } })
+      this.$router.push({ path: '/questionLib/edit', query: { id: row.id } })
     },
     handleDelete (index, row) { // 删除
       this.$confirm('您确定要删除吗?', '提示', {

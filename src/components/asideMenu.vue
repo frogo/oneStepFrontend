@@ -35,7 +35,7 @@ export default {
         {
           name: '考试管理',
           children: [
-            { name: '题库管理', link: '/questions', icon: 'el-icon-edit-outline' },
+            { name: '题库管理', link: '/questionLib', icon: 'el-icon-edit-outline' },
             { name: '试卷管理', link: '/paper', icon: 'el-icon-document' }
           ]
         },

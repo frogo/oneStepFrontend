@@ -401,3 +401,26 @@ Mock.mock('/v1/questionBank/delete', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': ''
 })
+Mock.mock('/v1/question/list', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'total': 21,
+    'list|10': [{
+      'id': '试题id',
+      'bank_id': '题库id',
+      'type': '单选single',
+      'creator': '杨帆',
+      'subject': '题目',
+      'options': [
+        {
+          'number': '编号',
+          'content': '内容',
+          'istrue': '是否是正确答案 0否 1是'
+        }
+      ],
+      'add_time': '创建时间'
+    }]
+  }
+
+})
