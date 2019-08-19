@@ -41,6 +41,7 @@ export default {
     LIST: CONTEXTPATH + '/spStudent/list',
     DELETE: CONTEXTPATH + '/spStudent/delete',
     ADD: CONTEXTPATH + '/spStudent/add',
-    DELETE_ALL: CONTEXTPATH + '/spStudent/deleteAll'
+    DELETE_ALL: CONTEXTPATH + '/spStudent/deleteAll',
+    EDIT: CONTEXTPATH + '/spStudent/modify'
   }
 }

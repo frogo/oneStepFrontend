@@ -219,8 +219,6 @@ export default {
           this.questionsTableData = res.data.list
           paginationObj.total = res.data.total
         }
-      }, error => {
-        error && this.$message.error(error)
       })
     },
     handleSearch () {
@@ -246,8 +244,6 @@ export default {
             this.$message.success('删除成功')
             this.fetchRemoteData()
           }
-        }, error => {
-          error && this.$message.error(error)
         })
       }).catch(() => {
 
@@ -267,8 +263,6 @@ export default {
             this.$message.success('删除成功')
             this.fetchRemoteData()
           }
-        }, error => {
-          error && this.$message.error(error)
         })
       }).catch(() => {
 

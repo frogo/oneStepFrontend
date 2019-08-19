@@ -134,8 +134,6 @@ export default {
             this.$message.success('删除成功')
             this.fetchRemoteData()
           }
-        }, error => {
-          error && this.$message.error(error)
         })
       }).catch(() => {
 

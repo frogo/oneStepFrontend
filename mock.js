@@ -434,8 +434,8 @@ Mock.mock('/v1/spStudent/list?keyword=&offset=1&limit=10', {
       'name': '题库id',
       'number': 'sxw33',
       'department': '部门',
-      'password': '334',
-      'username': 'xiaoqaing'
+      'pwd': '334',
+      'account': 'xiaoqaing'
     }]
   }
 

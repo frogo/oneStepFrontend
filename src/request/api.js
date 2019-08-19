@@ -48,3 +48,4 @@ export const getSpecialStudentList = p => get(CONFIG.SPECIAL_STUDENT.LIST, p) //
 export const deleteSpecialStudent = p => post(CONFIG.SPECIAL_STUDENT.DELETE, p) //
 export const addSpecialStudent = p => post(CONFIG.SPECIAL_STUDENT.ADD, p) //
 export const deleteStudentAll = p => post(CONFIG.SPECIAL_STUDENT.DELETE_ALL, p) // 批量删除试题
+export const editSpecialStudent = p => post(CONFIG.SPECIAL_STUDENT.EDIT, p) // 批量删除试题

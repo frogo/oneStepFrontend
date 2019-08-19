@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Loading } from 'element-ui'
+import { Loading, Message } from 'element-ui'
 let loadingInstance
 const httpClient = axios.create()
 // 环境转换
@@ -67,6 +67,7 @@ export function get (url, params) {
     }).then(res => {
       resolve(res.data)
     }).catch(err => {
+      Message.error(err.message)
       reject(err)
     })
   })
@@ -83,6 +84,7 @@ export function post (url, params) {
         resolve(res.data)
       })
       .catch(err => {
+        Message.error(err.message)
         reject(err)
       })
   })

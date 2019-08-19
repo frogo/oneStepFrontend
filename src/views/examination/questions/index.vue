@@ -132,8 +132,6 @@ export default {
           this.questionLibTableData = res.data.list
           paginationObj.total = res.data.total
         }
-      }, error => {
-        error && this.$message.error(error)
       })
     },
     handleCreate () { // 创建题库
@@ -148,8 +146,6 @@ export default {
               this.fetchRemoteData()
             }
             this.createQuestionsDialogVisible = false
-          }, error => {
-            error && this.$message.error(error)
           })
         } else {
           return false
@@ -165,8 +161,6 @@ export default {
               this.$router.push({ path: '/questionLib/edit', query: { id: res.id, name: this.form.name } })
             }
             this.createQuestionsDialogVisible = false
-          }, error => {
-            error && this.$message.error(error)
           })
         } else {
           return false
@@ -190,8 +184,6 @@ export default {
             this.$message.success('删除成功')
             this.fetchRemoteData()
           }
-        }, error => {
-          error && this.$message.error(error)
         })
       }).catch(() => {
 

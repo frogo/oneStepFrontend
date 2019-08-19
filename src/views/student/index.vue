@@ -52,12 +52,12 @@
               width="150"
             />
             <el-table-column
-              prop="username"
+              prop="account"
               label="用户名"
               width="150"
             />
             <el-table-column
-              prop="password"
+              prop="pwd"
               label="密码"
               width="150"
             />
@@ -116,6 +116,34 @@
       </el-dialog>
 
       <el-dialog
+        :visible.sync="editStudentDialogVisible"
+        title="编辑学员"
+        width="30%"
+      >
+        <el-form ref="studentEditForm" :model="studentEditForm" :rules="rules" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model="studentEditForm.name" />
+          </el-form-item>
+          <el-form-item label="工号" prop="number">
+            <el-input v-model="studentEditForm.number" />
+          </el-form-item>
+          <el-form-item label="部门" prop="department">
+            <el-input v-model="studentEditForm.department" />
+          </el-form-item>
+          <el-form-item label="用户名" prop="account">
+            <el-input v-model="studentEditForm.account" />
+          </el-form-item>
+          <el-form-item label="密码" prop="pwd">
+            <el-input v-model="studentEditForm.pwd" />
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="editStudentDialogVisible = false">取 消</el-button>
+          <el-button @click="handleEditStudent" type="primary">确 定</el-button>
+        </span>
+      </el-dialog>
+
+      <el-dialog
         :visible.sync="addStudentDialogVisible"
         title="新增学员"
         width="30%"
@@ -130,8 +158,8 @@
           <el-form-item label="部门" prop="department">
             <el-input v-model="studentAddForm.department" />
           </el-form-item>
-          <el-form-item label="用户名" prop="accord">
-            <el-input v-model="studentAddForm.accord" />
+          <el-form-item label="用户名" prop="account">
+            <el-input v-model="studentAddForm.account" />
           </el-form-item>
           <el-form-item label="密码" prop="pwd">
             <el-input v-model="studentAddForm.pwd" />
@@ -149,7 +177,7 @@
 <script>
 import AsideMenu from '@/components/asideMenu'
 import ExTable from '@/components/exTable.js'
-import { getSpecialStudentList, deleteSpecialStudent, addSpecialStudent, deleteStudentAll } from '@/request/api'
+import { getSpecialStudentList, deleteSpecialStudent, addSpecialStudent, deleteStudentAll, editSpecialStudent } from '@/request/api'
 export default {
   components: {
     AsideMenu,
@@ -162,8 +190,16 @@ export default {
         name: '',
         number: '',
         department: '',
-        accord: '',
+        account: '',
         pwd: ''
+      },
+      studentEditForm: {
+        name: '',
+        number: '',
+        department: '',
+        account: '',
+        pwd: '',
+        id: ''
       },
       rules: {
         name: [
@@ -175,7 +211,7 @@ export default {
         department: [
           { required: true, message: '请输入学员部门', trigger: 'blur' }
         ],
-        accord: [
+        account: [
           { required: true, message: '请输入学员用户名', trigger: 'blur' }
         ],
         pwd: [
@@ -188,7 +224,8 @@ export default {
       files: '',
       fileName: '',
       addStudentDialogVisible: false,
-      multipleSelection: []
+      multipleSelection: [],
+      editStudentDialogVisible: false
     }
   },
   watch: {
@@ -269,8 +306,6 @@ export default {
           this.spStudentTableData = res.data.list
           paginationObj.total = res.data.total
         }
-      }, error => {
-        error && this.$message.error(error)
       })
     },
     gotoImport () { // 导入
@@ -280,7 +315,8 @@ export default {
       this.fetchRemoteData()
     },
     handleEdit (index, row) { // 编辑
-
+      this.editStudentDialogVisible = true
+      this.studentEditForm = JSON.parse(JSON.stringify(row))
     },
     handleDelete (index, row) { // 删除
       this.$confirm('您确定要删除吗?', '提示', {
@@ -293,26 +329,34 @@ export default {
             this.$message.success('删除成功')
             this.fetchRemoteData()
           }
-        }, error => {
-          error && this.$message.error(error)
         })
       }).catch(() => {
 
       })
     },
-    handleAddStudent () { // 增加学员
+    handleAddStudent () { // 增加学员&编辑学员
       this.$refs['studentAddForm'].validate((valid) => {
         if (valid) {
           addSpecialStudent(this.studentAddForm).then(res => {
             if (res.code === '1') {
               this.$message.success('添加成功')
+              this.addStudentDialogVisible = false
               this.fetchRemoteData()
             }
-          }, error => {
-            error && this.$message.error(error)
           })
-        } else {
-          return false
+        }
+      })
+    },
+    handleEditStudent () {
+      this.$refs['studentEditForm'].validate((valid) => {
+        if (valid) {
+          editSpecialStudent(this.studentEditForm).then(res => {
+            if (res.code === '1') {
+              this.$message.success('修改成功')
+              this.editStudentDialogVisible = false
+              this.fetchRemoteData()
+            }
+          })
         }
       })
     },
@@ -327,8 +371,6 @@ export default {
             this.$message.success('删除成功')
             this.fetchRemoteData()
           }
-        }, error => {
-          error && this.$message.error(error)
         })
       }).catch(() => {
 
