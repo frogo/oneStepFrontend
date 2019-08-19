@@ -110,8 +110,6 @@ export default {
           this.paperTableData = res.data.list
           paginationObj.total = res.data.total
         }
-      }, error => {
-        error && this.$message.error(error)
       })
     },
     handleCreate () { // 创建试卷
