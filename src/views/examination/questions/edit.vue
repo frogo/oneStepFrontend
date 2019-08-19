@@ -119,7 +119,6 @@
 <script>
 import { getQuestionList, deleteQuestion, deleteQuestionAll } from '@/request/api'
 import ExTable from '@/components/exTable.js'
-import { GetUrlParam } from '@/utility'
 export default {
   components: {
     ExTable
@@ -209,7 +208,7 @@ export default {
       let param = {
         keyword: this.keyword,
         type: this.filterForm.type,
-        bank_id: GetUrlParam('id'),
+        bank_id: this.$route.params.id,
         offset: currentPage || 1,
         limit: pageSize || 10
       }
@@ -231,7 +230,7 @@ export default {
       this.$router.push({ path: '/questions/itemEdit', query: { id: row.id } })
     },
     gotoCreate () {
-      this.$router.push({ path: '/questions/create', query: { id: GetUrlParam('id'), name: GetUrlParam('name') } })
+      this.$router.push({ name: 'questions-create', params: { id: this.$route.params.id, name: this.$route.params.name } })
     },
     deleteAll () {
       this.$confirm('您确定要删除吗?', '提示', {

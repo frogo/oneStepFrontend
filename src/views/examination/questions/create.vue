@@ -32,6 +32,7 @@
       <el-form-item prop="questionAnswer">
         <el-table
           ref="singleTable"
+          v-show="createForm.questionType === 'single'"
           :data="createForm.options.questionOptionsData"
           style="width: 100%"
         >
@@ -40,16 +41,10 @@
             width="100"
           >
             <template slot-scope="scope">
-              <el-radio v-model="createForm.options.trueOption" :label="scope.row.option" />
+              <el-radio v-model="createForm.options.trueOption" :label="scope.row.number" />
             </template>
           </el-table-column>
-          <!--          <el-table-column-->
-          <!--            property="option"-->
-          <!--            label="编号"-->
-          <!--            width="120"-->
-          <!--          />-->
           <el-table-column
-            property="name"
             label="描述"
           >
             <template slot-scope="scope">
@@ -57,6 +52,33 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <el-table
+          ref="multipleTable"
+          v-show="createForm.questionType === 'multi'"
+          :data="createForm.optionsMulti.questionOptionsData"
+          @selection-change="handleSelectionChange"
+          style="width: 100%"
+        >
+          <el-table-column
+            type="selection"
+            width="55"
+          />
+          <el-table-column
+            label="编号"
+            width="100"
+            prop="number"
+          />
+          <el-table-column
+            label="描述(请在左侧勾选正确答案)"
+          >
+            <template slot-scope="scope">
+              <el-input v-model="scope.row.content" type="textarea" />
+            </template>
+          </el-table-column>
+        </el-table>
+        <!--        v-else-if="createForm.questionType === 'multi'"-->
+        <!--         <div v-else>判断</div>-->
       </el-form-item>
     </el-form>
 
@@ -70,24 +92,28 @@
 </template>
 
 <script>
-import { GetUrlParam } from '@/utility'
+import { addQuestion } from '@/request/api'
 export default {
   name: 'Create',
   data () {
     return {
       questionType: [
+        { label: '单选', value: 'single' },
         { label: '多选', value: 'multi' },
-        { label: '单选', value: 'signal' },
         { label: '判断', value: 'trueFalse' }
       ],
       createForm: {
-        questionName: '',
-        questionType: '单选',
+        questionName: this.$route.params.name,
+        questionType: 'single',
         optionsNumber: 4,
         questionTitle: '',
         options: {
           trueOption: 'A',
-          questionOptionsData: [{ option: 'A', content: '' }, { option: 'B', content: '' }, { option: 'C', content: '' }, { option: 'D', content: '' }]
+          questionOptionsData: [{ number: 'A', content: '', istrue: 0 }, { number: 'B', content: '', istrue: 0 }, { number: 'C', content: '', istrue: 0 }, { number: 'D', content: '', istrue: 0 }]
+        },
+        optionsMulti: {
+          trueOption: [],
+          questionOptionsData: [{ number: 'A', content: '', istrue: 0 }, { number: 'B', content: '', istrue: 0 }, { number: 'C', content: '', istrue: 0 }, { number: 'D', content: '', istrue: 0 }]
         }
 
       },
@@ -109,13 +135,34 @@ export default {
     }
   },
   computed: {
-    addParam: function () {
+    addSingleParam: function () {
       return {
-        bank_id: GetUrlParam('id'),
-        bank_name: GetUrlParam('name'),
-        type: '',
-        subject: '',
-        options: []
+        bank_id: this.$route.params.id,
+        bank_name: this.$route.params.name,
+        type: this.createForm.questionType,
+        subject: this.createForm.questionTitle,
+        options: this.createForm.options.questionOptionsData.map(item => {
+          if (this.createForm.options.trueOption === item.number) {
+            item.istrue = 1
+          }
+          return item
+        })
+      }
+    },
+    addMultiParam: function () {
+      return {
+        bank_id: this.$route.params.id,
+        bank_name: this.$route.params.name,
+        type: this.createForm.questionType,
+        subject: this.createForm.questionTitle,
+        options: this.createForm.optionsMulti.questionOptionsData.map(item => {
+          for (let i in this.createForm.optionsMulti.trueOption) {
+            if (this.createForm.optionsMulti.trueOption[i]['number'] === item.number) {
+              item.istrue = 1
+            }
+          }
+          return item
+        })
       }
     }
   },
@@ -126,9 +173,26 @@ export default {
       ] })
   },
   methods: {
+    handleSelectionChange (val) {
+      this.createForm.optionsMulti.trueOption = val
+    },
     submit () {
+      let params
+      if (this.createForm.questionType === 'single') {
+        params = this.addSingleParam
+      } else if (this.createForm.questionType === 'multi') {
+        params = this.addMultiParam
+      } else {
+
+      }
       // eslint-disable-next-line no-console
-      console.log(this.createForm)
+      console.log(params)
+      addQuestion(params).then(res => {
+        if (res.code === '1') {
+          this.$message.success('添加成功')
+          this.$router.push({ name: 'questionLib-edit', params: { id: this.$route.params.id, name: this.$route.params.name } })
+        }
+      })
     }
   }
 }
