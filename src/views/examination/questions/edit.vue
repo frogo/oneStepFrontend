@@ -85,7 +85,7 @@
     </div>
     <el-dialog
       :visible.sync="importQuestionDialog"
-      title="提示"
+      title="导入试题"
       width="30%"
     >
       <el-upload
@@ -233,7 +233,7 @@ export default {
       this.$router.push({ path: '/questions/itemEdit', query: { id: row.id } })
     },
     gotoCreate () {
-      this.$router.push({ path: '/questions/create' })
+      this.$router.push({ path: '/questions/create', query: { id: GetUrlParam('id'), name: GetUrlParam('name') } })
     },
     deleteAll () {
       this.$confirm('您确定要删除吗?', '提示', {

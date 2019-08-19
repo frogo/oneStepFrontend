@@ -21,63 +21,49 @@
         </div>
       </div>
       <div class="list">
-        <el-table
-          ref="multipleTable"
-          :data="paperTableData"
-          tooltip-effect="dark"
-          style="width: 100%"
-        >
-          <el-table-column
-            prop="name"
-            label="试卷名称"
-          />
-          <el-table-column
-            prop="add_time"
-            label="创建时间"
-            width="180"
-          />
-          <el-table-column
-            prop="count"
-            label="试题数"
-            width="180"
-          />
-          <el-table-column
-            prop="rule"
-            label="试题规则"
-            width="180"
-          />
-          <el-table-column
-            label="操作"
-            width="180"
-          >
-            <template slot-scope="scope">
-              <el-button
-                @click="handleEdit(scope.$index, scope.row)"
-                size="mini"
-              >
-                编辑
-              </el-button>
-              <el-button
-                @click="handleDelete(scope.$index, scope.row)"
-                size="mini"
-                type="danger"
-              >
-                删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="pager">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="pager.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="pager.pageSize"
-          :total="pager.total"
-          layout="total, sizes, prev, pager, next, jumper"
-        />
+        <div class="exTable">
+          <ex-table ref="exTable" :data="paperTableData" :reload-method="handleReload" show-pagination stripe>
+            <el-table-column
+              prop="name"
+              label="试卷名称"
+            />
+            <el-table-column
+              prop="add_time"
+              label="创建时间"
+              width="180"
+            />
+            <el-table-column
+              prop="num"
+              label="试题数"
+              width="180"
+            />
+            <el-table-column
+              prop="rule"
+              label="试题规则"
+              width="180"
+            />
+            <el-table-column
+              label="操作"
+              width="180"
+            >
+              <template slot-scope="scope">
+                <el-button
+                  @click="handleEdit(scope.$index, scope.row)"
+                  size="mini"
+                >
+                  编辑
+                </el-button>
+                <el-button
+                  @click="handleDelete(scope.$index, scope.row)"
+                  size="mini"
+                  type="danger"
+                >
+                  删除
+                </el-button>
+              </template>
+            </el-table-column>
+          </ex-table>
+        </div>
       </div>
     </el-main>
   </el-container>
@@ -85,38 +71,57 @@
 
 <script>
 import AsideMenu from '@/components/asideMenu'
+import ExTable from '@/components/exTable.js'
+import { getExaminationPaperList, deleteExaminationPaper } from '@/request/api'
+
 export default {
   components: {
-    AsideMenu
+    AsideMenu,
+    ExTable
   },
   data () {
     return {
       keyword: '',
-      paperTableData: [],
-      pager: {
-        currentPage: 1,
-        pageSize: 10,
-        total: 100
-      }
+      paperTableData: []
     }
   },
   watch: {
   },
   mounted: function () {
+    this.fetchRemoteData() // 初始化数据
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
         { name: '首页', path: '/' }, { name: '试卷管理', path: '/paper' }
       ] })
   },
   methods: {
+    handleReload (pagination, { currentPage, pageSize }) {
+      this.fetchRemoteData(pagination, currentPage, pageSize)
+    },
+    fetchRemoteData (pagination, currentPage, pageSize) {
+      let param = {
+        keyword: this.keyword,
+        offset: currentPage || 1,
+        limit: pageSize || 10
+      }
+      let paginationObj = pagination || this.$refs.exTable.pagination
+      getExaminationPaperList(param).then(res => {
+        if (res.code === '1') {
+          this.paperTableData = res.data.list
+          paginationObj.total = res.data.total
+        }
+      }, error => {
+        error && this.$message.error(error)
+      })
+    },
     handleCreate () { // 创建试卷
-
+      this.$router.push({ path: '/paper/create' })
     },
     handleSearch () { // 搜索触发
-
+      this.fetchRemoteData()
     },
     handleEdit (index, row) { // 编辑
-
+      this.$router.push({ path: '/paper/edit', query: { id: row.id } })
     },
     handleDelete (index, row) { // 删除
       this.$confirm('您确定要删除吗?', '提示', {
@@ -124,16 +129,17 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
+        deleteExaminationPaper({ id: row.id }).then(res => {
+          if (res.code === '1') {
+            this.$message.success('删除成功')
+            this.fetchRemoteData()
+          }
+        }, error => {
+          error && this.$message.error(error)
+        })
       }).catch(() => {
 
       })
-    },
-    handleSizeChange () { //      条数改变
-
-    },
-    handleCurrentChange () { // 页数改变
-
     }
   }
 }
@@ -142,5 +148,8 @@ export default {
 <style lang="scss">
 .page-paper{
   padding: 0;
+  .exTable{
+    .el-pagination{margin-top: 20px;text-align: right}
+  }
 }
 </style>

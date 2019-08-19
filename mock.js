@@ -173,7 +173,7 @@ Mock.mock('v1/question/list?bank_id=&type=&keyword=', {
     ]
   }
 })
-Mock.mock('/v1/examinationPaper/list?type=%E6%89%8B%E5%8A%A8%E5%87%BA%E9%A2%98&limit=10&offset=1&keyword=', {
+Mock.mock('/v1/examinationPaper/list?keyword=&offset=1&limit=10', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -420,6 +420,22 @@ Mock.mock('/v1/question/list', {
         }
       ],
       'add_time': '创建时间'
+    }]
+  }
+
+})
+Mock.mock('/v1/spStudent/list?keyword=&offset=1&limit=10', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'total': 21,
+    'list|10': [{
+      'id': '5',
+      'name': '题库id',
+      'number': 'sxw33',
+      'department': '部门',
+      'password': '334',
+      'username': 'xiaoqaing'
     }]
   }
 

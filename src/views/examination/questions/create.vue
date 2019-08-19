@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import { GetUrlParam } from '@/utility'
 export default {
   name: 'Create',
   data () {
@@ -81,7 +82,7 @@ export default {
       ],
       createForm: {
         questionName: '',
-        questionType: '',
+        questionType: '单选',
         optionsNumber: 4,
         questionTitle: '',
         options: {
@@ -107,7 +108,17 @@ export default {
       }
     }
   },
-
+  computed: {
+    addParam: function () {
+      return {
+        bank_id: GetUrlParam('id'),
+        bank_name: GetUrlParam('name'),
+        type: '',
+        subject: '',
+        options: []
+      }
+    }
+  },
   mounted: function () {
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [

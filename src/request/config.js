@@ -20,7 +20,10 @@ export default {
     DETAILS: CONTEXTPATH + '/lesson/info'
   },
   EXAMINATION: {
-    PAPER: { LIST: CONTEXTPATH + '/examinationPaper/list' },
+    PAPER: {
+      LIST: CONTEXTPATH + '/examinationPaper/list',
+      DELETE: CONTEXTPATH + '/examinationPaper/delete'
+    },
     QUESTION: {
       QUESTION_LIB: CONTEXTPATH + '/questionBank/list',
       ADD_QUESTION_LIB: CONTEXTPATH + '/questionBank/add',
@@ -33,5 +36,11 @@ export default {
   },
   PROJECT: {
     LIST: CONTEXTPATH + '/project/list'
+  },
+  SPECIAL_STUDENT: {
+    LIST: CONTEXTPATH + '/spStudent/list',
+    DELETE: CONTEXTPATH + '/spStudent/delete',
+    ADD: CONTEXTPATH + '/spStudent/add',
+    DELETE_ALL: CONTEXTPATH + '/spStudent/deleteAll'
   }
 }

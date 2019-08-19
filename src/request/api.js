@@ -26,7 +26,6 @@ export const getStatus = p => get(CONFIG.STATUS, p)
 // 课程
 // 课程列表
 export const getCourseList = p => post(CONFIG.COURSE.LIST, p) // 修改接口为post
-export const getExaminationPaperList = p => get(CONFIG.EXAMINATION.PAPER.LIST, p) // 修改接口 传参试卷出题方式,输出内容加ID
 export const addCourse = p => post(CONFIG.COURSE.ADD, p) // 入参缺少标签 课程文件是列表
 export const addCourseDraft = p => post(CONFIG.COURSE.DRAFT_ADD, p)// 入参缺少标签 课程文件是列表
 export const getCourseDetails = p => get(CONFIG.COURSE.DETAILS, p) // 课程详情
@@ -40,3 +39,12 @@ export const deleteQuestionLib = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QU
 export const getQuestionList = p => post(CONFIG.EXAMINATION.QUESTION.QUESTION_LIST, p) // 试题列表
 export const deleteQuestion = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QUESTION, p) // 删除试题
 export const deleteQuestionAll = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QUESTION_ALL, p) // 批量删除试题
+// 试卷
+export const getExaminationPaperList = p => get(CONFIG.EXAMINATION.PAPER.LIST, p) // 修改接口 传参试卷出题方式,输出内容加ID
+export const deleteExaminationPaper = p => post(CONFIG.EXAMINATION.PAPER.DELETE, p) // 缺少
+
+// 特殊学员
+export const getSpecialStudentList = p => get(CONFIG.SPECIAL_STUDENT.LIST, p) //
+export const deleteSpecialStudent = p => post(CONFIG.SPECIAL_STUDENT.DELETE, p) //
+export const addSpecialStudent = p => post(CONFIG.SPECIAL_STUDENT.ADD, p) //
+export const deleteStudentAll = p => post(CONFIG.SPECIAL_STUDENT.DELETE_ALL, p) // 批量删除试题

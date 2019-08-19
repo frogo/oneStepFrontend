@@ -22,88 +22,96 @@
       </div>
       <div class="list">
         <div class="operate">
-          <el-button @click="handleAddStudent" type="primary" size="small">
+          <el-button @click="addStudentDialogVisible = true" type="primary" size="small">
             添加学员
           </el-button>
-          <el-button @click="handleDeleteAll" type="primary" size="small">
+          <el-button @click="handleDeleteAll" :disabled="multipleSelection.length > 0 ? false: true" type="primary" size="small">
             批量删除
           </el-button>
         </div>
 
-        <el-table
-          ref="multipleTable"
-          :data="studentsTableData"
-          @selection-change="handleSelectionChange"
-          tooltip-effect="dark"
-          style="width: 100%"
-        >
-          <el-table-column
-            type="selection"
-            width="55"
-          />
-          <el-table-column
-            prop="name"
-            label="姓名"
-            width="120"
-          />
-          <el-table-column
-            prop="jobNumber"
-            label="工号"
-            width="120"
-          />
-          <el-table-column
-            prop="department"
-            label="部门"
-          />
-          <el-table-column
-            prop="username"
-            label="用户名"
-          />
-          <el-table-column
-            prop="password"
-            label="密码"
-          />
-          <el-table-column
-            label="操作"
-          >
-            <template slot-scope="scope">
-              <el-button
-                @click="handleEdit(scope.$index, scope.row)"
-                size="mini"
-              >
-                编辑
-              </el-button>
-              <el-button
-                @click="handleDelete(scope.$index, scope.row)"
-                size="mini"
-                type="danger"
-              >
-                删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+        <div class="exTable">
+          <ex-table ref="exTable" :data="spStudentTableData" :reload-method="handleReload" @selection-change="handleSelectionChange" show-pagination stripe>
+            <el-table-column
+              type="selection"
+              width="55"
+            />
+            <el-table-column
+              prop="name"
+              label="姓名"
+              width="150"
+            />
+            <el-table-column
+              prop="number"
+              label="工号"
+              width="150"
+            />
+            <el-table-column
+              prop="department"
+              label="部门"
+              width="150"
+            />
+            <el-table-column
+              prop="username"
+              label="用户名"
+              width="150"
+            />
+            <el-table-column
+              prop="password"
+              label="密码"
+              width="150"
+            />
+            <el-table-column
+              label="操作"
+            >
+              <template slot-scope="scope">
+                <el-button
+                  @click="handleEdit(scope.$index, scope.row)"
+                  size="mini"
+                >
+                  编辑
+                </el-button>
+                <el-button
+                  @click="handleDelete(scope.$index, scope.row)"
+                  size="mini"
+                  type="danger"
+                >
+                  删除
+                </el-button>
+              </template>
+            </el-table-column>
+          </ex-table>
+        </div>
       </div>
-      <div class="pager">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="pager.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="pager.pageSize"
-          :total="pager.total"
-          layout="total, sizes, prev, pager, next, jumper"
-        />
-      </div>
+
       <el-dialog
         :visible.sync="importStudentDialogVisible"
         title="导入学员"
         width="30%"
       >
-        <span>导入学员</span>
+        <el-upload
+          ref="upload"
+          :limit="1"
+          :file-list="fileList"
+          :before-upload="beforeUpload"
+          class="upload-demo"
+          action="doUpload"
+        >
+          <el-button slot="trigger" size="small" type="primary">
+            选取文件
+          </el-button>
+          <a href="./static/questionTemplate.xlsx" rel="external nofollow" download="模板"><el-button size="small" type="success">下载模板</el-button></a>
+          <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
+          <div slot="tip" class="el-upload__tip">
+            只能上传excel文件，且不超过5MB
+          </div>
+          <div slot="tip" class="el-upload-list__item-name">
+            {{ fileName }}
+          </div>
+        </el-upload>
         <span slot="footer" class="dialog-footer">
           <el-button @click="importStudentDialogVisible = false">取 消</el-button>
-          <el-button @click="importStudentDialogVisible = false" type="primary">确 定</el-button>
+          <el-button @click="submitUpload()" type="primary">确 定</el-button>
         </span>
       </el-dialog>
 
@@ -112,10 +120,26 @@
         title="新增学员"
         width="30%"
       >
-        <span>新增学员</span>
+        <el-form ref="studentAddForm" :model="studentAddForm" :rules="rules" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model="studentAddForm.name" />
+          </el-form-item>
+          <el-form-item label="工号" prop="number">
+            <el-input v-model="studentAddForm.number" />
+          </el-form-item>
+          <el-form-item label="部门" prop="department">
+            <el-input v-model="studentAddForm.department" />
+          </el-form-item>
+          <el-form-item label="用户名" prop="accord">
+            <el-input v-model="studentAddForm.accord" />
+          </el-form-item>
+          <el-form-item label="密码" prop="pwd">
+            <el-input v-model="studentAddForm.pwd" />
+          </el-form-item>
+        </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="addStudentDialogVisible = false">取 消</el-button>
-          <el-button @click="addStudentDialogVisible = false" type="primary">确 定</el-button>
+          <el-button @click="handleAddStudent" type="primary">确 定</el-button>
         </span>
       </el-dialog>
     </el-main>
@@ -124,37 +148,136 @@
 
 <script>
 import AsideMenu from '@/components/asideMenu'
+import ExTable from '@/components/exTable.js'
+import { getSpecialStudentList, deleteSpecialStudent, addSpecialStudent, deleteStudentAll } from '@/request/api'
 export default {
   components: {
-    AsideMenu
+    AsideMenu,
+    ExTable
   },
   data () {
     return {
       keyword: '',
-      studentsTableData: [],
-      pager: {
-        currentPage: 1,
-        pageSize: 10,
-        total: 100
+      studentAddForm: {
+        name: '',
+        number: '',
+        department: '',
+        accord: '',
+        pwd: ''
       },
+      rules: {
+        name: [
+          { required: true, message: '请输入学员姓名', trigger: 'blur' }
+        ],
+        number: [
+          { required: true, message: '请输入学员工号', trigger: 'blur' }
+        ],
+        department: [
+          { required: true, message: '请输入学员部门', trigger: 'blur' }
+        ],
+        accord: [
+          { required: true, message: '请输入学员用户名', trigger: 'blur' }
+        ],
+        pwd: [
+          { required: true, message: '请输入学员密码', trigger: 'blur' }
+        ]
+      },
+      spStudentTableData: [],
       importStudentDialogVisible: false,
-      addStudentDialogVisible: false
+      fileList: [],
+      files: '',
+      fileName: '',
+      addStudentDialogVisible: false,
+      multipleSelection: []
     }
   },
   watch: {
   },
   mounted: function () {
+    this.fetchRemoteData() // 初始化数据
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
         { name: '首页', path: '/' }, { name: '特殊学员', path: '/specialStudent' }
       ] })
   },
   methods: {
+    beforeUpload (file) {
+      // eslint-disable-next-line no-console
+      console.log(file, '文件')
+
+      this.files = file
+      const extension = file.name.split('.')[1] === 'xls'
+      const extension2 = file.name.split('.')[1] === 'xlsx'
+      const isLt2M = file.size / 1024 / 1024 < 5
+      if (!extension && !extension2) {
+        this.$message.warning('上传模板只能是 xls、xlsx格式!')
+        return
+      }
+      if (!isLt2M) {
+        this.$message.warning('上传模板大小不能超过 5MB!')
+        return
+      }
+      this.fileName = file.name
+      return false // 返回false不会自动上传
+    },
+    submitUpload () {
+      // eslint-disable-next-line no-console
+      console.log(this.fileList, '文件')
+      // eslint-disable-next-line no-console
+      console.log('上传' + this.files.name)
+      if (this.fileName === '') {
+        this.$message.warning('请选择要上传的文件！')
+        return false
+      }
+      let fileFormData = new FormData()
+      fileFormData.append('file', this.files, this.fileName)// filename是键，file是值，就是要传的文件，test.zip是要传的文件名
+      let requestConfig = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+      // eslint-disable-next-line no-console
+      console.log(fileFormData)
+      this.$axios.post('spStudent/import', fileFormData, requestConfig).then((res) => {
+        if (res.data && res.data.code === '1') {
+          this.$message({
+            message: '导入成功',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.importStudentDialogVisible = false
+              this.fetchRemoteData()
+            }
+          })
+        } else {
+          this.$message.error(res.data.msg)
+        }
+      })
+    },
+    handleReload (pagination, { currentPage, pageSize }) {
+      this.fetchRemoteData(pagination, currentPage, pageSize)
+    },
+    fetchRemoteData (pagination, currentPage, pageSize) {
+      let param = {
+        keyword: this.keyword,
+        offset: currentPage || 1,
+        limit: pageSize || 10
+      }
+      let paginationObj = pagination || this.$refs.exTable.pagination
+      getSpecialStudentList(param).then(res => {
+        if (res.code === '1') {
+          this.spStudentTableData = res.data.list
+          paginationObj.total = res.data.total
+        }
+      }, error => {
+        error && this.$message.error(error)
+      })
+    },
     gotoImport () { // 导入
       this.importStudentDialogVisible = true
     },
     handleSearch () { // 搜索触发
-
+      this.fetchRemoteData()
     },
     handleEdit (index, row) { // 编辑
 
@@ -165,13 +288,33 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
+        deleteSpecialStudent({ id: row.id }).then(res => {
+          if (res.code === '1') {
+            this.$message.success('删除成功')
+            this.fetchRemoteData()
+          }
+        }, error => {
+          error && this.$message.error(error)
+        })
       }).catch(() => {
 
       })
     },
     handleAddStudent () { // 增加学员
-      this.addStudentDialogVisible = true
+      this.$refs['studentAddForm'].validate((valid) => {
+        if (valid) {
+          addSpecialStudent(this.studentAddForm).then(res => {
+            if (res.code === '1') {
+              this.$message.success('添加成功')
+              this.fetchRemoteData()
+            }
+          }, error => {
+            error && this.$message.error(error)
+          })
+        } else {
+          return false
+        }
+      })
     },
     handleDeleteAll () { // 批量删除
       this.$confirm('您确定要删除吗?', '提示', {
@@ -179,19 +322,20 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
+        deleteStudentAll({ list: this.multipleSelection }).then(res => {
+          if (res.code === '1') {
+            this.$message.success('删除成功')
+            this.fetchRemoteData()
+          }
+        }, error => {
+          error && this.$message.error(error)
+        })
       }).catch(() => {
 
       })
     },
-    handleSelectionChange () { // 表格多选
-
-    },
-    handleSizeChange () { // 条数改变
-
-    },
-    handleCurrentChange () { // 页数改变
-
+    handleSelectionChange (val) { // 表格多选
+      this.multipleSelection = val
     }
   }
 }
@@ -200,5 +344,9 @@ export default {
 <style lang="scss">
   .page-student{
     .operate{ text-align: right; margin: 0 0 20px 0}
+    .exTable{
+      .el-pagination{margin-top: 20px;text-align: right}
+    }
+    .el-upload-list__item-name{ margin-top: 15px}
   }
 </style>
