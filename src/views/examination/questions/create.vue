@@ -77,8 +77,26 @@
             </template>
           </el-table-column>
         </el-table>
-        <!--        v-else-if="createForm.questionType === 'multi'"-->
-        <!--         <div v-else>判断</div>-->
+
+        <el-table
+          ref="singleTable"
+          v-show="createForm.questionType === 'trueFalse'"
+          :data="createForm.optionsTrueFalse.questionOptionsData"
+          style="width: 100%"
+        >
+          <el-table-column
+            label="正确"
+            width="100"
+          >
+            <template slot-scope="scope">
+              <el-radio v-model="createForm.optionsTrueFalse.trueOption" :label="scope.row.number" />
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="描述"
+            prop="content"
+          />
+        </el-table>
       </el-form-item>
     </el-form>
 
@@ -114,8 +132,11 @@ export default {
         optionsMulti: {
           trueOption: [],
           questionOptionsData: [{ number: 'A', content: '', istrue: 0 }, { number: 'B', content: '', istrue: 0 }, { number: 'C', content: '', istrue: 0 }, { number: 'D', content: '', istrue: 0 }]
+        },
+        optionsTrueFalse: {
+          trueOption: 'A',
+          questionOptionsData: [{ number: 'A', content: '正确', istrue: 0 }, { number: 'B', content: '错误', istrue: 0 }]
         }
-
       },
       rules: {
         questionName: [
@@ -164,6 +185,20 @@ export default {
           return item
         })
       }
+    },
+    addTrueFalseParam: function () {
+      return {
+        bank_id: this.$route.params.id,
+        bank_name: this.$route.params.name,
+        type: this.createForm.questionType,
+        subject: this.createForm.questionTitle,
+        options: this.createForm.optionsTrueFalse.questionOptionsData.map(item => {
+          if (this.createForm.optionsTrueFalse.trueOption === item.number) {
+            item.istrue = 1
+          }
+          return item
+        })
+      }
     }
   },
   mounted: function () {
@@ -183,7 +218,7 @@ export default {
       } else if (this.createForm.questionType === 'multi') {
         params = this.addMultiParam
       } else {
-
+        params = this.addTrueFalseParam
       }
       // eslint-disable-next-line no-console
       console.log(params)
