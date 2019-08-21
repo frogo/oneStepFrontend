@@ -33,7 +33,7 @@
         <el-table
           ref="singleTable"
           v-show="createForm.questionType === 'single'"
-          :data="createForm.options.questionOptionsData"
+          :data="createForm.optionsSingle.questionOptionsData"
           style="width: 100%"
         >
           <el-table-column
@@ -41,7 +41,7 @@
             width="100"
           >
             <template slot-scope="scope">
-              <el-radio v-model="createForm.options.trueOption" :label="scope.row.number" />
+              <el-radio v-model="createForm.optionsSingle.trueOption" :label="scope.row.number" />
             </template>
           </el-table-column>
           <el-table-column
@@ -101,7 +101,7 @@
     </el-form>
 
     <div class="operation-bar">
-      <el-button @click="submit" type="primary">
+      <el-button @click="submit('createForm')" type="primary">
         提交
       </el-button>
       <el-button>重置</el-button>
@@ -123,9 +123,9 @@ export default {
       createForm: {
         questionName: this.$route.params.name,
         questionType: 'single',
-        optionsNumber: 4,
+        // optionsNumber: 4,
         questionTitle: '',
-        options: {
+        optionsSingle: {
           trueOption: 'A',
           questionOptionsData: [{ number: 'A', content: '', istrue: 0 }, { number: 'B', content: '', istrue: 0 }, { number: 'C', content: '', istrue: 0 }, { number: 'D', content: '', istrue: 0 }]
         },
@@ -140,15 +140,14 @@ export default {
       },
       rules: {
         questionName: [
-          { required: true, message: '请输入试题名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { required: true, message: '请输入试题名称', trigger: 'blur' }
         ],
         questionType: [
           { required: true, message: '请选择试题类型', trigger: 'blur' }
         ],
-        options: [
-          { required: true, message: '请输入选项数', trigger: 'blur' }
-        ],
+        // options: [
+        //   { required: true, message: '请输入选项数', trigger: 'blur' }
+        // ],
         questionTitle: [
           { required: true, message: '请输入题目', trigger: 'blur' }
         ]
@@ -162,8 +161,8 @@ export default {
         bank_name: this.$route.params.name,
         type: this.createForm.questionType,
         subject: this.createForm.questionTitle,
-        options: this.createForm.options.questionOptionsData.map(item => {
-          if (this.createForm.options.trueOption === item.number) {
+        options: this.createForm.optionsSingle.questionOptionsData.map(item => {
+          if (this.createForm.optionsSingle.trueOption === item.number) {
             item.istrue = 1
           }
           return item
@@ -204,27 +203,41 @@ export default {
   mounted: function () {
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
-        { name: '首页', path: '/' }, { name: '题库管理', path: '/questionLib' }, { name: '创建试题', path: '/questions/create' }
+        { name: '首页', path: '/' }, { name: '题库管理', path: '/questionLib' }, { name: '创建试题' }
       ] })
   },
   methods: {
     handleSelectionChange (val) {
       this.createForm.optionsMulti.trueOption = val
     },
-    submit () {
-      let params
-      if (this.createForm.questionType === 'single') {
-        params = this.addSingleParam
-      } else if (this.createForm.questionType === 'multi') {
-        params = this.addMultiParam
-      } else {
-        params = this.addTrueFalseParam
-      }
-      // eslint-disable-next-line no-console
-      console.log(params)
-      addQuestion(params).then(res => {
-        this.$message.success('添加成功')
-        this.$router.push({ name: 'questionLib-edit', params: { id: this.$route.params.id, name: this.$route.params.name } })
+    submit (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let params
+          if (this.createForm.questionType === 'single') {
+            // let hasValFlag = true
+            // this.createForm.optionsSingle.questionOptionsData.some(item => {
+            //   if (item.content === '') {
+            //     this.$message.error('请填写选项')
+            //     hasValFlag = false
+            //     return true
+            //   }
+            // })
+            params = this.addSingleParam
+          } else if (this.createForm.questionType === 'multi') {
+            params = this.addMultiParam
+          } else {
+            params = this.addTrueFalseParam
+          }
+          // eslint-disable-next-line no-console
+          console.log(params)
+          addQuestion(params).then(res => {
+            this.$message.success('添加成功')
+            this.$router.push({ name: 'questionLib-edit', params: { id: this.$route.params.id, name: this.$route.params.name } })
+          })
+        } else {
+          return false
+        }
       })
     }
   }

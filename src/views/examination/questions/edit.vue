@@ -144,7 +144,7 @@ export default {
     this.fetchRemoteData() // 初始化数据
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
-        { name: '首页', path: '/' }, { name: '题库管理', path: '/questionLib' }, { name: '试题编辑', path: '/questionLib/edit' }
+        { name: '首页', path: '/' }, { name: '题库管理', path: '/questionLib' }, { name: '试题编辑' }
       ] })
   },
   methods: {
@@ -225,7 +225,7 @@ export default {
       this.multipleSelection = val
     },
     handleEdit (index, row) { // 编辑
-      this.$router.push({ path: '/questions/itemEdit', query: { id: row.id } })
+      this.$router.push({ path: '/questions/edit', query: { id: row.id } })
     },
     gotoCreate () {
       this.$router.push({ name: 'questions-create', params: { id: this.$route.params.id, name: this.$route.params.name } })

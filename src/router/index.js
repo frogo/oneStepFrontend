@@ -63,12 +63,12 @@ const router = new VueRouter({
         { // 创建试题
           path: '/questions/create',
           name: 'questions-create',
-          component: () => import('../views/examination/questions/create.vue')
+          component: () => import('../views/examination/questions/create_edit.vue')
         },
         { // 编辑试题
           path: '/questions/edit',
           name: 'questions-edit',
-          component: () => import('../views/examination/questions/itemEdit.vue')
+          component: () => import('../views/examination/questions/create_edit.vue')
         },
         { // 编辑题库
           path: '/questionLib/edit',
@@ -83,12 +83,12 @@ const router = new VueRouter({
         { // 试卷管理-创建试卷
           path: '/paper/create',
           name: 'paper-create',
-          component: () => import('../views/examination/paper/create.vue')
+          component: () => import('../views/examination/paper/create_edit.vue')
         },
         { // 试卷管理-编辑试卷
           path: '/paper/edit',
           name: 'paper-edit',
-          component: () => import('../views/examination/paper/create.vue')
+          component: () => import('../views/examination/paper/create_edit.vue')
         },
         { // 特殊学员
           path: 'specialStudent',
