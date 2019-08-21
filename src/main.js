@@ -30,13 +30,11 @@ router.beforeEach((to, from, next) => {
     next()
   } else {
     sessionVerify().then(res => {
-      if (res.code === '1') {
-        if (!localStorage.getItem('user') || localStorage.getItem('user') !== res.data.name) {
-          localStorage.setItem('user', res.data.name)
-          // store.commit('$_setUserStorage', res.data.name)
-        }
-        next()
+      if (!localStorage.getItem('user') || localStorage.getItem('user') !== res.data.name) {
+        localStorage.setItem('user', res.data.name)
+        // store.commit('$_setUserStorage', res.data.name)
       }
+      next()
     }, error => {
       if (error.response && error.response.status === 404) {
         next({

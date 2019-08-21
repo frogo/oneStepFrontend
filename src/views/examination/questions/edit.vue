@@ -214,10 +214,8 @@ export default {
       }
       let paginationObj = pagination || this.$refs.exTable.pagination
       getQuestionList(param).then(res => {
-        if (res.code === '1') {
-          this.questionsTableData = res.data.list
-          paginationObj.total = res.data.total
-        }
+        this.questionsTableData = res.data.list
+        paginationObj.total = res.data.total
       })
     },
     handleSearch () {
@@ -239,10 +237,8 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteQuestionAll({ list: this.multipleSelection }).then(res => { // todo 等待入参的key
-          if (res.code === '1') {
-            this.$message.success('删除成功')
-            this.fetchRemoteData()
-          }
+          this.$message.success('删除成功')
+          this.fetchRemoteData()
         })
       }).catch(() => {
 
@@ -258,10 +254,8 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteQuestion({ id: row.id }).then(res => {
-          if (res.code === '1') {
-            this.$message.success('删除成功')
-            this.fetchRemoteData()
-          }
+          this.$message.success('删除成功')
+          this.fetchRemoteData()
         })
       }).catch(() => {
 

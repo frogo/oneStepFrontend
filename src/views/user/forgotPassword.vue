@@ -187,11 +187,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           resetPassword(this.resetPasswordParam).then(res => {
-            if (res.code === '1') {
-              this.step = 3
-            }
-          }, error => {
-            error && this.$message.error(error)
+            this.step = 3
           })
         } else {
           // console.log('error submit!!')

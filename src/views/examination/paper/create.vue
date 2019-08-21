@@ -24,7 +24,7 @@
             </el-popover>
           </div>
 
-          <el-input v-model="createForm.qualifiedPercent" placeholder="请输入" class="w200" /> %
+          <el-input v-model.number="createForm.qualifiedPercent" placeholder="请输入" class="w200" /> %
         </el-form-item>
       </div>
       <div class="head-line">
@@ -41,7 +41,7 @@
         </span>
       </div>
       <el-form-item label="考试时长" prop="hours">
-        <el-input v-model="createForm.hours" placeholder="请输入" class="w200" /> 分钟
+        <el-input v-model.number="createForm.hours" placeholder="请输入" class="w200" /> 分钟
       </el-form-item>
 
       <div class="inline-form">
@@ -88,7 +88,7 @@
         <div class="questionsChoose">
           <div class="head">
             <span>题库列表</span>
-            <span v-if="createForm.rules === 'manual'" class="notice">C#中的类</span>
+            <span v-if="createForm.rules === 'manual'" class="notice">{{ manual.currentQuestionLib.name }}</span>
             <span v-else class="notice" title="提示：各题库题型后面的数字，左边为抽取题数，右边为题库中该题型的总数，抽取题数不得大于题型总数，请填写需要抽取的题型整数">提示：各题库题型后面的数字，左边为抽取题数，右边为题库中该题型的总数，抽取题数不得大于题型总数，请填写需要抽取的题型整数</span>
           </div>
           <div class="list">
@@ -97,96 +97,105 @@
                 <div class="keyword-input">
                   <el-input
                     v-model="questionsLib.keyword"
-                    @keyup.enter.native="handleSearch"
+                    @keyup.enter.native="handleQuestionsSearch"
                     placeholder="请输入内容"
                     size="medium "
                   >
                     <i slot="suffix" @click="handleQuestionsSearch" class="el-input__icon el-icon-search" />
                   </el-input>
                 </div>
-                <el-table
-                  :data="questionLibDataRemote"
-                  @current-change="handleQuestionCurrentChange"
-                  tooltip-effect="dark"
-                  highlight-current-row
-                  height="320"
-                  style="width: 100%"
-                >
-                  <el-table-column
-                    type="index"
-                    width="55"
-                  />
-                  <el-table-column
-                    prop="name"
-                    label="题库名称"
-                  />
-                  <el-table-column
-                    prop="total"
-                    label="试题数"
-                  />
-                </el-table>
-                <!--                <ul>-->
-                <!--                  <li v-for="(item, index) in questionLibData" :key="`lib_${index}`">-->
-                <!--                    <el-radio v-model="questionsLib.radio" :label="item.id" /> <span class="name">{{ item.name }}</span> <span class="total">({{ item.total }})</span>-->
-                <!--                  </li>-->
-                <!--                </ul>-->
+                <div class="exTable">
+                  <ex-table
+                    ref="exTableQuestionLib"
+                    :data="questionLibDataRemote"
+                    :reload-method="handleQuestionLibReload"
+                    @current-change="handleQuestionLibCurrentChange"
+                    :show-pagination="false"
+                    tooltip-effect="dark"
+                    highlight-current-row
+                    height="480"
+                  >
+                    <el-table-column
+                      type="index"
+                      width="40"
+                    />
+                    <el-table-column
+                      prop="name"
+                      label="题库名"
+                      show-overflow-tooltip
+                    />
+                    <el-table-column
+                      prop="num"
+                      label="试题数"
+                      width="70"
+                    />
+                  </ex-table>
+                </div>
               </div>
               <div class="questions">
                 <div class="selected-block">
                   <div class="operator">
-                    <el-badge :value="12">
-                      <el-button @click="boxShow = !boxShow" size="small">
-                        已添加  <i v-if="!boxShow" class="el-icon-arrow-up" />
+                    <el-badge :value="manual.questionSelected.length">
+                      <el-button @click="manual.questionSelectedBoxShow = !manual.questionSelectedBoxShow" size="small">
+                        已添加  <i v-if="!manual.questionSelectedBoxShow" class="el-icon-arrow-up" />
                         <i v-else class="el-icon-arrow-down" />
                       </el-button>
                     </el-badge>
                   </div>
                   <transition name="myBox">
-                    <div v-show="boxShow" class="box">
+                    <div v-show="manual.questionSelectedBoxShow" class="box">
                       <el-tag
-                        v-for="tag in paperSelected"
-                        :key="tag.name"
-                        @close="handleClose(tag)"
+                        v-for="(item, index) in manual.questionSelected"
+                        :key="item.subject + index"
+                        @close="handleDeleteQuestionSelected(item)"
                         closable
                         size="small"
                         effect="plain"
                       >
-                        {{ tag.name }}
+                        {{ item.subject }} {{ item.id }}
                       </el-tag>
                     </div>
                   </transition>
                 </div>
-                <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
+                <el-form ref="filterForm" :model="manual.filterForm" label-width="60px" size="mini">
                   <el-form-item label="题型：">
-                    <el-radio-group v-model="filterForm.type">
-                      <el-radio :label="item" v-for="item in type" :key="item" border />
+                    <el-radio-group v-model="manual.filterForm.type" @change="handleRulesSwitch">
+                      <el-radio :label="item" v-for="item in manual.filterForm.typeList" :key="item" border />
                     </el-radio-group>
                   </el-form-item>
                 </el-form>
-                <el-table
-                  ref="multipleTable"
-                  :data="paperTableData"
-                  @selection-change="handlePaperSelectionChange"
-                  tooltip-effect="dark"
-                  style="width: 100%"
-                  height="260"
-                  stripe
-                >
-                  <el-table-column
-                    type="selection"
-                    width="55"
-                  />
-                  <el-table-column
-                    prop="title"
-                    label="题目"
-                    show-overflow-tooltip
-                  />
-                  <el-table-column
-                    prop="type"
-                    label="题型"
-                    width="120"
-                  />
-                </el-table>
+
+                <div class="exTable exTableQuestion">
+                  <ex-table
+                    ref="exTableQuestion"
+                    :data="manual.questionTableData"
+                    :reload-method="handleQuestionReload"
+                    @selection-change="handleQuestionCurrentChange"
+                    @select="handleQuestionClick"
+                    tooltip-effect="light"
+                    height="320"
+                  >
+                    <el-table-column
+                      type="selection"
+                      width="55"
+                    />
+                    <el-table-column
+                      prop="subject"
+                      label="题目"
+                      show-overflow-tooltip
+                    />
+                    <el-table-column
+                      prop="id"
+                      label="id"
+                      show-overflow-tooltip
+                    />
+                    <el-table-column
+                      prop="type"
+                      label="题型"
+                      width="120"
+                    />
+                  </ex-table>
+                </div>
               </div>
             </div>
 
@@ -195,51 +204,64 @@
                 <div class="keyword-input">
                   <el-input
                     v-model="questionsLib.keyword"
-                    @keyup.enter.native="handleSearch"
+                    @keyup.enter.native="handleQuestionsSearch"
                     placeholder="请输入内容"
                     size="medium "
                   >
                     <i slot="suffix" @click="handleQuestionsSearch" class="el-input__icon el-icon-search" />
                   </el-input>
                 </div>
-                <el-table
-                  ref="multipleTable"
-                  :data="questionLibDataRemote"
-                  @selection-change="handleQuestionSelectionChange"
-                  tooltip-effect="dark"
-                  height="320"
-                  style="width: 100%"
-                >
-                  <el-table-column
-                    type="selection"
-                    width="55"
-                  />
-                  <el-table-column
-                    prop="name"
-                    label="题库名称"
-                  />
-                  <el-table-column
-                    prop="total"
-                    label="试题数"
-                  />
-                </el-table>
+                <div class="exTable">
+                  <ex-table
+                    ref="exTableQuestionLib"
+                    :data="questionLibDataRemote"
+                    :reload-method="handleQuestionLibReload"
+                    @selection-change="handleQuestionLibListChange"
+                    @select="handleQuestionLibClick"
+                    :show-pagination="false"
+                    tooltip-effect="dark"
+                    height="480"
+                  >
+                    <el-table-column
+                      type="selection"
+                      width="55"
+                    />
+                    <el-table-column
+                      prop="name"
+                      label="题库名"
+                      show-overflow-tooltip
+                    />
+                    <el-table-column
+                      prop="num"
+                      label="试题数"
+                      width="70"
+                    />
+                  </ex-table>
+                </div>
               </div>
               <div class="questions">
                 <div class="collect">
-                  <span><i>总试题：</i>80</span>
-                  <span><i>单项选择题：</i>59</span>
-                  <span><i>多项选择题：</i>11</span>
-                  <span><i>判断题：</i>10</span>
+                  <span><i>总试题：</i>{{ random.allSingle + random.allMulti + random.allTrueFalse }}</span>
+                  <span><i>单项选择题：</i>{{ random.allSingle }}</span>
+                  <span><i>多项选择题：</i>{{ random.allMulti }}</span>
+                  <span><i>判断题：</i>{{ random.allTrueFalse }}</span>
                 </div>
                 <ul>
-                  <li v-for="item in questionSelected" :key="item.name">
+                  <li v-for="(item, index) in random.questionLibSelected" :key="item.name + index">
                     <p class="title">
                       {{ item.name }}
                     </p>
                     <p class="input">
-                      <span><i class="red">*</i> 单项选择题 <el-input v-model="item.singleValue" size="mini" /> / {{ item.singleTotal }}</span>
-                      <span><i class="red">*</i> 多项选择题 <el-input v-model="item.multiValue" size="mini" /> / {{ item.multiTotal }}</span>
-                      <span><i class="red">*</i> 判断题 <el-input v-model="item.trueFalseValue" size="mini" /> / {{ item.trueFalseTotal }}</span>
+                      <span><i class="red">*</i> 单项选择题
+                        <el-input-number v-model="item.single" :min="0" :max="item.single_total" @change="handleCountChange" size="mini" controls-position="right" />
+
+                        / {{ item.single_total }}</span>
+                      <span><i class="red">*</i> 多项选择题
+                        <el-input-number v-model="item.multiple" :min="0" :max="item.multiple_total" @change="handleCountChange" size="mini" controls-position="right" />
+                        / {{ item.multiple_total }}</span>
+                      <span><i class="red">*</i> 判断题
+                        <el-input-number v-model="item.judge" :min="0" :max="item.judge_total" @change="handleCountChange" size="mini" controls-position="right" />
+                        / {{ item.judge_total }}</span>
                     </p>
                   </li>
                 </ul>
@@ -251,10 +273,10 @@
     </el-form>
 
     <div class="operation-bar">
-      <el-button @click="handleSavePaperDraft" type="success">
-        保存草稿
-      </el-button>
-      <el-button @click="handleSavePaper" type="primary">
+      <!--      <el-button @click="handleSavePaperDraft" type="success">-->
+      <!--        保存草稿-->
+      <!--      </el-button>-->
+      <el-button @click="handleSavePaper('createForm')" type="primary">
         完成
       </el-button>
     </div>
@@ -262,12 +284,47 @@
 </template>
 
 <script>
+import ExTable from '@/components/exTable.js'
+import { getQuestionLibList, addExaminationPaper, getQuestionList, getExaminationPaperDetails } from '@/request/api'
+import { GetUrlParam } from '@/utility'
 export default {
+  components: {
+    ExTable
+  },
   data () {
+    let checkQualifiedPercent = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('合格分数比不能为空'))
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(value)) {
+          callback(new Error('请输入数字值'))
+        } else {
+          if (value > 100) {
+            callback(new Error('合格分数比不能大于100'))
+          } else {
+            callback()
+          }
+        }
+      }, 500)
+    }
+    let checkHours = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('课时不能为空'))
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(value)) {
+          callback(new Error('请输入数字值'))
+        } else {
+          callback()
+        }
+      }, 500)
+    }
     return {
       createForm: {
         paperName: '',
         qualifiedPercent: '',
+        hours: '',
         randomSequence: true,
         randomOption: false,
         noLookAnswer: false,
@@ -275,121 +332,272 @@ export default {
       },
       rules: {
         paperName: [
-          { required: true, message: '请输入试题名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { required: true, message: '请输入试题名称', trigger: 'blur' }
         ],
         qualifiedPercent: [
-          { required: true, message: '请输入合格分数百分比数字', trigger: 'blur' }
+          { required: true, validator: checkQualifiedPercent, trigger: 'blur' }
         ],
         hours: [
-          { required: true, message: '请输入课时时长', trigger: 'blur' }
+          { required: true, validator: checkHours, trigger: 'blur' }
         ]
       },
       paperRules: [{ label: '手动出题', value: 'manual' }, { label: '随机出题', value: 'random' }],
-      questionsLib: {
-        keyword: '',
-        radio: 46
-      },
       questionLibDataRemote: [
-        { name: '多大的', id: 45, total: 98 },
-        { name: '多大的', id: 46, total: 98 },
-        { name: '多大的', id: 47, total: 98 },
-        { name: '多大的', id: 47, total: 98 },
-        { name: '多大的', id: 47, total: 98 },
-        { name: '多大的', id: 47, total: 98 },
-        { name: '多大的', id: 47, total: 98 },
-        { name: '多大的', id: 47, total: 98 },
-        { name: '多大的', id: 47, total: 98 },
-        { name: '多大的', id: 47, total: 98 },
-        { name: '多大的', id: 47, total: 98 },
-        { name: '多大的', id: 47, total: 98 }
       ],
-      filterForm: {
-        type: '不限'
+      questionsLib: {
+        keyword: ''
       },
-      type: ['不限', '单选', '多选', '判断'],
-      paperTableData: [
-        {
-          type: '单选',
-          title: '类与对象的关系'
+      manual: {
+        currentQuestionLib: '',
+        filterForm: {
+          type: '不限',
+          typeList: ['不限', '单选', '多选', '判断']
         },
-        {
-          type: '多选',
-          title: '类与对象'
-        },
-        {
-          type: '判断',
-          title: '静态类的声明'
-        },
-        {
-          type: '单选',
-          title: '类与对象的关系'
-        },
-        {
-          type: '单选',
-          title: '类与对象的关系4'
-        }
-      ], // 手动出题，当前已经选择的题库
-      paperSelected: [{
-        name: '标签一'
-      }, // 手动出题，试卷已选择
-      {
-        name: '标签二'
+        questionTableData: [
+        ], // 手动出题，当前选择的题库的试题列表
+        questionChecked: [], // 试题列表checkbox 选中状态
+        questionSelected: [
+        ], // 已选择的试题列表
+        questionSelectedBoxShow: false // 已选择试题列表盒子是否隐藏
       },
-      {
-        name: '标签三'
-      }
-      ],
-      questionSelected: [
-        {
-          singleTotal: 23,
-          multiTotal: 34,
-          trueFalseTotal: 45,
-          name: '测试试题题目',
-          singleValue: 0,
-          multiValue: 0,
-          trueFalseValue: 0
-        },
-        {
-          singleTotal: 23,
-          multiTotal: 34,
-          trueFalseTotal: 45,
-          name: '测试试题题目3',
-          singleValue: 0,
-          multiValue: 0,
-          trueFalseValue: 0
-        }
-      ], // 随机出题，当前已经选择题库
-      boxShow: false
+      random: {
+        allSingle: 0,
+        allMulti: 0,
+        allTrueFalse: 0,
+        questionLibSelected: [
+        ] // 随机出题，当前已经选择题库
+      },
+      editMode: false // 编辑模式
     }
   },
+  watch: {
+  },
   mounted: function () {
+    if (this.$route.name === 'paper-edit') {
+      this.editMode = true
+      let id = GetUrlParam('id')
+      getExaminationPaperDetails({ id: id }).then(res => {
+        this.createForm = { // 编辑回显数据
+          paperName: res.data.name,
+          qualifiedPercent: res.data.ratio,
+          hours: res.data.minute,
+          randomSequence: res.data.is_question_random,
+          randomOption: res.data.is_option_random,
+          noLookAnswer: res.data.is_show_answer,
+          rules: res.data.rule
+        }
+        if (res.data.rule === 'manual') {
+          this.manual.questionSelected = res.data.question
+          // console.log(this.manual.questionSelected)
+        } else {
+          this.random.questionLibSelected = res.data.question_bank
+          this.reCount()
+          // console.log(this.questionLibDataRemote)
+          // console.log('HHHHHH'+ this.random.questionLibSelected[0].id)
+          this.questionLibDataRemote.map(item => { // 遍历题库数据和已有题库数据 回显题库数据
+            // let bankId = item.id
+            // console.log(item.id)
+            this.random.questionLibSelected.map(cItem => {
+              if (cItem.id === item.id) {
+                this.$refs.exTableQuestionLib.toggleRowSelection(item, true)
+              }
+            })
+          })
+        }
+      })
+    }
+    // getExaminationPaperDetails
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
-        { name: '首页', path: '/' }, { name: '试卷管理', path: '/paper' }, { name: '创建试卷', path: '/paper/create' }
+        { name: '首页', path: '/' }, { name: '试卷管理', path: '/paper' }, { name: this.editMode ? '编辑试卷' : '创建试卷' }
       ] })
+    this.fetchQuestionLibRemoteData() // 获取题库数据
   },
   methods: {
-    handleSavePaperDraft () {
-
+    handleQuestionLibReload (pagination, { currentPage, pageSize }) {
+      this.fetchQuestionLibRemoteData(pagination, currentPage, pageSize)
     },
-    handleSavePaper () {
-
+    fetchQuestionLibRemoteData (pagination, currentPage, pageSize) {
+      let param = {
+        keyword: this.questionsLib.keyword,
+        offset: currentPage || 1,
+        limit: pageSize || 10
+      }
+      let paginationObj = pagination || this.$refs['exTableQuestionLib'].pagination
+      getQuestionLibList(param).then(res => {
+        this.questionLibDataRemote = res.data.list
+        if (paginationObj) {
+          paginationObj.total = res.data.total
+        }
+        // this.$nextTick(() => {
+        //   this.$refs.exTableQuestionLib.toggleRowSelection(this.questionLibDataRemote[0], true)
+        // })
+      })
+      this.reCount()
     },
-    handleQuestionsSearch () {
-
+    handleQuestionReload (pagination, { currentPage, pageSize }) {
+      this.fetchQuestionRemoteData(pagination, currentPage, pageSize)
     },
-    handlePaperSelectionChange () { // 手动选题右侧试卷选择
-
+    fetchQuestionRemoteData (pagination, currentPage, pageSize) {
+      let param = {
+        type: this.manual.filterForm.type,
+        bank_id: this.manual.currentQuestionLib.id,
+        keyword: this.questionsLib.keyword,
+        offset: currentPage || 1,
+        limit: pageSize || 10
+      }
+      let paginationObj = pagination || this.$refs['exTableQuestion'].pagination
+      getQuestionList(param).then(res => {
+        this.manual.questionTableData = res.data.list
+        if (paginationObj) {
+          paginationObj.total = res.data.total
+        }
+        // this.$refs.exTableQuestion.toggleRowSelection(this.manual.questionTableData[0], true)
+        // console.log(this.manual.questionTableData[0])
+        this.manual.questionTableData.map(item => { // 手动选题模式 点击题库，加载试题 遍历 已有试题数据  回显
+          // console.log(item.id)
+          this.manual.questionSelected.map(cItem => {
+            if (item.id === cItem.id) {
+              // console.log('---------')
+              this.$nextTick(() => {
+                this.$refs.exTableQuestion.toggleRowSelection(item, true)
+              })
+            }
+          })
+        })
+      })
     },
-    handleQuestionSelectionChange (val) { // 随机选题左侧题库选择
-      this.questionSelected = val
+    // handleSavePaperDraft () {
+    // },
+    paperAddFun () { // 处理试卷添加
+      // save paper
+      let questionIdList = []
+      let questionLibIdList = []
+      this.manual.questionSelected.map(item => {
+        questionIdList.push(item.id)
+      })
+      this.random.questionLibSelected.map(item => {
+        let obj = {
+          id: item.id,
+          single: item.single,
+          multi: item.multiple,
+          judge: item.judge
+        }
+        questionLibIdList.push(obj)
+      })
+      let param = {
+        'rule': this.createForm.rules,
+        'question': questionIdList,
+        'question_bank': questionLibIdList,
+        'name': this.createForm.paperName,
+        'ratio': this.createForm.qualifiedPercent,
+        'minute': this.createForm.hours,
+        'is_question_random': this.createForm.randomSequence,
+        'is_option_random': this.createForm.randomOption,
+        'is_show_answer': this.createForm.noLookAnswer
+      }
+      addExaminationPaper(param).then(res => {
+        this.$message.success('添加成功')
+      })
+      // save paper
     },
-    handleQuestionCurrentChange () {
-
+    handleSavePaper (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (this.createForm.rules === 'manual') {
+            if (this.manual.questionSelected.length > 0) {
+              this.paperAddFun()
+            } else {
+              this.$message.error('请添加试题')
+            }
+          } else {
+            if (this.random.questionLibSelected.length > 0) {
+              this.paperAddFun()
+            } else {
+              this.$message.error('请添加题库')
+            }
+          }
+        } else {
+          return false
+        }
+      })
     },
-    handleRulesSwitch () {
-
+    getItemIndex (list, item) { // 根据id获取index
+      let itemIndex = -1
+      list.map((i, index, array) => {
+        if (i.id === item.id) {
+          itemIndex = index
+        }
+      })
+      return itemIndex
+    },
+    // 手动选择 ======================================
+    handleQuestionLibCurrentChange (val) { // 左侧题库数据初始
+      this.manual.currentQuestionLib = val
+      this.fetchQuestionRemoteData()
+    },
+    handleQuestionsSearch () { // 关键字过滤左侧题库
+      this.fetchQuestionLibRemoteData()
+    },
+    handleRulesSwitch () { // 右侧试题题型切换过滤
+      if (!this.manual.currentQuestionLib.id) {
+        return false
+      }
+      this.fetchQuestionRemoteData()
+    },
+    handleQuestionClick (selection, row) { //  点击checkbox事件,添加试题
+      if (this.getItemIndex(this.manual.questionSelected, row) === -1) {
+        this.manual.questionSelected.push(row)
+      } else {
+        this.manual.questionSelected.splice(this.getItemIndex(this.manual.questionSelected, row), 1)
+      }
+    },
+    handleQuestionCurrentChange (val) { // 手动选题 右侧试题选择
+      this.manual.questionChecked = val
+    },
+    handleDeleteQuestionSelected (item) {
+      // console.log('ddddddddddd')
+      //  console.log(this.manual.questionSelected)
+      this.manual.questionSelected.splice(this.getItemIndex(this.manual.questionSelected, item), 1)
+      let questionCheckedIndex = this.getItemIndex(this.manual.questionChecked, item) // 判断删除的试题是否在列表中且被选中
+      if (questionCheckedIndex !== -1) {
+        let questionTableDataIndex = this.getItemIndex(this.manual.questionTableData, item)
+        this.$refs.exTableQuestion.toggleRowSelection(this.manual.questionTableData[questionTableDataIndex], false)
+      }
+    },
+    // 随机选择 ======================================
+    handleQuestionLibListChange (list) {
+    },
+    handleQuestionLibClick (selection, row) { // 随机选题左侧题库选择
+      if (this.getItemIndex(this.random.questionLibSelected, row) === -1) {
+        let obj = {
+          id: row.id,
+          name: row.name,
+          single_total: row.single_total,
+          multiple_total: row.multiple_total,
+          judge_total: row.judge_total,
+          single: 0,
+          multiple: 0,
+          judge: 0
+        }
+        this.random.questionLibSelected.push(obj)
+      } else {
+        this.random.questionLibSelected.splice(this.getItemIndex(this.random.questionLibSelected, row), 1)
+      }
+      this.reCount()
+    },
+    handleCountChange (val) {
+      this.reCount()
+    },
+    reCount () { // 重新计算题型数量
+      this.random.allSingle = 0
+      this.random.allMulti = 0
+      this.random.allTrueFalse = 0
+      this.random.questionLibSelected.map(item => {
+        this.random.allSingle += item.single
+        this.random.allMulti += item.multiple
+        this.random.allTrueFalse += item.judge
+      })
     }
   }
 }
@@ -436,25 +644,30 @@ export default {
           display: flex;
           justify-content: space-between;
           border: 1px solid #efefef;
+          padding-bottom: 20px;
           .questionLib{width:28%;border-right: 1px solid #efefef;
             .keyword-input{padding:15px 15px 0 15px}
-            ul{padding: 15px;
-              height: 260px;
-              overflow: auto;
-              li{
-                line-height: 26px;
-                .el-radio{
-                  .el-radio__label{display: none}
-                }
-                span{display: inline-block;
-                  &.name{width:130px}
-                  &.total{width:60px;text-align: right }
-                }
-              }}}
+            .exTable{
+              .el-pagination{
+                margin: 10px auto 0;
+                text-align: center;
+                .el-pagination__total,.el-pagination__sizes,.el-pagination__jump{display: none}
+              }
+            }
+          }
           .questions{
             width:70%;
             min-height: 400px;
             position: relative;
+            .exTable{
+              .el-table th:first-child{
+                .cell{display: none}
+              }
+            }
+            .el-pagination{
+              margin: 10px auto 0;
+              text-align: right;
+            }
             .selected-block{
               box-shadow: 0px -12px 10px -10px #888888;
               padding: 10px;
@@ -496,11 +709,22 @@ export default {
           display: flex;
           justify-content: space-between;
           border: 1px solid #efefef;
+          padding-bottom: 20px;
           .questionLib {
             width: 28%;
             border-right: 1px solid #efefef;
             .keyword-input {
               padding: 15px 15px 0 15px
+            }
+            .exTable{
+                .el-table th:first-child{
+                  .cell{display: none}
+                }
+              .el-pagination{
+                margin: 10px auto 0;
+                text-align: center;
+                .el-pagination__total,.el-pagination__sizes,.el-pagination__jump{display: none}
+              }
             }
            /* .el-table td, .el-table th{padding: 6px 0}*/
           }
@@ -508,6 +732,7 @@ export default {
             width:70%;
             min-height: 400px;
             position: relative;
+
             .collect{
               display: flex;
               justify-content: space-around;
@@ -518,19 +743,19 @@ export default {
               }
             }
             ul{
-              height:260px;overflow: auto;
+              height:460px;overflow: auto;
               li {
                 border-bottom: 1px dashed #efefef;
                 padding: 10px 0;
                 .title{ font-size: 16px;color:#666}
                 .input{display: flex;justify-content: space-between;
-                  span{width:33%;color:#999;i{font-style: normal;}.el-input{width:45px;}}
+                  span{width:33%;color:#999;i{font-style: normal;}}
                 }
+                .el-input-number--mini{width:88px}
               }
             }
           }
         }
-
       }
     }
   }
@@ -538,6 +763,5 @@ export default {
     display: flex;justify-content:center;
     .el-button{width:100px}
   }
-
 }
 </style>

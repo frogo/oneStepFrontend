@@ -88,7 +88,7 @@ const router = new VueRouter({
         { // 试卷管理-编辑试卷
           path: '/paper/edit',
           name: 'paper-edit',
-          component: () => import('../views/examination/paper/edit.vue')
+          component: () => import('../views/examination/paper/create.vue')
         },
         { // 特殊学员
           path: 'specialStudent',

@@ -22,7 +22,9 @@ export default {
   EXAMINATION: {
     PAPER: {
       LIST: CONTEXTPATH + '/examinationPaper/list',
-      DELETE: CONTEXTPATH + '/examinationPaper/delete'
+      DELETE: CONTEXTPATH + '/examinationPaper/delete',
+      ADD: CONTEXTPATH + '/examinationPaper/add',
+      DETAILS: CONTEXTPATH + '/examinationPaper/info'
     },
     QUESTION: {
       QUESTION_LIB: CONTEXTPATH + '/questionBank/list',

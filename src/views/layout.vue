@@ -99,13 +99,9 @@ export default {
         cancelButtonText: '取消'
       }).then(() => {
         logout().then(res => {
-          if (res.code && res.code === '1') {
-            this.$store.commit('$_removeUserStorage')
-            localStorage.removeItem('user')
-            this.$router.push({ path: '/login' })
-          }
-        }, error => {
-          error && this.$message.error(error)
+          this.$store.commit('$_removeUserStorage')
+          localStorage.removeItem('user')
+          this.$router.push({ path: '/login' })
         })
       }).catch(() => {
 

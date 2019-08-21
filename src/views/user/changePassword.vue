@@ -99,17 +99,13 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           changePassword(this.changePasswordParams).then(res => {
-            if (res.code === '1') {
-              this.$alert('密码修改成功', '提示', {
-                confirmButtonText: '知道了',
-                type: 'success',
-                callback: action => {
-                  this.$router.push({ path: '/login' })
-                }
-              })
-            }
-          }, error => {
-            error && this.$message.error(error)
+            this.$alert('密码修改成功', '提示', {
+              confirmButtonText: '知道了',
+              type: 'success',
+              callback: action => {
+                this.$router.push({ path: '/login' })
+              }
+            })
           })
         } else {
           // console.log('error submit!!')

@@ -223,10 +223,8 @@ export default {
       // eslint-disable-next-line no-console
       console.log(params)
       addQuestion(params).then(res => {
-        if (res.code === '1') {
-          this.$message.success('添加成功')
-          this.$router.push({ name: 'questionLib-edit', params: { id: this.$route.params.id, name: this.$route.params.name } })
-        }
+        this.$message.success('添加成功')
+        this.$router.push({ name: 'questionLib-edit', params: { id: this.$route.params.id, name: this.$route.params.name } })
       })
     }
   }

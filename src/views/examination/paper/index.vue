@@ -106,10 +106,8 @@ export default {
       }
       let paginationObj = pagination || this.$refs.exTable.pagination
       getExaminationPaperList(param).then(res => {
-        if (res.code === '1') {
-          this.paperTableData = res.data.list
-          paginationObj.total = res.data.total
-        }
+        this.paperTableData = res.data.list
+        paginationObj.total = res.data.total
       })
     },
     handleCreate () { // 创建试卷
@@ -128,10 +126,8 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteExaminationPaper({ id: row.id }).then(res => {
-          if (res.code === '1') {
-            this.$message.success('删除成功')
-            this.fetchRemoteData()
-          }
+          this.$message.success('删除成功')
+          this.fetchRemoteData()
         })
       }).catch(() => {
 

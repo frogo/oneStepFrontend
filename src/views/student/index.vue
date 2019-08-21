@@ -302,10 +302,8 @@ export default {
       }
       let paginationObj = pagination || this.$refs.exTable.pagination
       getSpecialStudentList(param).then(res => {
-        if (res.code === '1') {
-          this.spStudentTableData = res.data.list
-          paginationObj.total = res.data.total
-        }
+        this.spStudentTableData = res.data.list
+        paginationObj.total = res.data.total
       })
     },
     gotoImport () { // 导入
@@ -325,10 +323,8 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteSpecialStudent({ id: row.id }).then(res => {
-          if (res.code === '1') {
-            this.$message.success('删除成功')
-            this.fetchRemoteData()
-          }
+          this.$message.success('删除成功')
+          this.fetchRemoteData()
         })
       }).catch(() => {
 
@@ -338,11 +334,9 @@ export default {
       this.$refs['studentAddForm'].validate((valid) => {
         if (valid) {
           addSpecialStudent(this.studentAddForm).then(res => {
-            if (res.code === '1') {
-              this.$message.success('添加成功')
-              this.addStudentDialogVisible = false
-              this.fetchRemoteData()
-            }
+            this.$message.success('添加成功')
+            this.addStudentDialogVisible = false
+            this.fetchRemoteData()
           })
         }
       })
@@ -351,11 +345,9 @@ export default {
       this.$refs['studentEditForm'].validate((valid) => {
         if (valid) {
           editSpecialStudent(this.studentEditForm).then(res => {
-            if (res.code === '1') {
-              this.$message.success('修改成功')
-              this.editStudentDialogVisible = false
-              this.fetchRemoteData()
-            }
+            this.$message.success('修改成功')
+            this.editStudentDialogVisible = false
+            this.fetchRemoteData()
           })
         }
       })
@@ -367,10 +359,8 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteStudentAll({ list: this.multipleSelection }).then(res => {
-          if (res.code === '1') {
-            this.$message.success('删除成功')
-            this.fetchRemoteData()
-          }
+          this.$message.success('删除成功')
+          this.fetchRemoteData()
         })
       }).catch(() => {
 

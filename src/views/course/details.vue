@@ -84,12 +84,7 @@ export default {
       ] })
     let param = { id: GetUrlParam('id') }
     getCourseDetails(param).then(res => {
-      if (res.code === '1') {
-        // console.log(res)
-        this.courseDetails = res.data
-      }
-    }, error => {
-      error && this.$message(error)
+      this.courseDetails = res.data
     })
   },
   methods: {

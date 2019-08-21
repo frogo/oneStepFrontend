@@ -346,12 +346,8 @@ export default {
     },
     getExaminationPaperList () {
       getExaminationPaperList(this.getExaminationPaperListParam).then(res => {
-        if (res.code === '1') {
-          this.dialogExaminationTableData = res.data.list
-          this.dialogExaminationData.total = res.data.total
-        }
-      }, error => {
-        error && this.$message.error(error)
+        this.dialogExaminationTableData = res.data.list
+        this.dialogExaminationData.total = res.data.total
       })
     },
     cancelExaminationSelect () {
@@ -364,32 +360,24 @@ export default {
     },
     handleSaveCourseDraft () {
       addCourseDraft(this.addCourseParam).then(res => {
-        if (res.code === '1') {
-          this.$alert('保存草稿成功', '提示', {
-            confirmButtonText: '确定',
-            callback: action => {
+        this.$alert('保存草稿成功', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
 
-            }
-          })
-        }
-      }, error => {
-        error && this.$message.error(error)
+          }
+        })
       })
     },
     handleSaveCourse () {
       addCourse(this.addCourseParam).then(res => {
-        if (res.code === '1') {
-          this.$alert('保存成功', '提示', {
-            confirmButtonText: '确定',
-            callback: action => {
-              this.$router.push({
-                path: '/course'
-              })
-            }
-          })
-        }
-      }, error => {
-        error && this.$message.error(error)
+        this.$alert('保存成功', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$router.push({
+              path: '/course'
+            })
+          }
+        })
       })
     }
   }

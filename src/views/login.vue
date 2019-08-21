@@ -100,19 +100,17 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           login(this.loginForm).then(res => {
-            if (res.code === '1') {
-              this.$store.commit('$_setUserStorage', res.data.name)
-              localStorage.setItem('user', res.data.name)
-              const redirect = this.$route.query.redirect
-              if (redirect) {
-                // 存在回跳地址就回跳
-                this.$router.push(redirect)
-              } else {
-                // 否则就跳到默认的首页
-                this.$router.push({
-                  path: '/'
-                })
-              }
+            this.$store.commit('$_setUserStorage', res.data.name)
+            localStorage.setItem('user', res.data.name)
+            const redirect = this.$route.query.redirect
+            if (redirect) {
+              // 存在回跳地址就回跳
+              this.$router.push(redirect)
+            } else {
+              // 否则就跳到默认的首页
+              this.$router.push({
+                path: '/'
+              })
             }
           })
         }

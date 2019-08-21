@@ -44,6 +44,8 @@ export const addQuestion = p => post(CONFIG.EXAMINATION.QUESTION.ADD_QUESTION, p
 // 试卷
 export const getExaminationPaperList = p => get(CONFIG.EXAMINATION.PAPER.LIST, p) // 修改接口 传参试卷出题方式,输出内容加ID
 export const deleteExaminationPaper = p => post(CONFIG.EXAMINATION.PAPER.DELETE, p) // 缺少
+export const addExaminationPaper = p => post(CONFIG.EXAMINATION.PAPER.ADD, p) //
+export const getExaminationPaperDetails = p => post(CONFIG.EXAMINATION.PAPER.DETAILS, p) //
 
 // 特殊学员
 export const getSpecialStudentList = p => get(CONFIG.SPECIAL_STUDENT.LIST, p) //

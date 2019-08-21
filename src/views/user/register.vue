@@ -219,17 +219,13 @@ export default {
       this.$refs[registerForm].validate((valid) => {
         if (valid) {
           register(this.registerParam).then(res => {
-            if (res.code === '1') {
-              this.$alert('注册成功', '提示', {
-                confirmButtonText: '知道了',
-                type: 'success',
-                callback: action => {
-                  this.$router.push({ path: '/login' })
-                }
-              })
-            }
-          }, error => {
-            error && this.$message.error(error)
+            this.$alert('注册成功', '提示', {
+              confirmButtonText: '知道了',
+              type: 'success',
+              callback: action => {
+                this.$router.push({ path: '/login' })
+              }
+            })
           })
         } else {
           return false

@@ -81,7 +81,9 @@ export default {
     }
   },
   beforeDestroy () {
-    this.pagination.$off('current-change', this.setCurrentPage)
-    this.pagination.$off('size-change', this.setPageSize)
+    if (this.pagination) {
+      this.pagination.$off('current-change', this.setCurrentPage)
+      this.pagination.$off('size-change', this.setPageSize)
+    }
   }
 }

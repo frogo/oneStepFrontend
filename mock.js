@@ -384,10 +384,13 @@ Mock.mock('/v1/questionBank/list?keyword=&offset=1&limit=10', {
     'total': 31,
     'list|10': [
       {
-        'id': 1,
-        'name': '孙子兵法实践初级入门第一届',
+        'id|1-10': 1,
+        'name|1': ['1孙子兵法实践初级入门第一届', '2孙子兵法实践初级入门第一届', '3孙子兵法实践初级入门第一届', '4孙子兵法实践初级入门第一届', '5孙子兵法实践初级入门第一届', '6孙子兵法实践初级入门第一届', '7孙子兵法实践初级入门第一届', '8孙子兵法实践初级入门第一届', '9孙子兵法实践初级入门第一届', '10孙子兵法实践初级入门第一届'],
         'add_time': '2019-02-21',
-        'num': 12
+        'num|10-100': 12,
+        'single_total': 20,
+        'multiple_total': 12,
+        'judge_total': 10
       }
     ]
   }
@@ -407,11 +410,11 @@ Mock.mock('/v1/question/list', {
   'data': {
     'total': 21,
     'list|10': [{
-      'id': '试题id',
-      'bank_id': '题库id',
+      'id|1-10': 1,
+      'bank_id|1-100': 1,
       'type': '单选single',
       'creator': '杨帆',
-      'subject': '题目',
+      'subject|1': ['题目1', '题目2', '题目3', '题目4', '题目5', '题目6', '题目7', '题目8', '题目9', '题目10'],
       'options': [
         {
           'number': '编号',
@@ -439,4 +442,34 @@ Mock.mock('/v1/spStudent/list?keyword=&offset=1&limit=10', {
     }]
   }
 
+})
+
+Mock.mock('/v1/examinationPaper/info', {
+  'code': '1',
+  'message': '说明',
+  'data': {
+    'id|1-100': 1,
+    'name': '试卷名称',
+    'ratio|1-100': 1,
+    'minute|1-120': 1,
+    'is_question_random': false,
+    'is_option_random': false,
+    'is_show_answer': false,
+    // 'rule|1': ['manual', 'random'],
+    'rule': 'manual',
+    'question': [{ 'id': 1, 'subject': '试题1' }, { 'id': 2, 'subject': '试题2' }, { 'id': 3, 'subject': '试题3' }, { 'id': 4, 'subject': '试题4' }],
+    'question_bank': [
+      {
+        'id|1-10': 1,
+        'single|1-20': 2,
+        'multiple|1-30': 3,
+        'judge|1-40': 4,
+        'single_total': 20,
+        'multiple_total': 30,
+        'judge_total': 40,
+        'name': '题库1'
+      }
+    ],
+    'add_time': '2001-02-19'
+  }
 })

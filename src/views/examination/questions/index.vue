@@ -128,10 +128,8 @@ export default {
       }
       let paginationObj = pagination || this.$refs.exTable.pagination
       getQuestionLibList(param).then(res => {
-        if (res.code === '1') {
-          this.questionLibTableData = res.data.list
-          paginationObj.total = res.data.total
-        }
+        this.questionLibTableData = res.data.list
+        paginationObj.total = res.data.total
       })
     },
     handleCreate () { // 创建题库
@@ -141,10 +139,8 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           addQuestionLib(this.form.name).then(res => {
-            if (res.code === '1') {
-              this.$message.success('添加成功')
-              this.fetchRemoteData()
-            }
+            this.$message.success('添加成功')
+            this.fetchRemoteData()
             this.createQuestionsDialogVisible = false
           })
         } else {
@@ -156,10 +152,8 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           addQuestionLib(this.form.name).then(res => {
-            if (res.code === '1') {
-              this.$message.success('添加成功')
-              this.$router.push({ name: 'questionLib-edit', params: { id: res.id, name: this.form.name } })
-            }
+            this.$message.success('添加成功')
+            this.$router.push({ name: 'questionLib-edit', params: { id: res.id, name: this.form.name } })
             this.createQuestionsDialogVisible = false
           })
         } else {
@@ -180,10 +174,8 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteQuestionLib({ id: row.id }).then(res => {
-          if (res.code === '1') {
-            this.$message.success('删除成功')
-            this.fetchRemoteData()
-          }
+          this.$message.success('删除成功')
+          this.fetchRemoteData()
         })
       }).catch(() => {
 
