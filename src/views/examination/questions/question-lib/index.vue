@@ -113,7 +113,8 @@ export default {
     this.fetchRemoteData() // 初始化数据
     this.$store.commit('$_setBreadCrumb', { isShow: true, // 面包屑
       list: [
-        { name: '首页', path: '/' }, { name: '题库管理', path: '/questionLib' }
+        { name: '首页', path: '/' },
+        { name: '题库管理' }
       ] })
   },
   methods: {
@@ -153,7 +154,7 @@ export default {
         if (valid) {
           addQuestionLib(this.form.name).then(res => {
             this.$message.success('添加成功')
-            this.$router.push({ name: 'questionLib-edit', params: { id: res.id, name: this.form.name } })
+            this.$router.push({ name: 'questionLib-edit', params: { bank_id: res.id, bank_name: this.form.name } })
             this.createQuestionsDialogVisible = false
           })
         } else {
@@ -165,7 +166,7 @@ export default {
       this.fetchRemoteData()
     },
     handleEdit (index, row) { // 编辑
-      this.$router.push({ name: 'questionLib-edit', params: { id: row.id, name: row.name } })
+      this.$router.push({ name: 'questionLib-edit', params: { bank_id: row.id, bank_name: row.name } })
     },
     handleDelete (index, row) { // 删除
       this.$confirm('您确定要删除吗?', '提示', {

@@ -33,7 +33,8 @@ export default {
       QUESTION_LIST: CONTEXTPATH + '/question/list',
       DELETE_QUESTION: CONTEXTPATH + 'question/delete',
       DELETE_QUESTION_ALL: CONTEXTPATH + '/question/deleteAll',
-      ADD_QUESTION: CONTEXTPATH + '/question/add'
+      ADD_QUESTION: CONTEXTPATH + '/question/add',
+      QUESTION_DETAILS: CONTEXTPATH + '/question/info'
     }
 
   },

@@ -135,12 +135,27 @@ export default {
       importQuestionDialog: false,
       fileList: [],
       files: '',
-      fileName: ''
+      fileName: '',
+      bank_name: '',
+      bank_id: ''
     }
   },
   watch: {
   },
   mounted: function () {
+    let routeParams = this.$route.params
+    if (routeParams.bank_id) {
+      this.bank_id = routeParams.bank_id
+      localStorage.setItem('bank_id', routeParams.bank_id)
+    } else {
+      this.bank_id = localStorage.getItem('bank_id')
+    }
+    if (routeParams.bank_name) {
+      this.bank_name = routeParams.bank_name
+      localStorage.setItem('bank_name', routeParams.bank_name)
+    } else {
+      this.bank_name = localStorage.getItem('bank_name')
+    }
     this.fetchRemoteData() // 初始化数据
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
@@ -225,10 +240,10 @@ export default {
       this.multipleSelection = val
     },
     handleEdit (index, row) { // 编辑
-      this.$router.push({ path: '/questions/edit', query: { id: row.id } })
+      this.$router.push({ name: 'question-edit', params: { id: row.id, bank_id: this.bank_id, bank_name: this.bank_name } })
     },
     gotoCreate () {
-      this.$router.push({ name: 'questions-create', params: { id: this.$route.params.id, name: this.$route.params.name } })
+      this.$router.push({ name: 'question-create', params: { bank_id: this.bank_id, bank_name: this.bank_name } })
     },
     deleteAll () {
       this.$confirm('您确定要删除吗?', '提示', {

@@ -18,12 +18,12 @@ const router = new VueRouter({
         },
         { // 个人中心
           path: 'user',
-          redirect: 'changePassword'
+          redirect: 'change_password'
         },
         { // 个人中心
-          path: 'changePassword',
-          name: 'changePassword',
-          component: () => import('../views/user/changePassword.vue')
+          path: 'change_password',
+          name: 'change_password',
+          component: () => import('../views/user/change_password.vue')
         },
         { // 企业课程库-
           path: 'course',
@@ -58,22 +58,22 @@ const router = new VueRouter({
         { // 题库管理首页
           path: 'questionLib',
           name: 'questionLib',
-          component: () => import('../views/examination/questions/index.vue')
-        },
-        { // 创建试题
-          path: '/questions/create',
-          name: 'questions-create',
-          component: () => import('../views/examination/questions/create_edit.vue')
-        },
-        { // 编辑试题
-          path: '/questions/edit',
-          name: 'questions-edit',
-          component: () => import('../views/examination/questions/create_edit.vue')
+          component: () => import('../views/examination/questions/question-lib/index.vue')
         },
         { // 编辑题库
           path: '/questionLib/edit',
           name: 'questionLib-edit',
-          component: () => import('../views/examination/questions/edit.vue')
+          component: () => import('../views/examination/questions/question-lib/edit.vue')
+        },
+        { // 创建试题
+          path: '/question/create',
+          name: 'question-create',
+          component: () => import('../views/examination/questions/question/create_edit.vue')
+        },
+        { // 编辑试题
+          path: '/question/edit',
+          name: 'question-edit',
+          component: () => import('../views/examination/questions/question/create_edit.vue')
         },
         { // 试卷管理-首页
           path: 'paper',
@@ -124,8 +124,8 @@ const router = new VueRouter({
     },
     {
       path: '/forgotPassword',
-      name: 'forgotPassword',
-      component: () => import('../views/user/forgotPassword.vue')
+      name: 'forgot-password',
+      component: () => import('../views/user/forgot_password.vue')
     },
     {
       path: '/exTable',

@@ -473,3 +473,35 @@ Mock.mock('/v1/examinationPaper/info', {
     'add_time': '2001-02-19'
   }
 })
+Mock.mock('/v1/question/info', {
+  'code': '1',
+  'message': '成功',
+  'data': {
+    'id|1-100': 1,
+    'bank_id': 1,
+    'type': 'multi',
+    'subject': '题目',
+    'options': [
+      {
+        'number': 'A',
+        'content': '内容',
+        'istrue': 1
+      },
+      {
+        'number': 'B',
+        'content': '内容B',
+        'istrue': 1
+      },
+      {
+        'number': 'C',
+        'content': '内容C',
+        'istrue': 1
+      },
+      {
+        'number': 'D',
+        'content': '内容D',
+        'istrue': 0
+      }
+    ],
+    'add_time': '2009-08-17'
+  } })
