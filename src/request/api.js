@@ -31,6 +31,10 @@ export const addCourseDraft = p => post(CONFIG.COURSE.DRAFT_ADD, p)// 入参缺�
 export const getCourseDetails = p => get(CONFIG.COURSE.DETAILS, p) // 课程详情
 // 项目
 export const getProjectList = p => post(CONFIG.PROJECT.LIST, p) // 修改接口为post
+export const getProjectDetails = p => get(CONFIG.PROJECT.DETAILS, p) // 修
+export const deleteProject = p => post(CONFIG.PROJECT.DELETE, p) // 删除
+export const onLineProject = p => post(CONFIG.PROJECT.ONLINE, p) // 上线下线
+export const approvalProject = p => post(CONFIG.PROJECT.APPROVAL, p) // 学员审批
 
 // 试题
 export const getQuestionLibList = p => get(CONFIG.EXAMINATION.QUESTION.QUESTION_LIB, p) // 题库列表

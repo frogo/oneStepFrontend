@@ -39,7 +39,11 @@ export default {
 
   },
   PROJECT: {
-    LIST: CONTEXTPATH + '/project/list'
+    LIST: CONTEXTPATH + '/project/list',
+    DETAILS: CONTEXTPATH + '/project/info',
+    DELETE: CONTEXTPATH + '/project/delete',
+    ONLINE: CONTEXTPATH + '/project/online',
+    APPROVAL: CONTEXTPATH + '/projectApproval/pass'
   },
   SPECIAL_STUDENT: {
     LIST: CONTEXTPATH + '/spStudent/list',

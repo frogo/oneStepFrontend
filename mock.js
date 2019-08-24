@@ -342,14 +342,14 @@ Mock.mock('/v1/project/list', {
     'total': 31,
     'list|8': [
       {
-        'id': 1,
-        'name': '孙子兵法实践初级入门第一届',
+        'id': 2,
+        'name|1': ['孙子兵法实践初级入门第一届1', '孙子兵法实践初级入门第一届2', '孙子兵法实践初级入门第一届3', '孙子兵法实践初级入门第一届4', '孙子兵法实践初级入门第一届5'],
         'start_time': '2019-02-21',
         'end_time': '2019-09-21',
         'introduction': '十四次撒擦色威威v菜市场但是速度测试',
         'obj': '企业家老板',
         'target_num': 12,
-        'lesson_info': [
+        'lesson_info|3': [
           {
             'id': 3,
             'name': '第一门课',
@@ -358,7 +358,7 @@ Mock.mock('/v1/project/list', {
             'credit': '90'
           }
         ],
-        'is_review': 0,
+        'is_review|1': [0, 1],
         'is_auth': 0,
         'is_pwd': 0,
         'is_sign': 0,
@@ -369,12 +369,55 @@ Mock.mock('/v1/project/list', {
             'name': '王五'
           }
         ],
-        'ratio': 50,
-        'status': 1,
+        'ratio|1-100': 50,
+        'status|1': [0, 1, 2],
         'add_time': '2019-09-21'
       }
     ]
   }
+})
+Mock.mock('/v1/project/info?id=2', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'id': '2',
+    'name': '项目名称',
+    'start_time': '2008.12.30',
+    'end_time': '2009.12.50',
+    'introduction': '士大夫撒旦发生隔热隔热哥哥人格人格人格',
+    'obj': '一般员工',
+    'target_num': 20,
+    'lesson_info|3': [
+      {
+        'id': '课程id',
+        'name|1': ['课程名称1', '课程名称2', '课程名称3', '课程名称4'],
+        'teacher': '教师姓名',
+        'minute': 22,
+        'credit': 100
+      }
+    ],
+    'is_review': '是否需要审批',
+    'is_auth': '是否需要认证',
+    'is_pwd': '是否需要口令',
+    'is_sign': '是否需要签到',
+    'passwd': '口令',
+    'personnel': [
+      {
+        'id': '学员id',
+        'name': '学员姓名'
+      }
+    ],
+    'status|1': ['0', '1', '2'], // '状态0下线 1上线 2草稿',
+    'add_time': '2009-12-23'
+  }
+})
+Mock.mock('/v1/project/delete', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '删除成功'
+})
+Mock.mock('/v1/project/online', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '该项目已成功下线'
 })
 
 Mock.mock('/v1/questionBank/list?keyword=&offset=1&limit=10', {

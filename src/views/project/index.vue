@@ -31,11 +31,11 @@
             <el-row>
               <el-col :span="5" v-for="(item, index) in projectList" :key="`project_card_${index}`" :offset="index%4 ==0 ? 0 : 1">
                 <el-card class="project-card">
-                  <div :class="`status-bg ${statusBgMap[item.status]}`">
-                    <span @click="handlePending" class="special-status">待审批</span>
-                    <span @click="gotoDetails(item)">编辑中</span>
+                  <div :class="`status-bg ${statusMap.bg[item.status]}`">
+                    <span @click="handlePending" v-if="item.is_review" class="special-status">待审批</span>
+                    <span>{{ statusMap.txt[item.status] }}</span>
                   </div>
-                  <div class="headline">
+                  <div @click="gotoDetails(item)" class="headline">
                     {{ item.name }}
                   </div>
                   <div class="date">
@@ -48,7 +48,7 @@
                   </div>
                   <div class="mask">
                     <div class="operate">
-                      <div class="item">
+                      <div @click="handleEdit(item.id)" class="item">
                         <p class="icon">
                           <i class="el-icon-edit" />
                         </p>
@@ -56,7 +56,7 @@
                           编辑
                         </p>
                       </div>
-                      <div @click="handleView" class="item">
+                      <div @click="handleView(item.id)" class="item">
                         <p class="icon">
                           <i class="el-icon-view" />
                         </p>
@@ -64,7 +64,7 @@
                           预览
                         </p>
                       </div>
-                      <div class="item">
+                      <div @click="handleOffline(item.id)" class="item">
                         <p class="icon">
                           <i class="el-icon-download" />
                         </p>
@@ -72,7 +72,7 @@
                           下线
                         </p>
                       </div>
-                      <div class="item">
+                      <div @click="handleDelete(item.id)" class="item">
                         <p class="icon">
                           <i class="el-icon-delete" />
                         </p>
@@ -88,26 +88,26 @@
           </el-tab-pane>
           <el-tab-pane name="list">
             <span slot="label"><i class="el-icon-bank-card" /> </span>
-            <div v-for="(item, index) in 7" :key="`project_list_${index}`" class="project-list">
-              <span class="pending">待审批</span>
+            <div v-for="(item, index) in projectList" :key="`project_list_${index}`" class="project-list">
+              <span @click="handlePending(item)" v-if="item.is_review" class="pending">待审批</span>
               <el-row :gutter="20">
                 <el-col :span="2">
-                  <el-progress :percentage="50" :width="52" :stroke-width="4" type="circle" />
+                  <el-progress :percentage="item.ratio" :width="52" :stroke-width="4" type="circle" />
                 </el-col>
                 <el-col :span="16">
                   <div class="headline">
-                    <span class="status">[进行中]</span>孙子兵法实践初级入门第一届
+                    <span @click="gotoDetails(item)" class="status">[{{ statusMap.txt[item.status] }}]</span>{{ item.name }}
                   </div>
                   <div class="pieces">
-                    <span>发布时间： 2019-8-22</span>  <span class="end-date">结束时间： 2019-9-29</span>  <span class="person-num"><i class=" el-icon-user" /> 158</span>
+                    <span>发布时间： {{ item.start_time }}</span>  <span class="end-date">结束时间： {{ item.end_time }}</span>  <span class="person-num"><i class=" el-icon-user" /> 158</span>
                   </div>
                 </el-col>
                 <el-col :span="6">
                   <div class="operate-item">
-                    <span @click="handleEdit"><i class="el-icon-edit" /> 编辑</span>
-                    <span @click="handleView"><i class="el-icon-view" /> 预览</span>
-                    <span @click="handleOffline"><i class="el-icon-download" /> 下线</span>
-                    <span @click="handleDelete"><i class="el-icon-delete" /> 删除</span>
+                    <span @click="handleEdit(item.id)"><i class="el-icon-edit" /> 编辑</span>
+                    <span @click="handleView(item.id)"><i class="el-icon-view" /> 预览</span>
+                    <span @click="handleOffline(item.id)"><i class="el-icon-download" /> 下线</span>
+                    <span @click="handleDelete(item.id)"><i class="el-icon-delete" /> 删除</span>
                   </div>
                 </el-col>
               </el-row>
@@ -127,24 +127,24 @@
     </el-main>
     <el-dialog
       :visible.sync="viewProjectDialogVisible"
-      title="提示"
+      title="预览项目"
       width="50%"
       class="projectViewDialog"
     >
       <div class="project-view-box">
         <ul>
           <li class="flex">
-            <span><i>参训对象：</i>一般员工</span> <span><i>目标人数：</i>26</span>
+            <span><i>参训对象：</i>{{ projectDetails.obj }}</span> <span><i>目标人数：</i>{{ projectDetails.target_num }}</span>
           </li>
           <li class="flex">
-            <span><i>开始日期：</i>2019-04-01</span> <span><i>结束日期：</i>2019-05-01</span>
+            <span><i>开始日期：</i>{{ projectDetails.start_time }}</span> <span><i>结束日期：</i>{{ projectDetails.end_time }}</span>
           </li>
           <li>
             <div class="head">
               简介：
             </div>
             <div class="content">
-              洒落的骄傲的就看见了快速减肥涉及到法律
+              {{ projectDetails.introduction }}
             </div>
           </li>
           <li>
@@ -153,11 +153,9 @@
             </div>
             <div class="content flex">
               <div class="chapter">
-                <p>第一章课程介绍</p>
-                <p>第一章课程介绍</p>
-                <p>第一章课程介绍</p>
-                <p>第一章课程介绍</p>
-                <p>第一章课程介绍</p>
+                <p v-for="(item, index) in projectDetails.lesson_info" :key="item + index">
+                  {{ item.name }}
+                </p>
               </div>
               <div class="qrCode">
                 <img src="@/assets/img/qrCode.png">
@@ -219,13 +217,13 @@
         >
           <template slot-scope="scope">
             <el-button
-              @click="handleEdit(scope.$index, scope.row)"
+              @click="handlePass(scope.$index, scope.row)"
               size="mini"
             >
               通过
             </el-button>
             <el-button
-              @click="handleDelete(scope.$index, scope.row)"
+              @click="handleNoPass(scope.$index, scope.row)"
               size="mini"
               type="danger"
             >
@@ -244,7 +242,7 @@
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getProjectList } from '@/request/api'
+import { getProjectList, getProjectDetails, deleteProject, onLineProject, approvalProject } from '@/request/api'
 import AsideMenu from '@/components/asideMenu'
 export default {
   components: {
@@ -259,7 +257,10 @@ export default {
       },
       status: ['全部', '正常', '草稿', '下线'],
       projectList: [],
-      statusBgMap: { 0: 'gray', 1: 'green', 2: 'blue' },
+      statusMap: {
+        bg: { 0: 'gray', 1: 'green', 2: 'blue' },
+        txt: { 0: '已下线', 1: '进行中', 2: '编辑中' }
+      },
       viewProjectDialogVisible: false,
       approvalProjectDialogVisible: false,
       pendingTableData: [{
@@ -272,7 +273,8 @@ export default {
         currentPage: 1,
         pageSize: 8,
         total: 8
-      }
+      },
+      projectDetails: ''
     }
   },
   computed: {
@@ -280,8 +282,8 @@ export default {
       return {
         keyword: this.keyword,
         status: this.filterForm.status,
-        offset: this.currentPage,
-        limit: this.pageSize
+        offset: this.pagination.currentPage,
+        limit: this.pagination.pageSize
       }
     }
   },
@@ -311,23 +313,43 @@ export default {
     gotoDetails (item) {
       this.$router.push({ path: '/project/details' })
     },
-    handleSearch () {
-      this.getProjectList()
-    },
-    handleChangeStatus () {
-      this.getProjectList()
-    },
-    handleView () {
+    handleView (id) {
       this.viewProjectDialogVisible = true
+      getProjectDetails({ id: id }).then(res => {
+        this.projectDetails = res.data
+        // console.log(this.projectDetails)
+      })
     },
     handleEdit () {
 
     },
-    handleOffline () {
+    handleOffline (id) {
+      this.$confirm('您确定下线该项目吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        onLineProject({ id: id, online: 0 }).then(res => {
+          this.$message.success(res.message)
+          this.getProjectList()
+        })
+      }).catch(() => {
 
+      })
     },
-    handleDelete () {
+    handleDelete (id) {
+      this.$confirm('您确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteProject({ id: id }).then(res => {
+          this.$message.success(res.message)
+          this.getProjectList()
+        })
+      }).catch(() => {
 
+      })
     },
     copyUrl2 () {
       let Url2 = document.getElementById('url')
@@ -340,6 +362,36 @@ export default {
     },
     handleSelectionChange (val) {
       this.multiplePendingSelection = val
+    },
+    // 列表数据改变
+    handleSearch () {
+      this.pagination.pageSize = 8
+      this.pagination.currentPage = 1
+      this.getProjectList()
+    },
+    handleChangeStatus () {
+      this.pagination.pageSize = 8
+      this.pagination.currentPage = 1
+      this.getProjectList()
+    },
+    handleSizeChange (size) {
+      this.pagination.pageSize = size
+      this.pagination.currentPage = 1
+      this.getProjectList()
+    },
+    handleCurrentChange (page) {
+      this.pagination.currentPage = page
+      this.getProjectList()
+    },
+    handlePass (index, row) {
+      approvalProject().then(res => {
+
+      })
+    },
+    handleNoPass (index, row) {
+      approvalProject().then(res => {
+
+      })
     }
   }
 }
@@ -379,7 +431,7 @@ export default {
               position: relative;
               padding: 0;
               .status-bg{
-                cursor: pointer;
+                /*cursor: pointer;*/
                 height:105px;position: relative;
                 color:#fff;
                 font-size: 12px;
@@ -401,13 +453,13 @@ export default {
                   border-radius: 0 0 3px 0;
                 }
               }
-              .headline{padding: 10px; line-height: 1.4em; font-size: 14px;}
+              .headline{padding: 10px; line-height: 1.4em; font-size: 14px;cursor: pointer}
               .date{padding:0 10px;font-size: 12px;color:#a0a0a0; line-height: 1.6em}
               .percent{
                 padding: 5px 10px;margin-top: 20px;
                 width:100%;
                 position: relative;
-                .person-num{position: absolute;display: inline-block;width:60px;height:26px; line-height: 26px;color:#a0a0a0;font-size: 12px;top:-12px;right:-10px}
+                .person-num{position: absolute;display: inline-block;width:40px;height:26px; line-height: 26px;color:#a0a0a0;font-size: 12px;top:-12px;right:-10px}
                 .el-progress{position: relative;
                   .el-progress-bar{ padding-right: 0;
                     .el-progress-bar__inner{ background: #51c8b6}
@@ -451,7 +503,7 @@ export default {
             padding: 10px;
             margin: 5px 0;
             &:hover{background: #fff0e9;border-bottom: 1px solid #ef6520;border-top: 1px solid #ef6520}
-            .pending{display: inline-block;width:60px;height:26px; line-height: 26px; font-size: 12px; text-align: center;background: #15d1a4;color:#fff;position: absolute;top:10px;right:10px;border-radius:4px }
+            .pending{z-index:1;cursor:pointer;display: inline-block;width:60px;height:26px; line-height: 26px; font-size: 12px; text-align: center;background: #15d1a4;color:#fff;position: absolute;top:10px;right:10px;border-radius:4px }
             .el-row{
               .headline {
                 margin: 4px 0 15px 0;
@@ -466,6 +518,7 @@ export default {
             }
 
           }
+          .el-pagination{text-align: right;margin-top: 20px}
         }
       }
     }
