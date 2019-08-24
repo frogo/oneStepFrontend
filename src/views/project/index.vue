@@ -18,7 +18,7 @@
         </div>
         <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
           <el-form-item label="状态：">
-            <el-radio-group v-model="filterForm.status">
+            <el-radio-group v-model="filterForm.status" @change="handleChangeStatus">
               <el-radio :label="item" v-for="item in status" :key="item" border />
             </el-radio-group>
           </el-form-item>
@@ -31,9 +31,9 @@
             <el-row>
               <el-col :span="5" v-for="(item, index) in projectList" :key="`project_card_${index}`" :offset="index%4 ==0 ? 0 : 1">
                 <el-card class="project-card">
-                  <div :class="`status-bg ${statusBgMap[item.status]}`" @click="gotoDetails(item)">
+                  <div :class="`status-bg ${statusBgMap[item.status]}`">
                     <span @click="handlePending" class="special-status">待审批</span>
-                    编辑中
+                    <span @click="gotoDetails(item)">编辑中</span>
                   </div>
                   <div class="headline">
                     {{ item.name }}
@@ -113,6 +113,15 @@
               </el-row>
             </div>
           </el-tab-pane>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pagination.currentPage"
+            :page-sizes="[8, 16, 24]"
+            :page-size="pagination.pageSize"
+            :total="pagination.total"
+            layout="total, sizes, prev, pager, next, jumper"
+          />
         </el-tabs>
       </div>
     </el-main>
@@ -258,14 +267,19 @@ export default {
         name: '王小虎',
         phone: '13986189581'
       }],
-      multiplePendingSelection: ''
+      multiplePendingSelection: '',
+      pagination: {
+        currentPage: 1,
+        pageSize: 8,
+        total: 8
+      }
     }
   },
   computed: {
     getProjectListParam: function () {
       return {
         keyword: this.keyword,
-        status: this.status,
+        status: this.filterForm.status,
         offset: this.currentPage,
         limit: this.pageSize
       }
@@ -286,7 +300,7 @@ export default {
       // console.log(param)
       getProjectList(param).then(res => {
         this.projectList = res.data.list
-        this.total = res.data.total
+        this.pagination.total = res.data.total
       }, error => {
         error && this.$message.error(error.message)
       })
@@ -298,7 +312,10 @@ export default {
       this.$router.push({ path: '/project/details' })
     },
     handleSearch () {
-
+      this.getProjectList()
+    },
+    handleChangeStatus () {
+      this.getProjectList()
     },
     handleView () {
       this.viewProjectDialogVisible = true

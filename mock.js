@@ -340,7 +340,7 @@ Mock.mock('/v1/project/list', {
   'message': '',
   'data': {
     'total': 31,
-    'list|10': [
+    'list|8': [
       {
         'id': 1,
         'name': '孙子兵法实践初级入门第一届',
