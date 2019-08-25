@@ -126,10 +126,10 @@
       </el-form-item>
     </el-form>
     <div class="operation-bar">
-      <el-button @click="handleSaveProjectDraft" type="success">
+      <el-button @click="handleSaveProjectDraft(createForm)" type="success">
         保存草稿
       </el-button>
-      <el-button @click="handleSaveProject" type="primary">
+      <el-button @click="handleSaveProject(createForm)" type="primary">
         完成
       </el-button>
     </div>
@@ -312,7 +312,7 @@
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getCourseList } from '@/request/api'
+import { getCourseList, addDraftProject } from '@/request/api'
 import ExTable from '@/components/exTable.js'
 export default {
   components: {
@@ -476,7 +476,16 @@ export default {
         error && this.$message.error(error.message)
       })
     },
-    handleSaveProjectDraft () {
+    handleSaveProjectDraft (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          addDraftProject().then(res => {
+            this.$message.success(res.message)
+          })
+        } else {
+          return false
+        }
+      })
     },
     handleSaveProject () {
     },

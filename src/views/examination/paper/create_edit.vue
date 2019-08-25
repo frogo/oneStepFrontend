@@ -160,7 +160,9 @@
                 <el-form ref="filterForm" :model="manual.filterForm" label-width="60px" size="mini">
                   <el-form-item label="题型：">
                     <el-radio-group v-model="manual.filterForm.type" @change="handleRulesSwitch">
-                      <el-radio :label="item" v-for="item in manual.filterForm.typeList" :key="item" border />
+                      <el-radio :label="item.val" v-for="(item, index) in manual.filterForm.typeList" :key="item.val + index" border>
+                        {{ item.label }}
+                      </el-radio>
                     </el-radio-group>
                   </el-form-item>
                 </el-form>
@@ -350,8 +352,8 @@ export default {
       manual: {
         currentQuestionLib: '',
         filterForm: {
-          type: '不限',
-          typeList: ['不限', '单选', '多选', '判断']
+          type: 'all',
+          typeList: [{ val: 'all', label: '不限' }, { val: 'single', label: '单选' }, { val: 'muti', label: '多选' }, { val: 'trueFalse', label: '判断' }]
         },
         questionTableData: [
         ], // 手动出题，当前选择的题库的试题列表

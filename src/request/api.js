@@ -35,6 +35,7 @@ export const getProjectDetails = p => get(CONFIG.PROJECT.DETAILS, p) // 修
 export const deleteProject = p => post(CONFIG.PROJECT.DELETE, p) // 删除
 export const onLineProject = p => post(CONFIG.PROJECT.ONLINE, p) // 上线下线
 export const approvalProject = p => post(CONFIG.PROJECT.APPROVAL, p) // 学员审批
+export const addDraftProject = p => post(CONFIG.PROJECT.DRAFT, p) // 添加到草稿
 
 // 试题
 export const getQuestionLibList = p => get(CONFIG.EXAMINATION.QUESTION.QUESTION_LIB, p) // 题库列表
