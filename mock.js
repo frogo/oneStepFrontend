@@ -65,13 +65,13 @@ Mock.mock('/v1/lesson/list', {
   'message': '',
   'data': {
     'total': 33,
-    'list|20': [
+    'list|10': [
       {
-        'id': '3',
+        'id|1-100': 3,
         'name': '入职课程',
         'cover': 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
         'minutes': '180',
-        'credit': '10',
+        'credit|1-120': 10,
         'obj': '实习生',
         'target': '目标',
         'syllabus': '大纲',

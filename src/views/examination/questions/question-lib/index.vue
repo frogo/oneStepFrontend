@@ -139,7 +139,7 @@ export default {
     handleAdd () {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          addQuestionLib(this.form.name).then(res => {
+          addQuestionLib({ name: this.form.name }).then(res => {
             this.$message.success('添加成功')
             this.fetchRemoteData()
             this.createQuestionsDialogVisible = false

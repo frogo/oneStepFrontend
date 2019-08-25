@@ -41,7 +41,7 @@
           <el-button @click="chooseCourseDialogVisible = true" size="mini" type="primary">
             选择课程
           </el-button>
-          <span>已选课程数 <i>33</i> 总学分 <i>336</i> 总课时 <i>32</i></span>
+          <span>已选课程数 <i>{{ courseSelected.length }}</i> 总学分 <i>336</i> 总课时 <i>32</i></span>
         </div>
         <div class="list">
           <el-table
@@ -143,13 +143,14 @@
       </el-transfer>
       <span slot="footer" class="dialog-footer">
         <el-button @click="chooseStudentsDialogVisible = false">取 消</el-button>
-        <el-button @click="chooseStudentsDialogVisible = false" type="primary">确 定</el-button>
+        <el-button @click="handleStudentOk" type="primary">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog
       :visible.sync="chooseCourseDialogVisible"
       title="课程选择"
       class="chooseCourse"
+      width="80%"
     >
       <div class="filter-box">
         <div class="keyword-input">
@@ -196,49 +197,112 @@
           </el-form-item>
         </el-form>
       </div>
-      <el-table
-        ref="multipleTable"
-        :data="courseTableData"
-        @selection-change="handleSelectionChange"
-        tooltip-effect="dark"
-        style="width: 100%"
-      >
-        <el-table-column
-          type="selection"
-          width="55"
-        />
-        <el-table-column
-          prop="name"
-          label="课程"
-        />
-        <el-table-column
-          prop="teacher_info.name"
-          label="讲师"
-          width="150"
-        />
-        <el-table-column
-          prop="credit"
-          label="学分"
-          width="150"
-        />
-        <el-table-column
-          prop="minutes"
-          label="课时"
-          width="150"
-        />
-      </el-table>
-      <div class="pager">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="pager.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="pager.pageSize"
-          :total="pager.total"
-          layout="total, sizes, prev, pager, next, jumper"
-        />
+      <div class="exTable">
+        <ex-table
+          ref="exTableCourse"
+          :data="courseTableData"
+          @selection-change="handleSelectionChange"
+          @select="handleCourseClick"
+          :reload-method="handleReload"
+          tooltip-effect="dark"
+          show-pagination stripe
+        >
+          <el-table-column
+            type="selection"
+            width="55"
+          />
+          <el-table-column
+            prop="name"
+            label="课程"
+          />
+          <el-table-column
+            prop="id"
+            label="id"
+            width="100"
+          />
+          <el-table-column
+            prop="teacher_info.name"
+            label="讲师"
+            width="150"
+          />
+          <el-table-column
+            prop="credit"
+            label="学分"
+            width="150"
+          />
+          <el-table-column
+            prop="minutes"
+            label="课时"
+            width="150"
+          />
+        </ex-table>
       </div>
-
+      <!--      <el-table-->
+      <!--        ref="multipleTable"-->
+      <!--        :data="courseTableData"-->
+      <!--        @selection-change="handleSelectionChange"-->
+      <!--        tooltip-effect="dark"-->
+      <!--        style="width: 100%"-->
+      <!--      >-->
+      <!--        <el-table-column-->
+      <!--          type="selection"-->
+      <!--          width="55"-->
+      <!--        />-->
+      <!--        <el-table-column-->
+      <!--          prop="name"-->
+      <!--          label="课程"-->
+      <!--        />-->
+      <!--        <el-table-column-->
+      <!--          prop="teacher_info.name"-->
+      <!--          label="讲师"-->
+      <!--          width="150"-->
+      <!--        />-->
+      <!--        <el-table-column-->
+      <!--          prop="credit"-->
+      <!--          label="学分"-->
+      <!--          width="150"-->
+      <!--        />-->
+      <!--        <el-table-column-->
+      <!--          prop="minutes"-->
+      <!--          label="课时"-->
+      <!--          width="150"-->
+      <!--        />-->
+      <!--      </el-table>-->
+      <!--      <div class="pager">-->
+      <!--        <el-pagination-->
+      <!--          @size-change="handleSizeChange"-->
+      <!--          @current-change="handleCurrentChange"-->
+      <!--          :current-page="pager.currentPage"-->
+      <!--          :page-sizes="[10, 20, 50]"-->
+      <!--          :page-size="pager.pageSize"-->
+      <!--          :total="pager.total"-->
+      <!--          layout="total, sizes, prev, pager, next, jumper"-->
+      <!--        />-->
+      <!--      </div>-->
+      <div class="selected-block">
+        <div class="operator">
+          <el-badge :value="courseSelected.length">
+            <el-button @click="courseSelectedBoxShow = !courseSelectedBoxShow" size="small">
+              已添加  <i v-if="courseSelectedBoxShow" class="el-icon-arrow-up" />
+              <i v-else class="el-icon-arrow-down" />
+            </el-button>
+          </el-badge>
+        </div>
+        <transition name="myBox">
+          <div v-show="courseSelectedBoxShow" class="box">
+            <el-tag
+              v-for="(item, index) in courseSelected"
+              :key="item.name + index"
+              @close="handleDeleteCourseSelected(item)"
+              closable
+              size="small"
+              effect="plain"
+            >
+              {{ item.name }} {{ item.id }}
+            </el-tag>
+          </div>
+        </transition>
+      </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="chooseCourseDialogVisible = false">取 消</el-button>
         <el-button @click="chooseCourseDialogVisible = false" type="primary">确 定</el-button>
@@ -249,7 +313,11 @@
 <script>
 // import { mapState, mapMutations } from 'vuex'
 import { getCourseList } from '@/request/api'
+import ExTable from '@/components/exTable.js'
 export default {
+  components: {
+    ExTable
+  },
   data () {
     const generateData = _ => {
       const data = []
@@ -318,12 +386,15 @@ export default {
         department: ['职能1', '职能2', '职能3'],
         custom: ['职能1', '职能2', '职能3']
       },
-      courseTableData: [],
-      pager: {
-        currentPage: 1,
-        pageSize: 10,
-        total: 100
-      }
+      courseTableData: [], // 课程表格数据
+      courseSelected: [], // 已选择课程
+      courseChecked: [], // 当前页面选择的课程数据
+      courseSelectedBoxShow: false
+      // pager: {
+      //   currentPage: 1,
+      //   pageSize: 10,
+      //   total: 100
+      // }
     }
   },
   computed: {
@@ -337,19 +408,25 @@ export default {
         tags: this.createForm.tags,
         introduction: this.createForm.intro
       }
-    },
-    getCourseListParam: function () {
-      let tags = this.filterForm.level.concat(this.filterForm.department, this.filterForm.custom)
-      tags.push(this.filterForm.from, this.filterForm.series, this.filterForm.status)
-      return {
-        keyword: this.keyword,
-        tag_id: tags,
-        offset: this.currentPage,
-        limit: this.pageSize
-      }
     }
+    // getCourseListParam: function () {
+    //   let tags = this.filterForm.level.concat(this.filterForm.department, this.filterForm.custom)
+    //   tags.push(this.filterForm.from, this.filterForm.series, this.filterForm.status)
+    //   return {
+    //     keyword: this.keyword,
+    //     tag_id: tags,
+    //     offset: this.currentPage,
+    //     limit: this.pageSize
+    //   }
+    // }
   },
   watch: {
+    filterForm: {
+      handler (newVal, oldVal) {
+        this.fetchRemoteData()
+      },
+      deep: true
+    }
   },
   mounted: function () {
     this.$store.commit('$_setBreadCrumb', { isShow: true,
@@ -359,6 +436,36 @@ export default {
     this.getCourseList()
   },
   methods: {
+    handleReload (pagination, { currentPage, pageSize }) {
+      this.fetchRemoteData(pagination, currentPage, pageSize)
+    },
+    fetchRemoteData (pagination, currentPage, pageSize) {
+      let tags = this.filterForm.level.concat(this.filterForm.department, this.filterForm.custom)
+      tags.push(this.filterForm.from, this.filterForm.series, this.filterForm.status)
+      let param = {
+        keyword: this.keyword,
+        tag_id: tags,
+        offset: currentPage || 1,
+        limit: pageSize || 10
+      }
+      let paginationObj = pagination || this.$refs.exTableCourse.pagination
+      getCourseList(param).then(res => {
+        this.courseTableData = res.data.list
+        paginationObj.total = res.data.total
+
+        this.courseTableData.map(item => { // 手动选题模式 点击题库，加载试题 遍历 已有试题数据  回显
+          // console.log(item.id)
+          this.courseSelected.map(cItem => {
+            if (item.id === cItem.id) {
+              // console.log('---------')
+              this.$nextTick(() => {
+                this.$refs.exTableCourse.toggleRowSelection(item, true)
+              })
+            }
+          })
+        })
+      })
+    },
     getCourseList () {
       let param = this.getCourseListParam
       // console.log(param)
@@ -374,16 +481,40 @@ export default {
     handleSaveProject () {
     },
     handleSearch () {
-
+      this.fetchRemoteData()
     },
-    handleSelectionChange () { // 表格多选
-
+    handleSelectionChange (val) { // 表格多选
+      this.courseChecked = val
     },
-    handleSizeChange () { // 条数改变
-
+    handleDeleteCourseSelected (item) { // 删除已选
+      this.courseSelected.splice(this.getItemIndex(this.courseSelected, item), 1)
+      let courseCheckedIndex = this.getItemIndex(this.courseChecked, item) // 判断删除的试题是否在列表中且被选中
+      if (courseCheckedIndex !== -1) {
+        let courseTableDataIndex = this.getItemIndex(this.courseTableData, item)
+        this.$nextTick(() => {
+          this.$refs.exTableCourse.toggleRowSelection(this.courseTableData[courseTableDataIndex], false)
+        })
+      }
     },
-    handleCurrentChange () { // 页数改变
-
+    handleCourseClick (selection, row) { //  点击checkbox事件,添加试题
+      if (this.getItemIndex(this.courseSelected, row) === -1) {
+        this.courseSelected.push(row)
+      } else {
+        this.courseSelected.splice(this.getItemIndex(this.courseSelected, row), 1)
+      }
+    },
+    getItemIndex (list, item) { // 根据id获取index
+      let itemIndex = -1
+      list.map((i, index, array) => {
+        if (i.id === item.id) {
+          itemIndex = index
+        }
+      })
+      return itemIndex
+    },
+    handleStudentOk () {
+      this.chooseStudentsDialogVisible = false
+      // console.log(this.transferValue)
     }
   }
 }
@@ -404,6 +535,7 @@ export default {
       .el-textarea{width:400px}
       .chooseCourse{
         .btn-box{display: flex;justify-content: space-between;span{i{color:red;font-style: normal}}}
+
       }
       .setting{
         div.box {
@@ -429,6 +561,12 @@ export default {
     }
     .chooseCourse{
       min-width:900px;
+      .exTable{
+        .el-pagination{margin-top: 20px;text-align: right}
+          .el-table th:first-child{
+            .cell{display: none}
+        }
+      }
       .filter-box{
         position: relative;
         margin: 20px 0;
@@ -447,7 +585,32 @@ export default {
         .el-radio{ margin-right: 0}
         .add-button{position: absolute;right:0;top:0}
       }
-      .pager{ margin: 30px 20px; text-align: right}
+      .selected-block{
+        box-shadow: 0px -12px 10px -10px #888888;
+        padding: 10px;
+        border: 1px solid #efefef;
+        border-radius: 5px 5px 0 0 ;
+        width:100%;
+        height:auto;
+        position: absolute;
+        left:0;bottom:0;background:#fff;z-index: 2;
+        .operator{position: absolute;top:-30px;left:45%}
+        .box{
+          height:200px;
+          overflow: hidden
+        }
+        .myBox-leave-active,.myBox-enter-active{
+          transition:  all 1s ease
+        }
+        .myBox-leave-active,.myBox-enter{
+          height:0px !important
+        }
+        .myBox-leave,.myBox-enter-active{
+          height: 200px
+        }
+        .el-tag{ margin-right: 10px}
+      }
+      /*.pager{ margin: 30px 20px; text-align: right}*/
     }
   }
 </style>

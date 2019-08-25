@@ -25,7 +25,7 @@ module.exports = {
     // Package path
     path: prod ? path.resolve(__dirname, 'dist') : path.resolve(__dirname, 'dist'),
     // Server access address
-    publicPath: prod ? './' : '/',
+    publicPath: prod ? '/' : '/',
     // Scripts file name
     filename: prod ? 'scripts/[chunkhash].js' : '[name].js?[hash:8]'
   },

@@ -27,13 +27,13 @@
             <div class="login-box">
               <h2>账号登陆</h2>
               <el-form ref="loginForm" :model="loginForm" :rules="rules" label-width="">
-                <el-form-item label="" prop="username">
-                  <el-input v-model="loginForm.username" placeholder="账号">
+                <el-form-item label="" prop="account">
+                  <el-input v-model="loginForm.account" placeholder="账号">
                     <i slot="prefix" class="username_icon" />
                   </el-input>
                 </el-form-item>
-                <el-form-item label="" prop="password" class="small_spacing">
-                  <el-input v-model="loginForm.password" placeholder="密码" type="password">
+                <el-form-item label="" prop="passwd" class="small_spacing">
+                  <el-input v-model="loginForm.passwd" placeholder="密码" type="password">
                     <i slot="prefix" class="password_icon" />
                   </el-input>
                 </el-form-item>
@@ -70,16 +70,16 @@ export default {
   data () {
     return {
       loginForm: {
-        username: '',
-        password: '',
+        account: '',
+        passwd: '',
         remember: true
       },
       rules: {
-        username: [
+        account: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { min: 3, max: 12, message: '长度在 3 到 12 个字符', trigger: 'blur' }
         ],
-        password: [
+        passwd: [
           { required: true, message: '请输入密码', trigger: 'blur' }
         ]
       }
@@ -100,8 +100,8 @@ export default {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           login(this.loginForm).then(res => {
-            this.$store.commit('$_setUserStorage', res.data.name)
-            localStorage.setItem('user', res.data.name)
+            this.$store.commit('$_setUserStorage', res.data.account)
+            localStorage.setItem('user', res.data.account)
             const redirect = this.$route.query.redirect
             if (redirect) {
               // 存在回跳地址就回跳

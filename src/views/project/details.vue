@@ -30,61 +30,104 @@
               </el-button>
             </div>
             <div class="table-list">
-              <el-table
-                :data="studentTableData"
-                stripe
-                style="width: 100%"
-              >
-                <el-table-column
-                  prop="name"
-                  label="姓名"
-                  width="160"
-                />
-                <el-table-column
-                  prop="start_time"
-                  label="参加时间"
-                  width="160"
-                />
-                <el-table-column
-                  prop="end_time"
-                  label="完成时间"
-                  width="160"
-                />
-                <el-table-column
-                  prop="credit"
-                  label="获得学分"
-                  width="160"
-                />
-                <el-table-column label="操作">
-                  <template slot-scope="scope">
-                    <el-button
-                      @click="handleViewLearning(scope.$index, scope.row)"
-                      size="mini"
-                    >
-                      查看
-                    </el-button>
-                    <el-button
-                      @click="handleDeleteLearning(scope.$index, scope.row)"
-                      size="mini"
-                      type="danger"
-                    >
-                      删除
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
+              <div class="exTable">
+                <ex-table ref="exTable" :data="paperTableData" :reload-method="handleReload" show-pagination stripe>
+                  <el-table-column
+                    prop="name"
+                    label="姓名"
+                    width="150"
+                  />
+                  <el-table-column
+                    prop="start_time"
+                    label="参加时间"
+                    width="150"
+                  />
+                  <el-table-column
+                    prop="end_time"
+                    label="完成时间"
+                    width="150"
+                  />
+                  <el-table-column
+                    prop="credit"
+                    label="获得学分"
+                    width="150"
+                  />
+                  <el-table-column
+                    label="操作"
+                  >
+                    <template slot-scope="scope">
+                      <el-button
+                        @click="handleViewLearning(scope.$index, scope.row)"
+                        size="mini"
+                      >
+                        查看
+                      </el-button>
+                      <el-button
+                        @click="handleDeleteLearning(scope.$index, scope.row)"
+                        size="mini"
+                        type="danger"
+                      >
+                        删除
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                </ex-table>
+              </div>
+              <!--              <el-table-->
+              <!--                :data="studentTableData"-->
+              <!--                stripe-->
+              <!--                style="width: 100%"-->
+              <!--              >-->
+              <!--                <el-table-column-->
+              <!--                  prop="name"-->
+              <!--                  label="姓名"-->
+              <!--                  width="160"-->
+              <!--                />-->
+              <!--                <el-table-column-->
+              <!--                  prop="start_time"-->
+              <!--                  label="参加时间"-->
+              <!--                  width="160"-->
+              <!--                />-->
+              <!--                <el-table-column-->
+              <!--                  prop="end_time"-->
+              <!--                  label="完成时间"-->
+              <!--                  width="160"-->
+              <!--                />-->
+              <!--                <el-table-column-->
+              <!--                  prop="credit"-->
+              <!--                  label="获得学分"-->
+              <!--                  width="160"-->
+              <!--                />-->
+              <!--                <el-table-column label="操作">-->
+              <!--                  <template slot-scope="scope">-->
+              <!--                    <el-button-->
+              <!--                      @click="handleViewLearning(scope.$index, scope.row)"-->
+              <!--                      size="mini"-->
+              <!--                    >-->
+              <!--                      查看-->
+              <!--                    </el-button>-->
+              <!--                    <el-button-->
+              <!--                      @click="handleDeleteLearning(scope.$index, scope.row)"-->
+              <!--                      size="mini"-->
+              <!--                      type="danger"-->
+              <!--                    >-->
+              <!--                      删除-->
+              <!--                    </el-button>-->
+              <!--                  </template>-->
+              <!--                </el-table-column>-->
+              <!--              </el-table>-->
             </div>
-            <div class="pager">
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="pager.currentPage"
-                :page-sizes="[10, 20, 50]"
-                :page-size="pager.pageSize"
-                :total="pager.total"
-                layout="total, sizes, prev, pager, next, jumper"
-              />
-            </div>
+            <!--            <div class="pager">-->
+            <!--              <el-pagination-->
+            <!--                @size-change="handleSizeChange"-->
+            <!--                @current-change="handleCurrentChange"-->
+            <!--                :current-page="pager.currentPage"-->
+            <!--                :page-sizes="[10, 20, 50]"-->
+            <!--                :page-size="pager.pageSize"-->
+            <!--                :total="pager.total"-->
+            <!--                layout="total, sizes, prev, pager, next, jumper"-->
+            <!--              />-->
+            <!--            </div>-->
           </div>
         </el-col>
         <el-col :span="6">
@@ -158,11 +201,13 @@
 </template>
 <script>
 
-// import { getProjectList } from '@/request/api'
+// import { getProjectDetails } from '@/request/api'
 import AsideMenu from '@/components/asideMenu'
+import ExTable from '@/components/exTable.js'
 export default {
   components: {
-    AsideMenu
+    AsideMenu,
+    ExTable
   },
   data () {
     return {
@@ -191,6 +236,21 @@ export default {
       ] })
   },
   methods: {
+    handleReload (pagination, { currentPage, pageSize }) {
+      this.fetchRemoteData(pagination, currentPage, pageSize)
+    },
+    fetchRemoteData (pagination, currentPage, pageSize) {
+      // let param = {
+      //   keyword: this.keyword,
+      //   offset: currentPage || 1,
+      //   limit: pageSize || 10
+      // }
+      // let paginationObj = pagination || this.$refs.exTable.pagination
+      // getExaminationPaperList(param).then(res => {
+      //   this.paperTableData = res.data.list
+      //   paginationObj.total = res.data.total
+      // })
+    },
     handleStudentStats () {
       this.studentStatsDialogVisible = true
     },

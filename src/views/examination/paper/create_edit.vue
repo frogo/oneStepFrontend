@@ -562,7 +562,9 @@ export default {
       let questionCheckedIndex = this.getItemIndex(this.manual.questionChecked, item) // 判断删除的试题是否在列表中且被选中
       if (questionCheckedIndex !== -1) {
         let questionTableDataIndex = this.getItemIndex(this.manual.questionTableData, item)
-        this.$refs.exTableQuestion.toggleRowSelection(this.manual.questionTableData[questionTableDataIndex], false)
+        this.$nextTick(() => {
+          this.$refs.exTableQuestion.toggleRowSelection(this.manual.questionTableData[questionTableDataIndex], false)
+        })
       }
     },
     // 随机选择 ======================================
