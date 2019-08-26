@@ -44,7 +44,8 @@ export default {
     DELETE: CONTEXTPATH + '/project/delete',
     ONLINE: CONTEXTPATH + '/project/online',
     APPROVAL: CONTEXTPATH + '/projectApproval/pass',
-    DRAFT: CONTEXTPATH + '/projectDraft/add'
+    DRAFT: CONTEXTPATH + '/projectDraft/add',
+    ADD: CONTEXTPATH + '/project/add'
   },
   SPECIAL_STUDENT: {
     LIST: CONTEXTPATH + '/spStudent/list',

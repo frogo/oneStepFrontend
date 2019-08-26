@@ -39,35 +39,9 @@
       <el-form-item class="chooseCourse">
         <div class="btn-box">
           <el-button @click="chooseCourseDialogVisible = true" size="mini" type="primary">
-            选择课程
+            课程设置
           </el-button>
-          <span>已选课程数 <i>{{ courseSelected.length }}</i> 总学分 <i>336</i> 总课时 <i>32</i></span>
-        </div>
-        <div class="list">
-          <el-table
-            :data="selectedCourseTableData"
-            style="width: 100%"
-          >
-            <el-table-column
-              prop="date"
-              label="课堂"
-            />
-            <el-table-column
-              prop="name"
-              label="讲师"
-              width="260"
-            />
-            <el-table-column
-              prop="address"
-              label="学分（分）"
-              width="260"
-            />
-            <el-table-column
-              prop="address"
-              label="课时（分钟）"
-              width="260"
-            />
-          </el-table>
+          <span>已选课程数 <i>{{ courseSelected.length }}</i> 总学分 <i>{{ courseChooseTotal.credit }}</i> 总课时 <i>{{ courseChooseTotal.hours }}</i></span>
         </div>
       </el-form-item>
       <div class="head-line">
@@ -117,8 +91,8 @@
             inactive-color="gray"
           />
             <span v-if="createForm.studentsSwitch">
-              <el-button @click="chooseStudentsDialogVisible = true" size="small" type="primary">选择</el-button>
-              已选择参数人员<span class="red">138</span>人
+              <el-button @click="handleStudentDialogOpen" size="small" type="primary">设置参训人员</el-button>
+              已选择参数人员<span class="red">{{ transferValue.length }}</span>人
             </span>
 
           </span>
@@ -126,29 +100,37 @@
       </el-form-item>
     </el-form>
     <div class="operation-bar">
-      <el-button @click="handleSaveProjectDraft(createForm)" type="success">
+      <el-button @click="handleSaveProjectDraft('createForm')" type="success">
         保存草稿
       </el-button>
-      <el-button @click="handleSaveProject(createForm)" type="primary">
+      <el-button @click="handleSaveProject('createForm')" type="primary">
         完成
       </el-button>
     </div>
     <el-dialog
       :visible.sync="chooseStudentsDialogVisible"
-      title="指定学员"
+      title="设置参训人员"
       custom-class="chooseStudents"
     >
-      <el-transfer v-model="transferValue" :data="studentsTransferData" :titles="['姓名 - 工号 - 部门', '姓名 - 工号 - 部门']" filterable>
-        <span slot-scope="{ option }">{{ option.name }} - {{ option.no }} - {{ option.dept }}</span>
+      <el-transfer
+        v-model="transferValue" :data="studentsTransferData"
+        :filter-method="studentFilterMethod"
+        :props="{
+          key: 'id',
+          label: 'name'
+        }"
+        :titles="['编号 - 姓名 - 部门', '编号 - 姓名 - 部门']" filter-placeholder="请输入学员名称" filterable
+      >
+        <span slot-scope="{ option }">{{ option.number }} - {{ option.name }} - {{ option.department }}</span>
       </el-transfer>
       <span slot="footer" class="dialog-footer">
         <el-button @click="chooseStudentsDialogVisible = false">取 消</el-button>
-        <el-button @click="handleStudentOk" type="primary">确 定</el-button>
+        <el-button @click="chooseStudentsDialogVisible = false" type="primary">确 定</el-button>
       </span>
     </el-dialog>
     <el-dialog
       :visible.sync="chooseCourseDialogVisible"
-      title="课程选择"
+      title="课程设置"
       class="chooseCourse"
       width="80%"
     >
@@ -237,48 +219,6 @@
           />
         </ex-table>
       </div>
-      <!--      <el-table-->
-      <!--        ref="multipleTable"-->
-      <!--        :data="courseTableData"-->
-      <!--        @selection-change="handleSelectionChange"-->
-      <!--        tooltip-effect="dark"-->
-      <!--        style="width: 100%"-->
-      <!--      >-->
-      <!--        <el-table-column-->
-      <!--          type="selection"-->
-      <!--          width="55"-->
-      <!--        />-->
-      <!--        <el-table-column-->
-      <!--          prop="name"-->
-      <!--          label="课程"-->
-      <!--        />-->
-      <!--        <el-table-column-->
-      <!--          prop="teacher_info.name"-->
-      <!--          label="讲师"-->
-      <!--          width="150"-->
-      <!--        />-->
-      <!--        <el-table-column-->
-      <!--          prop="credit"-->
-      <!--          label="学分"-->
-      <!--          width="150"-->
-      <!--        />-->
-      <!--        <el-table-column-->
-      <!--          prop="minutes"-->
-      <!--          label="课时"-->
-      <!--          width="150"-->
-      <!--        />-->
-      <!--      </el-table>-->
-      <!--      <div class="pager">-->
-      <!--        <el-pagination-->
-      <!--          @size-change="handleSizeChange"-->
-      <!--          @current-change="handleCurrentChange"-->
-      <!--          :current-page="pager.currentPage"-->
-      <!--          :page-sizes="[10, 20, 50]"-->
-      <!--          :page-size="pager.pageSize"-->
-      <!--          :total="pager.total"-->
-      <!--          layout="total, sizes, prev, pager, next, jumper"-->
-      <!--        />-->
-      <!--      </div>-->
       <div class="selected-block">
         <div class="operator">
           <el-badge :value="courseSelected.length">
@@ -304,15 +244,15 @@
         </transition>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="chooseCourseDialogVisible = false">取 消</el-button>
-        <el-button @click="chooseCourseDialogVisible = false" type="primary">确 定</el-button>
+        <!--        <el-button @click="chooseCourseDialogVisible = false">取 消</el-button>-->
+        <el-button @click="chooseCourseDialogVisible = false" type="primary">关闭</el-button>
       </span>
     </el-dialog>
   </el-main>
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getCourseList, addDraftProject } from '@/request/api'
+import { getCourseList, addDraftProject, getSpecialStudentList, addProject } from '@/request/api'
 import ExTable from '@/components/exTable.js'
 export default {
   components: {
@@ -332,8 +272,6 @@ export default {
       return data
     }
     return {
-      studentsTransferData: generateData(),
-      transferValue: [],
       createForm: {
         projectName: '',
         projectCycle: '',
@@ -386,44 +324,61 @@ export default {
         department: ['职能1', '职能2', '职能3'],
         custom: ['职能1', '职能2', '职能3']
       },
+      studentsTransfer: {
+        keyword: ''
+      },
+      studentsTransferData: generateData(), // 穿梭框学员数据
+      transferValue: [], // 学员当前穿梭框选择数据
+      studentsSelected: [], // 学员已选择数据
       courseTableData: [], // 课程表格数据
       courseSelected: [], // 已选择课程
+      courseChooseTotal: {
+        credit: 0,
+        hours: 0
+      },
       courseChecked: [], // 当前页面选择的课程数据
-      courseSelectedBoxShow: false
-      // pager: {
-      //   currentPage: 1,
-      //   pageSize: 10,
-      //   total: 100
-      // }
+      courseSelectedBoxShow: false // 已选择课程容器开关
     }
   },
   computed: {
-    addCourseParam: function () {
+    addProjectParam: function () {
+      let lesson = []
+      this.courseSelected.map(item => {
+        lesson.push(item.id)
+      })
       return {
-        name: this.createForm.courseName,
-        minutes: this.createForm.hours,
-        credit: this.createForm.credit,
-        obj: this.createForm.audience,
-        target: this.createForm.target,
-        tags: this.createForm.tags,
-        introduction: this.createForm.intro
+        name: this.createForm.projectName,
+        start_time: this.createForm.projectCycle[0],
+        end_time: this.createForm.projectCycle[1],
+        introduction: this.createForm.intro,
+        obj: this.createForm.participants,
+        target_num: parseInt(this.createForm.number),
+        lesson_info: lesson,
+        is_review: this.createForm.approval ? 1 : 0,
+        is_auth: this.createForm.auth ? 1 : 0,
+        is_pwd: this.createForm.passwordSwitch ? 1 : 0,
+        is_sign: this.createForm.sign ? 1 : 0,
+        password: this.createForm.password,
+        personnel: this.transferValue
       }
     }
-    // getCourseListParam: function () {
-    //   let tags = this.filterForm.level.concat(this.filterForm.department, this.filterForm.custom)
-    //   tags.push(this.filterForm.from, this.filterForm.series, this.filterForm.status)
-    //   return {
-    //     keyword: this.keyword,
-    //     tag_id: tags,
-    //     offset: this.currentPage,
-    //     limit: this.pageSize
-    //   }
-    // }
   },
   watch: {
     filterForm: {
       handler (newVal, oldVal) {
         this.fetchRemoteData()
+      },
+      deep: true
+    },
+    courseSelected: { // 课程选择总数计算侦听
+      handler (newVal, oldVal) {
+        this.courseChooseTotal.credit = 0
+        this.courseChooseTotal.hours = 0
+        newVal.map(item => {
+          this.courseChooseTotal.credit += item.credit
+          this.courseChooseTotal.hours += item.minutes
+        })
+        // console.log(this.courseChooseTotal.credit, this.courseChooseTotal.hours )
       },
       deep: true
     }
@@ -438,7 +393,7 @@ export default {
   methods: {
     handleReload (pagination, { currentPage, pageSize }) {
       this.fetchRemoteData(pagination, currentPage, pageSize)
-    },
+    }, // 带翻页表格数据重载
     fetchRemoteData (pagination, currentPage, pageSize) {
       let tags = this.filterForm.level.concat(this.filterForm.department, this.filterForm.custom)
       tags.push(this.filterForm.from, this.filterForm.series, this.filterForm.status)
@@ -465,7 +420,7 @@ export default {
           })
         })
       })
-    },
+    }, // 带翻页表格数据远程拉取
     getCourseList () {
       let param = this.getCourseListParam
       // console.log(param)
@@ -475,26 +430,61 @@ export default {
       }, error => {
         error && this.$message.error(error.message)
       })
-    },
+    }, // 选择课程 获取课程列表
     handleSaveProjectDraft (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          addDraftProject().then(res => {
+          if (this.courseSelected.length === 0) {
+            this.$message.error('请选择课程')
+            return false
+          }
+          if (this.createForm.passwordSwitch && !this.createForm.password) {
+            this.$message.error('请输入参训口令')
+            return false
+          }
+          if (this.createForm.studentsSwitch && (this.transferValue.length === 0)) {
+            this.$message.error('请制定参训学员')
+            return false
+          }
+          addDraftProject(this.addProjectParam).then(res => {
             this.$message.success(res.message)
+            this.$router.push({ path: '/project' })
           })
         } else {
           return false
         }
       })
-    },
-    handleSaveProject () {
-    },
+    }, // 保存草稿
+    handleSaveProject (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (this.courseSelected.length === 0) {
+            this.$message.error('请选择课程')
+            return false
+          }
+          if (this.createForm.passwordSwitch && !this.createForm.password) {
+            this.$message.error('请输入参训口令')
+            return false
+          }
+          if (this.createForm.studentsSwitch && (this.transferValue.length === 0)) {
+            this.$message.error('请制定参训学员')
+            return false
+          }
+          addProject(this.addProjectParam).then(res => {
+            this.$message.success(res.message)
+            this.$router.push({ path: '/project' })
+          })
+        } else {
+          return false
+        }
+      })
+    }, // 保存项目
     handleSearch () {
       this.fetchRemoteData()
-    },
+    }, // 处理课程搜索
     handleSelectionChange (val) { // 表格多选
       this.courseChecked = val
-    },
+    }, // 处理课程选择
     handleDeleteCourseSelected (item) { // 删除已选
       this.courseSelected.splice(this.getItemIndex(this.courseSelected, item), 1)
       let courseCheckedIndex = this.getItemIndex(this.courseChecked, item) // 判断删除的试题是否在列表中且被选中
@@ -504,14 +494,14 @@ export default {
           this.$refs.exTableCourse.toggleRowSelection(this.courseTableData[courseTableDataIndex], false)
         })
       }
-    },
+    }, // 处理课程已选删除
     handleCourseClick (selection, row) { //  点击checkbox事件,添加试题
       if (this.getItemIndex(this.courseSelected, row) === -1) {
         this.courseSelected.push(row)
       } else {
         this.courseSelected.splice(this.getItemIndex(this.courseSelected, row), 1)
       }
-    },
+    }, // 处理课程列表checkbox选中
     getItemIndex (list, item) { // 根据id获取index
       let itemIndex = -1
       list.map((i, index, array) => {
@@ -520,11 +510,17 @@ export default {
         }
       })
       return itemIndex
-    },
-    handleStudentOk () {
-      this.chooseStudentsDialogVisible = false
-      // console.log(this.transferValue)
-    }
+    }, // 根据获取index
+    handleStudentDialogOpen () {
+      this.chooseStudentsDialogVisible = true
+      this.transferValue = []
+      getSpecialStudentList({ keyword: this.studentsTransfer.keyword, offset: 0, limit: 20 }).then(res => {
+        this.studentsTransferData = res.data.list
+      })
+    }, // 打开指定参训学员 弹窗
+    studentFilterMethod (query, item) { // 穿梭框学员搜索
+      return item.name.indexOf(query) > -1
+    } // 穿梭框过滤办法
   }
 }
 </script>

@@ -70,7 +70,7 @@ Mock.mock('/v1/lesson/list', {
         'id|1-100': 3,
         'name': '入职课程',
         'cover': 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-        'minutes': '180',
+        'minutes|1-120': 20,
         'credit|1-120': 10,
         'obj': '实习生',
         'target': '目标',
@@ -470,16 +470,16 @@ Mock.mock('/v1/question/list', {
   }
 
 })
-Mock.mock('/v1/spStudent/list?keyword=&offset=1&limit=10', {
+Mock.mock('/v1/spStudent/list?keyword=&offset=0&limit=20', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
     'total': 21,
     'list|10': [{
-      'id': '5',
-      'name': '题库id',
-      'number': 'sxw33',
-      'department': '部门',
+      'id|1-100': 5,
+      'name|1': ['小强', '王五', '张三', '李四', '王二麻子'],
+      'number': '321dcdc',
+      'department|1': ['部门1', '部门2', '部门3', '部门4', '部门5'],
       'pwd': '334',
       'account': 'xiaoqaing'
     }]
