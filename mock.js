@@ -91,64 +91,9 @@ Mock.mock('/v1/lesson/list', {
           'url': '/att/2898247/file.doc',
           'name': '附加名称'
         },
-        'status': '0',
+        'status|1': [0, 1, 2], // 状态0下线1上线2草稿
         'add_time': '2019.6.14'
       }
-      // {
-      //   'name': '入职课程2',
-      //   'cover': '/pic/cover/1.jpg',
-      //   'minutes': '180',
-      //   'credit': '10',
-      //   'obj': '实习生',
-      //   'target': '目标',
-      //   'syllabus': '大纲',
-      //   'teacher_info': {
-      //     'name': '王铮',
-      //     'pic': '/pic/cover/1.jpg',
-      //     'introduction': '简介内容'
-      //   },
-      //   'examination_info': {
-      //     'id': '1',
-      //     'name': '试卷名称',
-      //     'num': '20',
-      //     'rule': '手动出题',
-      //     'add_time': '2019.6.13'
-      //   },
-      //   'attachment': {
-      //     'url': '/att/2898247/file.doc',
-      //     'name': '附加名称'
-      //   },
-      //   'status': '2',
-      //   'add_time': '2019.6.14'
-      // },
-      // {
-      //   'name': '入职课程3',
-      //   'cover': '/pic/cover/1.jpg',
-      //   'minutes': '180',
-      //   'credit': '10',
-      //   'obj': '实习生',
-      //   'target': '目标',
-      //   'syllabus': '大纲',
-      //   'teacher_info': {
-      //     'name': '王铮',
-      //     'pic': '/pic/cover/1.jpg',
-      //     'introduction': '简介内容'
-      //   },
-      //   'examination_info': {
-      //     'id': '1',
-      //     'name': '试卷名称',
-      //     'num': '20',
-      //     'rule': '手动出题',
-      //     'add_time': '2019.6.13'
-      //   },
-      //   'attachment': {
-      //     'url': '/att/2898247/file.doc',
-      //     'name': '附加名称'
-      //   },
-      //   'status': '1',
-      //   'add_time': '2019.6.14'
-      // }
-
     ]
   }
 })
@@ -195,6 +140,14 @@ Mock.mock('/v1/lesson/add', {
 Mock.mock('/v1/lessonDraft/add', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': ''
+})
+Mock.mock('/v1/lesson/delete', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '课程删除成功'
+})
+Mock.mock('/v1/lesson/Online', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '课程上线/下线成功'
 })
 
 Mock.mock('/v1/tag/list', {
@@ -270,22 +223,19 @@ Mock.mock('/v1/tag/list', {
         ]
       }
     ],
+    'series': [],
     'status': [
       {
-        'value': 4,
-        'name': '下载'
-      },
-      {
         'value': 1,
-        'name': '正常'
+        'name': '已发布'
       },
       {
         'value': 2,
-        'name': '草稿'
+        'name': '已下线'
       },
       {
         'value': 3,
-        'name': '在线'
+        'name': '草稿'
       }
     ],
     'source': [

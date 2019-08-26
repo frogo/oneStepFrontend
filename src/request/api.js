@@ -29,6 +29,10 @@ export const getCourseList = p => post(CONFIG.COURSE.LIST, p) // 修改接口为
 export const addCourse = p => post(CONFIG.COURSE.ADD, p) // 入参缺少标签 课程文件是列表
 export const addCourseDraft = p => post(CONFIG.COURSE.DRAFT_ADD, p)// 入参缺少标签 课程文件是列表
 export const getCourseDetails = p => get(CONFIG.COURSE.DETAILS, p) // 课程详情
+export const deleteCourse = p => post(CONFIG.COURSE.DELETE, p) // 课程删除
+export const courseOnlineOrOffline = p => post(CONFIG.COURSE.ONLINE_OR_OFFLINE, p) // 课程上线下线
+
+export const getTagList = p => get(CONFIG.COURSE.TAG.LIST, p) // 获取标签列表
 // 项目
 export const getProjectList = p => post(CONFIG.PROJECT.LIST, p) // 修改接口为post
 export const getProjectDetails = p => get(CONFIG.PROJECT.DETAILS, p) // 修

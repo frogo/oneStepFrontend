@@ -180,10 +180,10 @@
       class="projectApprovalDialog"
     >
       <div class="btn-box">
-        <el-button :disabled="this.multiplePendingSelection.length > 0 ? false: true" @click="handleNoPass(this.multiplePendingSelection)" type="success" size="small">
+        <el-button :disabled="multiplePendingSelection.length > 0 ? false: true" @click="handleNoPass(multiplePendingSelection)" type="success" size="small">
           批量通过
         </el-button>
-        <el-button :disabled="this.multiplePendingSelection.length > 0 ? false: true" @click="handlePass(this.multiplePendingSelection)" type="primary" size="small">
+        <el-button :disabled="multiplePendingSelection.length > 0 ? false: true" @click="handlePass(multiplePendingSelection)" type="primary" size="small">
           批量不通过
         </el-button>
       </div>
@@ -404,6 +404,7 @@ export default {
       this.pagination.currentPage = page
       this.getProjectList()
     },
+    // todo 待确认接口
     handlePass (val) { // 审批通过 ,审批后需要刷新待审批的数据
       let idList = val.map(item => {
         return item.id

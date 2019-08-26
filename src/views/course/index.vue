@@ -17,33 +17,49 @@
       <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
         <el-form-item label="来源：">
           <el-radio-group v-model="filterForm.from">
-            <el-radio :label="item" v-for="item in tags.from" :key="item" border />
+            <el-radio :label="0" border>
+              全部
+            </el-radio>
+            <el-radio :label="item.value" v-for="(item, index) in tags.source" :key="item.name + index" border>
+              {{ item.name }}
+            </el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="状态：">
           <el-radio-group v-model="filterForm.status">
-            <el-radio :label="item" v-for="item in tags.status" :key="item" border />
+            <el-radio :label="0" border>
+              全部
+            </el-radio>
+            <el-radio :label="item.value" v-for="(item, index) in tags.status" :key="item.name + index" border>
+              {{ item.name }}
+            </el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="系列：">
-          <el-radio-group v-model="filterForm.series">
-            <el-radio :label="item" v-for="item in tags.series" :key="item" border />
-          </el-radio-group>
-        </el-form-item>
+        <!--        <el-form-item label="系列：">-->
+        <!--          <el-radio-group v-model="filterForm.series">-->
+        <!--            <el-radio :label="item" v-for="item in tags.series" :key="item" border />-->
+        <!--          </el-radio-group>-->
+        <!--        </el-form-item>-->
 
         <el-form-item label="层级：">
           <el-checkbox-group v-model="filterForm.level">
-            <el-checkbox-button :label="item" v-for="item in tags.level" :key="item" name="type" />
+            <el-checkbox-button :label="item.id" v-for="(item, index) in tags.level" :key="item + index">
+              {{ item.name }}
+            </el-checkbox-button>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="职能：">
           <el-checkbox-group v-model="filterForm.department">
-            <el-checkbox-button :label="item" v-for="item in tags.department" :key="item" name="type" />
+            <el-checkbox-button :label="item.id" v-for="(item, index) in tags.department" :key="item + index">
+              {{ item.name }}
+            </el-checkbox-button>
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="自定：">
           <el-checkbox-group v-model="filterForm.custom">
-            <el-checkbox-button :label="item" v-for="item in tags.custom" :key="item" name="type" />
+            <el-checkbox-button :label="item.id" v-for="(item, index) in tags.custom" :key="item + index">
+              {{ item.name }}
+            </el-checkbox-button>
           </el-checkbox-group>
         </el-form-item>
       </el-form>
@@ -56,7 +72,7 @@
             <div class="img-area">
               <div class="mask">
                 <div class="operate">
-                  <div class="item">
+                  <div @click="handleTagsEdit(item)" class="item">
                     <p class="icon">
                       <i class="el-icon-edit" />
                     </p>
@@ -64,15 +80,15 @@
                       编辑标签
                     </p>
                   </div>
-                  <div class="item">
+                  <div @click="handleCourseOffline(item)" class="item">
                     <p class="icon">
-                      <i class="el-icon-download" />
+                      <i :class="item.status === 0 ? 'el-icon-upload2' : 'el-icon-download'" />
                     </p>
                     <p class="text">
-                      课程下线
+                      课程{{ item.status === 0 ? '上线' : '下线' }}
                     </p>
                   </div>
-                  <div class="item">
+                  <div @click="handleCourseDelete(item)" class="item">
                     <p class="icon">
                       <i class="el-icon-delete" />
                     </p>
@@ -86,8 +102,8 @@
                   <span>学分：{{ item.credit }}</span>
                 </div>
               </div>
-              <span v-if="item.status === '0'" class="status-block bg-gray">下线</span>
-              <span v-else-if="item.status === '2'" class="status-block bg-blue">草稿</span>
+              <span v-if="item.status === 0 " class="status-block bg-gray">下线</span>
+              <span v-else-if="item.status === 2" class="status-block bg-blue">草稿</span>
               <span v-else />
               <img :src="item.cover" class="image">
             </div>
@@ -116,27 +132,28 @@
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getCourseList } from '@/request/api'
+import { getCourseList, deleteCourse, courseOnlineOrOffline, getTagList } from '@/request/api'
 export default {
   data () {
     return {
       keyword: '',
       filterForm: {
-        from: '全部',
-        status: '全部',
-        series: '全部',
+        from: 0,
+        status: 0,
+        series: 0,
         level: [],
         department: [],
         custom: []
       },
       tags: {
-        from: ['全部', '外部', '内部'],
-        status: ['全部', '状态1', '状态2', '状态3'],
-        series: ['全部', '系列1', '系列2', '系列3'],
-        level: ['层级1', '层级2', '层级3'],
-        department: ['职能1', '职能2', '职能3'],
-        custom: ['职能1', '职能2', '职能3']
+        source: [],
+        status: [],
+        series: [],
+        level: [],
+        department: [],
+        custom: []
       },
+      tagList: '', // 远程获取过滤标签列表
       courseList: [],
       currentPage: 1,
       pageSize: 20,
@@ -165,16 +182,23 @@ export default {
   },
   mounted: function () {
     this.getCourseList()
+    getTagList().then(res => {
+      this.tags.source = res.data.source
+      this.tags.status = res.data.status
+      this.tags.series = res.data.series
+      this.tags.level = res.data.tag[0].child
+      this.tags.department = res.data.tag[1].child
+      this.tags.custom = res.data.tag[2].child
+    })
   },
   methods: {
     getCourseList () {
       let param = this.getCourseListParam
-      // console.log(param)
+      // eslint-disable-next-line no-console
+      console.log(param)
       getCourseList(param).then(res => {
         this.courseList = res.data.list
         this.total = res.data.total
-      }, error => {
-        error && this.$message.error(error.message)
       })
     },
     handleSearch () {
@@ -193,6 +217,43 @@ export default {
     },
     gotoDetail (lessonId) {
       this.$router.push({ path: '/course/details', query: { id: lessonId } })
+    },
+    handleCourseOffline (item) { // 课程下线上线
+      let isOffline = 0
+      let tipTxt = '下线'
+      if (item.status === 2) {
+        this.$message.error('该课程处于未完成状态！')
+        return false
+      } else if (item.status === 0) {
+        isOffline = 1
+        tipTxt = '上线'
+      } else {
+        isOffline = 0
+        tipTxt = '下线'
+      }
+      this.$confirm('您确定要' + tipTxt + '该课程吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(() => {
+        courseOnlineOrOffline({ id: item.id, online: isOffline }).then(res => {
+          this.$message.success(res.message)
+          this.getCourseList()
+        })
+      })
+    },
+    handleCourseDelete (item) { // 课程删除
+      this.$confirm('您确定要删除该课程吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(() => {
+        deleteCourse({ id: item.id }).then(res => {
+          this.$message.success(res.message)
+          this.getCourseList()
+        })
+      })
+    },
+    handleTagsEdit () { // 标签编辑
+
     }
   }
 }

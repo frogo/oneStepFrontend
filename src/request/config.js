@@ -17,7 +17,12 @@ export default {
     LIST: CONTEXTPATH + '/lesson/list',
     ADD: CONTEXTPATH + '/lesson/add',
     DRAFT_ADD: CONTEXTPATH + '/lessonDraft/add',
-    DETAILS: CONTEXTPATH + '/lesson/info'
+    DETAILS: CONTEXTPATH + '/lesson/info',
+    DELETE: CONTEXTPATH + '/lesson/delete',
+    ONLINE_OR_OFFLINE: CONTEXTPATH + '/lesson/Online',
+    TAG: {
+      LIST: CONTEXTPATH + '/tag/list'
+    }
   },
   EXAMINATION: {
     PAPER: {
