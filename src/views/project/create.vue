@@ -23,7 +23,7 @@
         <el-input v-model="createForm.participants" placeholder="请输入" />
       </el-form-item>
       <el-form-item label="目标人数" prop="number">
-        <el-input v-model="createForm.number" placeholder="请输入" />
+        <el-input v-model.number="createForm.number" placeholder="请输入" />
       </el-form-item>
       <el-form-item label="项目简介" prop="intro">
         <el-input
@@ -299,7 +299,8 @@ export default {
           { required: true, message: '请输入参训对象', trigger: 'blur' }
         ],
         number: [
-          { required: true, message: '请输入目标人数', trigger: 'blur' }
+          { required: true, message: '请输入目标人数', trigger: 'blur' },
+          { type: 'number', message: '目标人数必须为数字值' }
         ]
       },
       // 试题弹窗

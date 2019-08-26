@@ -419,6 +419,21 @@ Mock.mock('/v1/project/online', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '该项目已成功下线'
 })
+Mock.mock('/v1/projectApproval/list?id=2&offset=1&limit=10', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'total': 31,
+    'list|8': [
+      {
+        'id|1-100': 2,
+        'name|1': ['小五', '小四', '小三', '小二', '小额', '小2', '小方法'],
+        'phone': '13800000000',
+        'add_time': '2019-08-10'
+      }
+    ]
+  }
+})
 
 Mock.mock('/v1/questionBank/list?keyword=&offset=1&limit=10', {
   'code': '1', // 这个定义数据的模板形式下面会介绍

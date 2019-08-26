@@ -32,7 +32,7 @@
               <el-col :span="5" v-for="(item, index) in projectList" :key="`project_card_${index}`" :offset="index%4 ==0 ? 0 : 1">
                 <el-card class="project-card">
                   <div :class="`status-bg ${statusMap.bg[item.status]}`">
-                    <span @click="handlePending" v-if="item.is_review" class="special-status">待审批</span>
+                    <span @click="handlePending(item)" v-if="item.is_review" class="special-status">待审批</span>
                     <span>{{ statusMap.txt[item.status] }}</span>
                   </div>
                   <div @click="gotoDetails(item)" class="headline">
@@ -176,77 +176,82 @@
     <el-dialog
       :visible.sync="approvalProjectDialogVisible"
       title="报名审批"
-      width="80%"
+      width="60%"
       class="projectApprovalDialog"
     >
       <div class="btn-box">
-        <el-button type="success" size="small">
+        <el-button :disabled="this.multiplePendingSelection.length > 0 ? false: true" @click="handleNoPass(this.multiplePendingSelection)" type="success" size="small">
           批量通过
-        </el-button> <el-button type="primary" size="small">
+        </el-button>
+        <el-button :disabled="this.multiplePendingSelection.length > 0 ? false: true" @click="handlePass(this.multiplePendingSelection)" type="primary" size="small">
           批量不通过
         </el-button>
       </div>
 
-      <el-table
-        ref="multipleTable"
-        :data="pendingTableData"
-        @selection-change="handleSelectionChange"
-        tooltip-effect="dark"
-        style="width: 100%"
-      >
-        <el-table-column
-          type="selection"
-          width="55"
-        />
-        <el-table-column
-          prop="name"
-          label="学员姓名"
-          width="120"
-        />
-        <el-table-column
-          prop="phone"
-          label="联系电话"
-          width="120"
-        />
-        <el-table-column
-          prop="add_time"
-          label="申请时间"
-        />
-        <el-table-column
-          label="操作"
+      <div class="exTable">
+        <ex-table
+          ref="exTableApprovalList"
+          :data="pendingTableData"
+          @selection-change="handleSelectionChange"
+          :reload-method="handleReload"
+          tooltip-effect="dark"
+          show-pagination stripe
         >
-          <template slot-scope="scope">
-            <el-button
-              @click="handlePass(scope.$index, scope.row)"
-              size="mini"
-            >
-              通过
-            </el-button>
-            <el-button
-              @click="handleNoPass(scope.$index, scope.row)"
-              size="mini"
-              type="danger"
-            >
-              不通过
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
+          <el-table-column
+            type="selection"
+            width="55"
+          />
+          <el-table-column
+            prop="name"
+            label="学员姓名"
+            width="180"
+          />
+          <el-table-column
+            prop="phone"
+            label="联系电话"
+            width="180"
+          />
+          <el-table-column
+            prop="add_time"
+            label="申请时间"
+            width="180"
+          />
+          <el-table-column
+            label="操作"
+          >
+            <template slot-scope="scope">
+              <el-button
+                @click="handlePass([scope.row])"
+                size="mini"
+              >
+                通过
+              </el-button>
+              <el-button
+                @click="handleNoPass([scope.row])"
+                size="mini"
+                type="danger"
+              >
+                不通过
+              </el-button>
+            </template>
+          </el-table-column>
+        </ex-table>
+      </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="approvalProjectDialogVisible = false" type="primary">退出</el-button>
-
       </span>
     </el-dialog>
   </el-container>
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getProjectList, getProjectDetails, deleteProject, onLineProject, approvalProject } from '@/request/api'
+import { getProjectList, getProjectDetails, deleteProject, onLineProject, approvalProject, getApprovalList } from '@/request/api'
 import AsideMenu from '@/components/asideMenu'
+import ExTable from '@/components/exTable.js'
 export default {
   components: {
-    AsideMenu
+    AsideMenu,
+    ExTable
   },
   data () {
     return {
@@ -263,18 +268,15 @@ export default {
       },
       viewProjectDialogVisible: false,
       approvalProjectDialogVisible: false,
-      pendingTableData: [{
-        add_time: '2016-05-02',
-        name: '王小虎',
-        phone: '13986189581'
-      }],
+      pendingTableData: [],
       multiplePendingSelection: '',
       pagination: {
         currentPage: 1,
         pageSize: 8,
         total: 8
       },
-      projectDetails: ''
+      projectDetails: '',
+      projectId: ''
     }
   },
   computed: {
@@ -297,6 +299,21 @@ export default {
       ] })
   },
   methods: {
+    handleReload (pagination, { currentPage, pageSize }) {
+      this.fetchRemoteData(pagination, currentPage, pageSize)
+    }, // 带翻页表格数据重载
+    fetchRemoteData (pagination, currentPage, pageSize) {
+      let param = {
+        id: this.projectId,
+        offset: currentPage || 1,
+        limit: pageSize || 10
+      }
+      let paginationObj = pagination || this.$refs.exTableApprovalList.pagination
+      getApprovalList(param).then(res => {
+        this.pendingTableData = res.data.list
+        paginationObj.total = res.data.total
+      })
+    }, // 带翻页表格数据远程拉取
     getProjectList () {
       let param = this.getProjectListParam
       // console.log(param)
@@ -357,8 +374,12 @@ export default {
       document.execCommand('Copy') // 执行浏览器复制命令
       alert('已复制好，可贴粘。')
     },
-    handlePending () {
+    handlePending (item) {
+      this.projectId = item.id
       this.approvalProjectDialogVisible = true
+      this.$nextTick(() => {
+        this.fetchRemoteData()
+      })
     },
     handleSelectionChange (val) {
       this.multiplePendingSelection = val
@@ -383,14 +404,24 @@ export default {
       this.pagination.currentPage = page
       this.getProjectList()
     },
-    handlePass (index, row) {
-      approvalProject().then(res => {
-
+    handlePass (val) { // 审批通过 ,审批后需要刷新待审批的数据
+      let idList = val.map(item => {
+        return item.id
+      })
+      let param = { id: idList, pass: 1 }
+      approvalProject(param).then(res => {
+        this.$message.success(res.message)
+        this.fetchRemoteData()
       })
     },
-    handleNoPass (index, row) {
-      approvalProject().then(res => {
-
+    handleNoPass (val) { // 审批不通过, 审批后需要刷新待审批的数据
+      let idList = val.map(item => {
+        return item.id
+      })
+      let param = { id: idList, pass: 0 }
+      approvalProject(param).then(res => {
+        this.$message.success(res.message)
+        this.fetchRemoteData()
       })
     }
   }
@@ -544,5 +575,8 @@ export default {
         &.copyLink{display: flex;justify-content: space-between; margin-top: 20px;.el-input{width:80%}}
       }
     }
+  }
+  .exTable{
+    .el-pagination{margin-top: 20px;text-align: right}
   }
 </style>
