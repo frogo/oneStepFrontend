@@ -67,13 +67,15 @@ Mock.mock('/v1/lesson/list', {
     'total': 33,
     'list|10': [
       {
-        'id|1-100': 3,
+        // 'id|1-100': 3,
+        'id': 3,
         'name': '入职课程',
         'cover': 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
         'minutes|1-120': 20,
         'credit|1-120': 10,
         'obj': '实习生',
         'target': '目标',
+        'tags': [4, 5, 6],
         'syllabus': '大纲',
         'teacher_info': {
           'name': '王铮',
@@ -118,7 +120,8 @@ Mock.mock('v1/question/list?bank_id=&type=&keyword=', {
     ]
   }
 })
-Mock.mock('/v1/examinationPaper/list?keyword=&offset=1&limit=10', {
+Mock.mock('/v1/examinationPaper/list?type=%E6%89%8B%E5%8A%A8%E5%87%BA%E9%A2%98&limit=10&offset=1&keyword=', {
+// Mock.mock('/v1/examinationPaper/list?keyword=&offset=1&limit=10', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -139,7 +142,12 @@ Mock.mock('/v1/lesson/add', {
 })
 Mock.mock('/v1/lessonDraft/add', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
-  'message': ''
+  'message': '保存成功'
+})
+Mock.mock('/v1/lesson/cover', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': ['../../assets/img/cover-1.png', '../../assets/img/cover-2.png', '../../assets/img/cover-3.png', '../../assets/img/cover-4.png']
 })
 Mock.mock('/v1/lesson/delete', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
@@ -149,7 +157,14 @@ Mock.mock('/v1/lesson/Online', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '课程上线/下线成功'
 })
-
+Mock.mock('/v1/tag/delete', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '标签删除成功'
+})
+Mock.mock('/v1/tag/add', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '标签新增成功'
+})
 Mock.mock('/v1/tag/list', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
@@ -165,7 +180,7 @@ Mock.mock('/v1/tag/list', {
           {
             'id': 4,
             'company_id': 0,
-            'name': '新员工',
+            'name|1': ['新员工', '老员工'],
             'readonly': 1,
             'parent_id': 1,
             'child': null
@@ -173,7 +188,7 @@ Mock.mock('/v1/tag/list', {
           {
             'id': 5,
             'company_id': 0,
-            'name': '一般员工',
+            'name|1': ['一般员工', '管理层'],
             'readonly': 1,
             'parent_id': 1,
             'child': null
@@ -262,6 +277,7 @@ Mock.mock('/v1/lesson/info?id=3', {
     'credit': '10',
     'obj': '实习生',
     'target': '目标',
+    'tags': [4, 5, 6],
     'introduction': '介绍',
     'syllabus': '大纲',
     'teacher_info': {

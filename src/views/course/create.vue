@@ -14,18 +14,22 @@
         <el-input v-model="createForm.audience" placeholder="请输入" />
       </el-form-item>
       <el-form-item label="课时" prop="hours">
-        <el-input v-model="createForm.hours" placeholder="请输入" class="w200" /> <span>分钟</span>
+        <el-input v-model.number="createForm.hours" placeholder="请输入" class="w200" /> <span>分钟</span>
       </el-form-item>
       <el-form-item label="学分" prop="credit">
-        <el-input v-model="createForm.credit" placeholder="请输入" class="w200" /> <span>分</span>
+        <el-input v-model.number="createForm.credit" placeholder="请输入" class="w200" /> <span>分</span>
       </el-form-item>
       <el-form-item label="课程目标" prop="">
         <el-input v-model="createForm.target" placeholder="请输入" />
       </el-form-item>
       <el-form-item label="标签" prop="">
-        <el-button @click="dialogTagsEditorVisible = true" type="info" icon="el-icon-plus" plain size="small">
-          添加
+        <el-button @click="dialogTagsEditorVisible = true; editMode = false" type="info" icon="el-icon-plus" plain size="small">
+          编辑标签
         </el-button>
+        <el-button @click="dialogTagsEditorVisible = true; editMode = true" type="primary" plain size="small">
+          维护标签
+        </el-button>
+        <span>已选择 <span class="red">{{ createForm.tags.length }}</span> 个标签</span>
       </el-form-item>
       <el-form-item label="课程简介" prop="">
         <el-input v-model="createForm.outline" :rows="4" type="textarea" />
@@ -97,14 +101,14 @@
         <el-button @click="handleExaminationDialog" type="primary" size="small">
           选择试卷
         </el-button>
-        <span v-if="dialogExaminationData.currentRow"><i class="el-icon-document" />{{ dialogExaminationData.currentRow.name }}</span>
+        <span v-if="createForm.examinationPaper"><i class="el-icon-document" />{{ createForm.examinationPaper.name }}</span>
       </el-form-item>
     </el-form>
     <div class="operation-bar">
-      <el-button @click="handleSaveCourseDraft" type="success">
+      <el-button @click="handleSaveCourseDraft('createForm')" type="success">
         保存草稿
       </el-button>
-      <el-button @click="handleSaveCourse" type="primary">
+      <el-button @click="handleSaveCourse('createForm')" type="primary">
         完成
       </el-button>
     </div>
@@ -156,12 +160,19 @@
         </el-button>
       </div>
     </el-dialog>
-    <tags-editor-dialog :dialogTagsEditorVisible.sync="dialogTagsEditorVisible" @closeDialog="dialogTagsEditorVisible = false" />
+    <tags-editor-dialog
+      :dialogTagsEditorVisible.sync="dialogTagsEditorVisible"
+      v-if="dialogTagsEditorVisible"
+      @closeDialog="dialogTagsEditorVisible = false"
+      @getSelectedTags="getSelectedTags"
+      :edit-mode="editMode"
+      :tagsSelectedFromParent="createForm.tags"
+    />
   </el-main>
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getExaminationPaperList, addCourse, addCourseDraft } from '@/request/api'
+import { getExaminationPaperList, addCourse, addCourseDraft, getDefaultCover } from '@/request/api'
 import TagsEditorDialog from '@/components/tagsEditorDialog'
 export default {
   components: {
@@ -189,13 +200,12 @@ export default {
         // 课程
         // courseFile: '',
         courseFileList: [
-          {
-            name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-          }
+          // {
+          //   name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+          // }
         ],
         examinationPaper: ''// 试卷ID
       },
-
       defaultCover: [
         require('../../assets/img/cover-1.png'),
         require('../../assets/img/cover-2.png'),
@@ -208,24 +218,30 @@ export default {
       rules: {
         courseName: [
           { required: true, message: '请输入活动名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 2, max: 9, message: '长度在 2 到 9 个字符', trigger: 'blur' }
         ],
         audience: [
           { required: true, message: '请输入活动名称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 2, max: 9, message: '长度在 2 到 9 个字符', trigger: 'blur' }
         ],
         hours: [
-          { required: true, message: '请输入课时', trigger: 'blur' }
+          { required: true, message: '请输入课时', trigger: 'blur' },
+          { type: 'number', message: '课时必须为数字值' }
         ],
         credit: [
-          { required: true, message: '请输入学分', trigger: 'blur' }
+          { required: true, message: '请输入学分', trigger: 'blur' },
+          { type: 'number', message: '学分必须为数字值' }
         ],
-        courseFile: [
-          { required: true }
-        ],
-        examination: [
-          { required: true }
+        lecturer: [
+          { required: true, message: '请输入讲师信息', trigger: 'blur' }
         ]
+        // courseFile: [
+        //   { required: true, message: '请选择课程' }
+        // ]
+        // ],
+        // examination: [
+        //   { required: true, message: '请选择试卷' }
+        // ]
       },
       // 试题弹窗
       dialogExaminationVisible: false,
@@ -240,7 +256,9 @@ export default {
       dialogExaminationTableData: [],
       typeMap: { random: '随机抽题', manual: '手动出题' },
       // 编辑标签弹窗
-      dialogTagsEditorVisible: false
+      dialogTagsEditorVisible: false,
+      editMode: false,
+      selectedTags: []
     }
   },
   computed: {
@@ -253,6 +271,9 @@ export default {
       }
     },
     addCourseParam: function () {
+      let tags = this.createForm.tags.map(_ => {
+        return _.id
+      })
       return {
         name: this.createForm.courseName,
         cover: (this.createForm.activeTabName === 'default') ? this.createForm.radioCover : this.createForm.coverImageUrl,
@@ -260,7 +281,7 @@ export default {
         credit: this.createForm.credit,
         obj: this.createForm.audience,
         target: this.createForm.target,
-        tags: this.createForm.tags,
+        tags: tags,
         introduction: this.createForm.intro,
         syllabus: this.createForm.outline,
         teacher_info: {
@@ -272,7 +293,7 @@ export default {
           url: this.createForm.courseFileList[0]['url'],
           name: this.createForm.courseFileList[0]['name']
         },
-        examination_id: this.createForm.examinationPaper
+        examination_id: this.createForm.examinationPaper.id
       }
     }
   },
@@ -285,8 +306,14 @@ export default {
         { name: '企业课程库', path: '/course' },
         { name: '创建课程', path: '/course/create' }
       ] })
+    getDefaultCover().then(res => { // todo  后台传入requeire以后打开
+      // this.defaultCover = res.data
+    })
   },
   methods: {
+    getSelectedTags (tags) {
+      this.createForm.tags = tags
+    },
     handleTabClick (tab, event) {
       // console.log(tab, event)
     },
@@ -356,28 +383,40 @@ export default {
     },
     confirmExaminationSelect () {
       this.dialogExaminationVisible = false
-      this.createForm.examinationPaper = this.dialogExaminationData.currentRow.id
+      this.createForm.examinationPaper = this.dialogExaminationData.currentRow
     },
-    handleSaveCourseDraft () {
-      addCourseDraft(this.addCourseParam).then(res => {
-        this.$alert('保存草稿成功', '提示', {
-          confirmButtonText: '确定',
-          callback: action => {
-
+    handleSaveCourseDraft (formName) { // 保存草稿
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (this.createForm.courseFileList.length === 0) {
+            this.$message.error('请选择课程文件！')
+            return false
           }
-        })
+          if (!this.createForm.examinationPaper) {
+            this.$message.error('请选择试卷！')
+            return false
+          }
+          // console.log(this.addCourseParam)
+          addCourseDraft(this.addCourseParam).then(res => {
+            this.$message.success(res.message)
+          })
+        }
       })
     },
-    handleSaveCourse () {
-      addCourse(this.addCourseParam).then(res => {
-        this.$alert('保存成功', '提示', {
-          confirmButtonText: '确定',
-          callback: action => {
-            this.$router.push({
-              path: '/course'
+    handleSaveCourse (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          addCourse(this.addCourseParam).then(res => {
+            this.$alert('保存成功', '提示', {
+              confirmButtonText: '确定',
+              callback: action => {
+                this.$router.push({
+                  path: '/course'
+                })
+              }
             })
-          }
-        })
+          })
+        }
       })
     }
   }

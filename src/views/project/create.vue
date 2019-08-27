@@ -38,7 +38,7 @@
       </div>
       <el-form-item class="chooseCourse">
         <div class="btn-box">
-          <el-button @click="chooseCourseDialogVisible = true" size="mini" type="primary">
+          <el-button @click="openCourseChooseDialog" size="mini" type="primary">
             课程设置
           </el-button>
           <span>已选课程数 <i>{{ courseSelected.length }}</i> 总学分 <i>{{ courseChooseTotal.credit }}</i> 总课时 <i>{{ courseChooseTotal.hours }}</i></span>
@@ -148,33 +148,43 @@
         <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
           <el-form-item label="来源：">
             <el-radio-group v-model="filterForm.from">
-              <el-radio :label="item" v-for="item in tags.from" :key="item" border />
+              <el-radio :label="0" border>
+                全部
+              </el-radio>
+              <el-radio :label="item.value" v-for="(item, index) in tags.source" :key="item.name + index" border>
+                {{ item.name }}
+              </el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="状态：">
             <el-radio-group v-model="filterForm.status">
-              <el-radio :label="item" v-for="item in tags.status" :key="item" border />
+              <el-radio :label="0" border>
+                全部
+              </el-radio>
+              <el-radio :label="item.value" v-for="(item, index) in tags.status" :key="item.name + index" border>
+                {{ item.name }}
+              </el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="系列：">
-            <el-radio-group v-model="filterForm.series">
-              <el-radio :label="item" v-for="item in tags.series" :key="item" border />
-            </el-radio-group>
-          </el-form-item>
-
           <el-form-item label="层级：">
             <el-checkbox-group v-model="filterForm.level">
-              <el-checkbox-button :label="item" v-for="item in tags.level" :key="item" name="type" />
+              <el-checkbox-button :label="item.id" v-for="(item, index) in tags.level" :key="item + index">
+                {{ item.name }}
+              </el-checkbox-button>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="职能：">
             <el-checkbox-group v-model="filterForm.department">
-              <el-checkbox-button :label="item" v-for="item in tags.department" :key="item" name="type" />
+              <el-checkbox-button :label="item.id" v-for="(item, index) in tags.department" :key="item + index">
+                {{ item.name }}
+              </el-checkbox-button>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="自定：">
             <el-checkbox-group v-model="filterForm.custom">
-              <el-checkbox-button :label="item" v-for="item in tags.custom" :key="item" name="type" />
+              <el-checkbox-button :label="item.id" v-for="(item, index) in tags.custom" :key="item + index">
+                {{ item.name }}
+              </el-checkbox-button>
             </el-checkbox-group>
           </el-form-item>
         </el-form>
@@ -252,7 +262,7 @@
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getCourseList, addDraftProject, getSpecialStudentList, addProject } from '@/request/api'
+import { getCourseList, addDraftProject, getSpecialStudentList, addProject, getTagList } from '@/request/api'
 import ExTable from '@/components/exTable.js'
 export default {
   components: {
@@ -318,12 +328,12 @@ export default {
         custom: []
       },
       tags: {
-        from: ['全部', '外部', '内部'],
-        status: ['全部', '状态1', '状态2', '状态3'],
-        series: ['全部', '系列1', '系列2', '系列3'],
-        level: ['层级1', '层级2', '层级3'],
-        department: ['职能1', '职能2', '职能3'],
-        custom: ['职能1', '职能2', '职能3']
+        source: [],
+        status: [],
+        series: [],
+        level: [],
+        department: [],
+        custom: []
       },
       studentsTransfer: {
         keyword: ''
@@ -392,10 +402,10 @@ export default {
     this.getCourseList()
   },
   methods: {
-    handleReload (pagination, { currentPage, pageSize }) {
+    handleReload (pagination, { currentPage, pageSize }) { // 带翻页表格数据重载
       this.fetchRemoteData(pagination, currentPage, pageSize)
-    }, // 带翻页表格数据重载
-    fetchRemoteData (pagination, currentPage, pageSize) {
+    },
+    fetchRemoteData (pagination, currentPage, pageSize) { // 带翻页表格数据远程拉取
       let tags = this.filterForm.level.concat(this.filterForm.department, this.filterForm.custom)
       tags.push(this.filterForm.from, this.filterForm.series, this.filterForm.status)
       let param = {
@@ -421,8 +431,8 @@ export default {
           })
         })
       })
-    }, // 带翻页表格数据远程拉取
-    getCourseList () {
+    },
+    getCourseList () { // 选择课程 获取课程列表
       let param = this.getCourseListParam
       // console.log(param)
       getCourseList(param).then(res => {
@@ -431,8 +441,8 @@ export default {
       }, error => {
         error && this.$message.error(error.message)
       })
-    }, // 选择课程 获取课程列表
-    handleSaveProjectDraft (formName) {
+    },
+    handleSaveProjectDraft (formName) { // 保存草稿
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.courseSelected.length === 0) {
@@ -455,8 +465,8 @@ export default {
           return false
         }
       })
-    }, // 保存草稿
-    handleSaveProject (formName) {
+    },
+    handleSaveProject (formName) { // 保存项目
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.courseSelected.length === 0) {
@@ -479,14 +489,14 @@ export default {
           return false
         }
       })
-    }, // 保存项目
-    handleSearch () {
+    },
+    handleSearch () { // 处理课程搜索
       this.fetchRemoteData()
-    }, // 处理课程搜索
+    },
     handleSelectionChange (val) { // 表格多选
       this.courseChecked = val
-    }, // 处理课程选择
-    handleDeleteCourseSelected (item) { // 删除已选
+    },
+    handleDeleteCourseSelected (item) { // 删除已选 处理课程已选删除
       this.courseSelected.splice(this.getItemIndex(this.courseSelected, item), 1)
       let courseCheckedIndex = this.getItemIndex(this.courseChecked, item) // 判断删除的试题是否在列表中且被选中
       if (courseCheckedIndex !== -1) {
@@ -495,14 +505,14 @@ export default {
           this.$refs.exTableCourse.toggleRowSelection(this.courseTableData[courseTableDataIndex], false)
         })
       }
-    }, // 处理课程已选删除
-    handleCourseClick (selection, row) { //  点击checkbox事件,添加试题
+    },
+    handleCourseClick (selection, row) { //  点击checkbox事件,添加试题 处理课程列表checkbox选中
       if (this.getItemIndex(this.courseSelected, row) === -1) {
         this.courseSelected.push(row)
       } else {
         this.courseSelected.splice(this.getItemIndex(this.courseSelected, row), 1)
       }
-    }, // 处理课程列表checkbox选中
+    },
     getItemIndex (list, item) { // 根据id获取index
       let itemIndex = -1
       list.map((i, index, array) => {
@@ -511,17 +521,28 @@ export default {
         }
       })
       return itemIndex
-    }, // 根据获取index
-    handleStudentDialogOpen () {
+    },
+    handleStudentDialogOpen () { // 打开指定参训学员 弹窗
       this.chooseStudentsDialogVisible = true
       this.transferValue = []
       getSpecialStudentList({ keyword: this.studentsTransfer.keyword, offset: 0, limit: 20 }).then(res => {
         this.studentsTransferData = res.data.list
       })
-    }, // 打开指定参训学员 弹窗
-    studentFilterMethod (query, item) { // 穿梭框学员搜索
+    },
+    studentFilterMethod (query, item) { // 穿梭框学员搜索 穿梭框过滤办法
       return item.name.indexOf(query) > -1
-    } // 穿梭框过滤办法
+    },
+    openCourseChooseDialog () {
+      this.chooseCourseDialogVisible = true
+      getTagList().then(res => {
+        this.tags.source = res.data.source
+        this.tags.status = res.data.status
+        this.tags.series = res.data.series
+        this.tags.level = res.data.tag[0].child
+        this.tags.department = res.data.tag[1].child
+        this.tags.custom = res.data.tag[2].child
+      })
+    }
   }
 }
 </script>

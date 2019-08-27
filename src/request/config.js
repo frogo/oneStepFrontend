@@ -21,8 +21,11 @@ export default {
     DELETE: CONTEXTPATH + '/lesson/delete',
     ONLINE_OR_OFFLINE: CONTEXTPATH + '/lesson/Online',
     TAG: {
-      LIST: CONTEXTPATH + '/tag/list'
-    }
+      LIST: CONTEXTPATH + '/tag/list',
+      DELETE: CONTEXTPATH + '/tag/delete',
+      ADD: CONTEXTPATH + '/tag/add'
+    },
+    DEFAULT_COVER: CONTEXTPATH + '/lesson/cover'
   },
   EXAMINATION: {
     PAPER: {

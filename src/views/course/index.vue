@@ -64,7 +64,6 @@
         </el-form-item>
       </el-form>
     </div>
-
     <div class="course-list">
       <el-row>
         <el-col :span="4" v-for="(item, index) in courseList" :key="`lesson_${index}`" :offset="index%5 ==0 ? 0 : 1">
@@ -128,12 +127,24 @@
         layout="total, sizes, prev, pager, next, jumper"
       />
     </div>
+
+    <tags-editor-dialog
+      :dialogTagsEditorVisible.sync="dialogTagsEditorVisible"
+      v-if="dialogTagsEditorVisible"
+      @closeDialog="dialogTagsEditorVisible = false"
+      @getSelectedTags="getSelectedTags"
+      :tagsSelectedFromParent="currentEditCourseTags"
+    />
   </el-main>
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getCourseList, deleteCourse, courseOnlineOrOffline, getTagList } from '@/request/api'
+import { getCourseList, deleteCourse, courseOnlineOrOffline, getTagList, getCourseDetails } from '@/request/api'
+import TagsEditorDialog from '@/components/tagsEditorDialog'
 export default {
+  components: {
+    TagsEditorDialog
+  },
   data () {
     return {
       keyword: '',
@@ -153,11 +164,12 @@ export default {
         department: [],
         custom: []
       },
-      tagList: '', // 远程获取过滤标签列表
       courseList: [],
       currentPage: 1,
       pageSize: 20,
-      total: 0
+      total: 0,
+      dialogTagsEditorVisible: false,
+      currentEditCourseTags: [] // 当前正在编辑标签的课程标签
     }
   },
   computed: {
@@ -252,8 +264,15 @@ export default {
         })
       })
     },
-    handleTagsEdit () { // 标签编辑
-
+    handleTagsEdit (item) { // 标签编辑
+      getCourseDetails({ id: item.id }).then(res => {
+        this.currentEditCourseTags = res.data.tags
+        this.dialogTagsEditorVisible = true
+      })
+    },
+    getSelectedTags (tags) { // todo 缺少编辑标签成功提交的接口
+      // eslint-disable-next-line no-console
+      console.log(tags)
     }
   }
 }

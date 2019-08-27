@@ -31,8 +31,11 @@ export const addCourseDraft = p => post(CONFIG.COURSE.DRAFT_ADD, p)// 入参缺�
 export const getCourseDetails = p => get(CONFIG.COURSE.DETAILS, p) // 课程详情
 export const deleteCourse = p => post(CONFIG.COURSE.DELETE, p) // 课程删除
 export const courseOnlineOrOffline = p => post(CONFIG.COURSE.ONLINE_OR_OFFLINE, p) // 课程上线下线
+export const getDefaultCover = p => get(CONFIG.COURSE.DEFAULT_COVER, p) // 课程封面
 
 export const getTagList = p => get(CONFIG.COURSE.TAG.LIST, p) // 获取标签列表
+export const deleteTag = p => post(CONFIG.COURSE.TAG.DELETE, p) // 删除标签
+export const addTag = p => post(CONFIG.COURSE.TAG.ADD, p) // 新增标签
 // 项目
 export const getProjectList = p => post(CONFIG.PROJECT.LIST, p) // 修改接口为post
 export const getProjectDetails = p => get(CONFIG.PROJECT.DETAILS, p) // 修
