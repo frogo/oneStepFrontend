@@ -26,9 +26,9 @@
         <el-button @click="dialogTagsEditorVisible = true; editMode = false" type="info" icon="el-icon-plus" plain size="small">
           编辑标签
         </el-button>
-        <el-button @click="dialogTagsEditorVisible = true; editMode = true" type="primary" plain size="small">
-          维护标签
-        </el-button>
+        <!--        <el-button @click="dialogTagsEditorVisible = true; editMode = true" type="primary" plain size="small">-->
+        <!--          维护标签-->
+        <!--        </el-button>-->
         <span>已选择 <span class="red">{{ createForm.tags.length }}</span> 个标签</span>
       </el-form-item>
       <el-form-item label="课程简介" prop="">
@@ -165,7 +165,6 @@
       v-if="dialogTagsEditorVisible"
       @closeDialog="dialogTagsEditorVisible = false"
       @getSelectedTags="getSelectedTags"
-      :edit-mode="editMode"
       :tagsSelectedFromParent="createForm.tags"
     />
   </el-main>
@@ -256,9 +255,9 @@ export default {
       dialogExaminationTableData: [],
       typeMap: { random: '随机抽题', manual: '手动出题' },
       // 编辑标签弹窗
-      dialogTagsEditorVisible: false,
-      editMode: false,
-      selectedTags: []
+      dialogTagsEditorVisible: false
+      // editMode: false,
+      // selectedTags: []
     }
   },
   computed: {
@@ -312,7 +311,9 @@ export default {
   },
   methods: {
     getSelectedTags (tags) {
-      this.createForm.tags = tags
+      this.createForm.tags = tags.map(_ => {
+        return _.id
+      })
     },
     handleTabClick (tab, event) {
       // console.log(tab, event)

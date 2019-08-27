@@ -36,6 +36,7 @@
     </div>
 
     <span slot="footer" class="dialog-footer">
+      <el-button @click="editMode = !editMode"> {{ editMode ? '取消编辑模式' : '编辑模式' }}</el-button>
       <el-button @click="handleDialogCancel">取消</el-button>
       <el-button @click="handleDialogConfirm" type="primary">确定</el-button>
     </span>
@@ -51,10 +52,10 @@ export default {
       type: Boolean,
       default: false
     },
-    editMode: {
-      type: Boolean,
-      default: false
-    },
+    // editMode: {
+    //   type: Boolean,
+    //   default: false
+    // },
     getSelectedTags: {
       type: Function,
       default: () => {
@@ -69,6 +70,7 @@ export default {
   },
   data () {
     return {
+      editMode: false,
       tags: [],
       tagsSelected: []
       // selectedTagsFromParent: []
@@ -98,6 +100,9 @@ export default {
     getRemoteTags () {
       // this.tagsSelected = []
       getTagList().then(res => {
+        if (this.editMode) {
+          this.tagsSelected = []
+        }
         this.tags = res.data.tag.map(item => { // 拿到远程数据，改造成view需要的数据
           item.inputVisible = false
           item.inputValue = ''
