@@ -59,7 +59,8 @@ export default {
     APPROVAL: CONTEXTPATH + '/projectApproval/pass',
     DRAFT: CONTEXTPATH + '/projectDraft/add',
     ADD: CONTEXTPATH + '/project/add',
-    PENDING_LIST: CONTEXTPATH + '/projectApproval/list'
+    PENDING_LIST: CONTEXTPATH + '/projectApproval/list',
+    MODIFY: CONTEXTPATH + '/project/modify'
   },
   SPECIAL_STUDENT: {
     LIST: CONTEXTPATH + '/spStudent/list',

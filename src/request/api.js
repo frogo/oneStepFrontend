@@ -46,6 +46,7 @@ export const approvalProject = p => post(CONFIG.PROJECT.APPROVAL, p) // 学员�
 export const addDraftProject = p => post(CONFIG.PROJECT.DRAFT, p) // 添加到草稿
 export const addProject = p => post(CONFIG.PROJECT.ADD, p) // 添加
 export const getApprovalList = p => get(CONFIG.PROJECT.PENDING_LIST, p) // 获取待审批学员
+export const modifyProject = p => post(CONFIG.PROJECT.MODIFY, p) // 修改项目
 
 // 试题
 export const getQuestionLibList = p => get(CONFIG.EXAMINATION.QUESTION.QUESTION_LIB, p) // 题库列表

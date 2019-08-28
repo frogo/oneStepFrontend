@@ -41,7 +41,7 @@
           <el-button @click="openCourseChooseDialog" size="mini" type="primary">
             课程设置
           </el-button>
-          <span>已选课程数 <i>{{ courseSelected.length }}</i> 总学分 <i>{{ courseChooseTotal.credit }}</i> 总课时 <i>{{ courseChooseTotal.hours }}</i></span>
+          <span>已选课程数 <i>{{ dialogCourse.selectedData.length }}</i> 总学分 <i>{{ dialogCourse.courseChooseTotal.credit }}</i> 总课时 <i>{{ dialogCourse.courseChooseTotal.hours }}</i></span>
         </div>
       </el-form-item>
       <div class="head-line">
@@ -91,8 +91,8 @@
             inactive-color="gray"
           />
             <span v-if="createForm.studentsSwitch">
-              <el-button @click="handleStudentDialogOpen" size="small" type="primary">设置参训人员</el-button>
-              已选择参数人员<span class="red">{{ transferValue.length }}</span>人
+              <el-button @click="handleStudentDialogOpen" size="small" type="primary">{{ editMode ? '重新指定' : '设置' }}</el-button>
+              已选择参数人员<span class="red">{{ dialogStudents.transferSelectedData.length }}</span>人
             </span>
 
           </span>
@@ -108,12 +108,12 @@
       </el-button>
     </div>
     <el-dialog
-      :visible.sync="chooseStudentsDialogVisible"
+      :visible.sync="dialogStudents.visible"
       title="设置参训人员"
       custom-class="chooseStudents"
     >
       <el-transfer
-        v-model="transferValue" :data="studentsTransferData"
+        v-model="dialogStudents.transferSelectedData" :data="dialogStudents.transferData"
         :filter-method="studentFilterMethod"
         :props="{
           key: 'id',
@@ -124,12 +124,12 @@
         <span slot-scope="{ option }">{{ option.number }} - {{ option.name }} - {{ option.department }}</span>
       </el-transfer>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="chooseStudentsDialogVisible = false">取 消</el-button>
-        <el-button @click="chooseStudentsDialogVisible = false" type="primary">确 定</el-button>
+        <!--        <el-button @click="dialogStudents.visible = false">取 消</el-button>-->
+        <el-button @click="dialogStudents.visible = false" type="primary">关闭</el-button>
       </span>
     </el-dialog>
     <el-dialog
-      :visible.sync="chooseCourseDialogVisible"
+      :visible.sync="dialogCourse.visible"
       title="课程设置"
       class="chooseCourse"
       width="80%"
@@ -137,7 +137,7 @@
       <div class="filter-box">
         <div class="keyword-input">
           <el-input
-            v-model="keyword"
+            v-model="dialogCourse.keyword"
             @keyup.enter.native="handleSearch"
             placeholder="请输入内容"
             size="medium "
@@ -145,44 +145,44 @@
             <i slot="suffix" @click="handleSearch" class="el-input__icon el-icon-search" />
           </el-input>
         </div>
-        <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
+        <el-form ref="filterForm" :model="dialogCourse.filterForm" label-width="60px" size="mini">
           <el-form-item label="来源：">
-            <el-radio-group v-model="filterForm.from">
+            <el-radio-group v-model="dialogCourse.filterForm.from">
               <el-radio :label="0" border>
                 全部
               </el-radio>
-              <el-radio :label="item.value" v-for="(item, index) in tags.source" :key="item.name + index" border>
+              <el-radio :label="item.value" v-for="(item, index) in dialogCourse.tags.source" :key="item.name + index" border>
                 {{ item.name }}
               </el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="状态：">
-            <el-radio-group v-model="filterForm.status">
+            <el-radio-group v-model="dialogCourse.filterForm.status">
               <el-radio :label="0" border>
                 全部
               </el-radio>
-              <el-radio :label="item.value" v-for="(item, index) in tags.status" :key="item.name + index" border>
+              <el-radio :label="item.value" v-for="(item, index) in dialogCourse.tags.status" :key="item.name + index" border>
                 {{ item.name }}
               </el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="层级：">
-            <el-checkbox-group v-model="filterForm.level">
-              <el-checkbox-button :label="item.id" v-for="(item, index) in tags.level" :key="item + index">
+            <el-checkbox-group v-model="dialogCourse.filterForm.level">
+              <el-checkbox-button :label="item.id" v-for="(item, index) in dialogCourse.tags.level" :key="item + index">
                 {{ item.name }}
               </el-checkbox-button>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="职能：">
-            <el-checkbox-group v-model="filterForm.department">
-              <el-checkbox-button :label="item.id" v-for="(item, index) in tags.department" :key="item + index">
+            <el-checkbox-group v-model="dialogCourse.filterForm.department">
+              <el-checkbox-button :label="item.id" v-for="(item, index) in dialogCourse.tags.department" :key="item + index">
                 {{ item.name }}
               </el-checkbox-button>
             </el-checkbox-group>
           </el-form-item>
           <el-form-item label="自定：">
-            <el-checkbox-group v-model="filterForm.custom">
-              <el-checkbox-button :label="item.id" v-for="(item, index) in tags.custom" :key="item + index">
+            <el-checkbox-group v-model="dialogCourse.filterForm.custom">
+              <el-checkbox-button :label="item.id" v-for="(item, index) in dialogCourse.tags.custom" :key="item + index">
                 {{ item.name }}
               </el-checkbox-button>
             </el-checkbox-group>
@@ -192,7 +192,7 @@
       <div class="exTable">
         <ex-table
           ref="exTableCourse"
-          :data="courseTableData"
+          :data="dialogCourse.tableData"
           @selection-change="handleSelectionChange"
           @select="handleCourseClick"
           :reload-method="handleReload"
@@ -223,7 +223,7 @@
             width="150"
           />
           <el-table-column
-            prop="minutes"
+            prop="minute"
             label="课时"
             width="150"
           />
@@ -231,18 +231,18 @@
       </div>
       <div class="selected-block">
         <div class="operator">
-          <el-badge :value="courseSelected.length">
-            <el-button @click="courseSelectedBoxShow = !courseSelectedBoxShow" size="small">
-              已添加  <i v-if="courseSelectedBoxShow" class="el-icon-arrow-up" />
+          <el-badge :value="dialogCourse.selectedData.length">
+            <el-button @click="dialogCourse.courseSelectedBoxShow = !dialogCourse.courseSelectedBoxShow" size="small">
+              已添加  <i v-if="dialogCourse.courseSelectedBoxShow" class="el-icon-arrow-up" />
               <i v-else class="el-icon-arrow-down" />
             </el-button>
           </el-badge>
         </div>
         <transition name="myBox">
-          <div v-show="courseSelectedBoxShow" class="box">
+          <div v-show="dialogCourse.courseSelectedBoxShow" class="box">
             <el-tag
-              v-for="(item, index) in courseSelected"
-              :key="item.name + index"
+              v-for="(item, index) in dialogCourse.selectedData"
+              :key="item.name + item.id + index"
               @close="handleDeleteCourseSelected(item)"
               closable
               size="small"
@@ -255,15 +255,16 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <!--        <el-button @click="chooseCourseDialogVisible = false">取 消</el-button>-->
-        <el-button @click="chooseCourseDialogVisible = false" type="primary">关闭</el-button>
+        <el-button @click="dialogCourse.visible = false" type="primary">关闭</el-button>
       </span>
     </el-dialog>
   </el-main>
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getCourseList, addDraftProject, getSpecialStudentList, addProject, getTagList } from '@/request/api'
+import { getCourseList, addDraftProject, getSpecialStudentList, addProject, getTagList, modifyProject, getProjectDetails } from '@/request/api'
 import ExTable from '@/components/exTable.js'
+import { GetUrlParam } from '@/utility'
 export default {
   components: {
     ExTable
@@ -282,6 +283,7 @@ export default {
       return data
     }
     return {
+      // 表单内容
       createForm: {
         projectName: '',
         projectCycle: '',
@@ -298,6 +300,7 @@ export default {
         students: ''
 
       },
+      // 验证规则
       rules: {
         projectName: [
           { required: true, message: '请输入项目名称', trigger: 'blur' }
@@ -313,49 +316,54 @@ export default {
           { type: 'number', message: '目标人数必须为数字值' }
         ]
       },
-      // 试题弹窗
-      selectedCourseTableData: [],
-      chooseStudentsDialogVisible: false,
-      chooseCourseDialogVisible: false,
-      // 课程弹窗
-      keyword: '',
-      filterForm: {
-        from: '全部',
-        status: '全部',
-        series: '全部',
-        level: [],
-        department: [],
-        custom: []
+      // 课程选择弹窗信息
+      dialogCourse: { // 课程选择弹窗信息
+        visible: false,
+        keyword: '',
+        filterForm: {
+          from: '全部',
+          status: '全部',
+          series: '全部',
+          level: [],
+          department: [],
+          custom: []
+        },
+        tags: {
+          source: [],
+          status: [],
+          series: [],
+          level: [],
+          department: [],
+          custom: []
+        },
+        tableData: [], // 课程表格远程数据
+        selectedData: [], // 已选择课程
+        courseChecked: [], // 当前页面选择的课程数据
+        courseSelectedBoxShow: false, // 已选择课程容器开关
+        courseChooseTotal: {
+          credit: 0,
+          hours: 0
+        } // 课程的学分统计，用于展示
       },
-      tags: {
-        source: [],
-        status: [],
-        series: [],
-        level: [],
-        department: [],
-        custom: []
+      // 指定参训学员弹窗信息
+      dialogStudents: { // 制定参训学院弹窗信息
+        visible: false, // 选择学员弹窗开关
+        keyword: '', // 穿梭框搜索关键字
+        transferData: generateData(), // 穿梭框学员远程数据
+        transferSelectedData: [], // 学员当前穿梭框选择数据
+        editModeStudentSelectedData: [] // 编辑的时候拉取的参训学员数据 //废弃
       },
-      studentsTransfer: {
-        keyword: ''
-      },
-      studentsTransferData: generateData(), // 穿梭框学员数据
-      transferValue: [], // 学员当前穿梭框选择数据
-      studentsSelected: [], // 学员已选择数据
-      courseTableData: [], // 课程表格数据
-      courseSelected: [], // 已选择课程
-      courseChooseTotal: {
-        credit: 0,
-        hours: 0
-      },
-      courseChecked: [], // 当前页面选择的课程数据
-      courseSelectedBoxShow: false // 已选择课程容器开关
+      // 是否编辑模式
+      editMode: false
     }
   },
   computed: {
     addProjectParam: function () {
-      let lesson = []
-      this.courseSelected.map(item => {
-        lesson.push(item.id)
+      let lesson = this.dialogCourse.selectedData.map(item => {
+        return item.id
+      })
+      let student = this.dialogStudents.transferSelectedData.map(item => {
+        return item.id
       })
       return {
         name: this.createForm.projectName,
@@ -370,34 +378,55 @@ export default {
         is_pwd: this.createForm.passwordSwitch ? 1 : 0,
         is_sign: this.createForm.sign ? 1 : 0,
         password: this.createForm.password,
-        personnel: this.transferValue
+        personnel: student
       }
     }
   },
   watch: {
-    filterForm: {
+    'dialogCourse.filterForm': {
       handler (newVal, oldVal) {
         this.fetchRemoteData()
       },
       deep: true
     },
-    courseSelected: { // 课程选择总数计算侦听
+    'dialogCourse.selectedData': { // 课程选择总数计算侦听
       handler (newVal, oldVal) {
-        this.courseChooseTotal.credit = 0
-        this.courseChooseTotal.hours = 0
+        this.dialogCourse.courseChooseTotal.credit = 0
+        this.dialogCourse.courseChooseTotal.hours = 0
         newVal.map(item => {
-          this.courseChooseTotal.credit += item.credit
-          this.courseChooseTotal.hours += item.minutes
+          this.dialogCourse.courseChooseTotal.credit += item.credit
+          this.dialogCourse.courseChooseTotal.hours += item.minute
         })
-        // console.log(this.courseChooseTotal.credit, this.courseChooseTotal.hours )
       },
       deep: true
     }
   },
   mounted: function () {
+    if (this.$route.name === 'project-edit') {
+      this.editMode = true
+      let id = GetUrlParam('id')
+      getProjectDetails({ id: id }).then(res => { // todo 项目编辑
+        this.createForm = { // 编辑回显数据
+          projectName: res.data.name,
+          projectCycle: [res.data.start_time, res.data.end_time],
+          participants: res.data.obj,
+          number: res.data.target_num,
+          intro: res.data.introduction,
+          auth: res.data.auth === 1,
+          sign: res.data.is_sign === 1,
+          approval: res.data.is_review === 1,
+          passwordSwitch: res.data.is_pwd === 1,
+          password: res.data.passwd,
+          studentsSwitch: res.data.personnel.length > 0,
+          students: res.data.personnel
+        }
+        this.dialogCourse.selectedData = res.data.lesson_info
+        this.dialogStudents.transferSelectedData = res.data.personnel
+      })
+    }
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
-        { name: '首页', path: '/' }, { name: '培训项目管理', path: '/project' }, { name: '创建项目', path: '/project/create' }
+        { name: '首页', path: '/' }, { name: '培训项目管理', path: '/project' }, { name: this.editMode ? '编辑项目' : '创建项目' }
       ] })
     this.getCourseList()
   },
@@ -406,22 +435,22 @@ export default {
       this.fetchRemoteData(pagination, currentPage, pageSize)
     },
     fetchRemoteData (pagination, currentPage, pageSize) { // 带翻页表格数据远程拉取
-      let tags = this.filterForm.level.concat(this.filterForm.department, this.filterForm.custom)
-      tags.push(this.filterForm.from, this.filterForm.series, this.filterForm.status)
+      let tags = this.dialogCourse.filterForm.level.concat(this.dialogCourse.filterForm.department, this.dialogCourse.filterForm.custom)
+      tags.push(this.dialogCourse.filterForm.from, this.dialogCourse.filterForm.series, this.dialogCourse.filterForm.status)
       let param = {
-        keyword: this.keyword,
+        keyword: this.dialogCourse.keyword,
         tag_id: tags,
         offset: currentPage || 1,
         limit: pageSize || 10
       }
       let paginationObj = pagination || this.$refs.exTableCourse.pagination
       getCourseList(param).then(res => {
-        this.courseTableData = res.data.list
+        this.dialogCourse.tableData = res.data.list
         paginationObj.total = res.data.total
 
-        this.courseTableData.map(item => { // 手动选题模式 点击题库，加载试题 遍历 已有试题数据  回显
+        this.dialogCourse.tableData.map(item => { // 手动选题模式 点击题库，加载试题 遍历 已有试题数据  回显
           // console.log(item.id)
-          this.courseSelected.map(cItem => {
+          this.dialogCourse.selectedData.map(cItem => {
             if (item.id === cItem.id) {
               // console.log('---------')
               this.$nextTick(() => {
@@ -436,7 +465,7 @@ export default {
       let param = this.getCourseListParam
       // console.log(param)
       getCourseList(param).then(res => {
-        this.courseTableData = res.data.list
+        this.dialogCourse.tableData = res.data.list
         this.total = res.data.total
       }, error => {
         error && this.$message.error(error.message)
@@ -445,7 +474,7 @@ export default {
     handleSaveProjectDraft (formName) { // 保存草稿
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.courseSelected.length === 0) {
+          if (this.dialogCourse.selectedData.length === 0) {
             this.$message.error('请选择课程')
             return false
           }
@@ -453,7 +482,7 @@ export default {
             this.$message.error('请输入参训口令')
             return false
           }
-          if (this.createForm.studentsSwitch && (this.transferValue.length === 0)) {
+          if (this.createForm.studentsSwitch && (this.dialogStudents.transferSelectedData.length === 0)) {
             this.$message.error('请制定参训学员')
             return false
           }
@@ -469,7 +498,7 @@ export default {
     handleSaveProject (formName) { // 保存项目
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.courseSelected.length === 0) {
+          if (this.dialogCourse.selectedData.length === 0) {
             this.$message.error('请选择课程')
             return false
           }
@@ -477,14 +506,22 @@ export default {
             this.$message.error('请输入参训口令')
             return false
           }
-          if (this.createForm.studentsSwitch && (this.transferValue.length === 0)) {
+          if (this.createForm.studentsSwitch && (this.dialogStudents.transferSelectedData.length === 0)) {
             this.$message.error('请制定参训学员')
             return false
           }
-          addProject(this.addProjectParam).then(res => {
-            this.$message.success(res.message)
-            this.$router.push({ path: '/project' })
-          })
+          if (this.editMode) {
+            this.addProjectParam.id = GetUrlParam('id')
+            modifyProject(this.addProjectParam).then(res => {
+              this.$message.success(res.message)
+              this.$router.push({ path: '/project' })
+            })
+          } else {
+            addProject(this.addProjectParam).then(res => {
+              this.$message.success(res.message)
+              this.$router.push({ path: '/project' })
+            })
+          }
         } else {
           return false
         }
@@ -494,23 +531,23 @@ export default {
       this.fetchRemoteData()
     },
     handleSelectionChange (val) { // 表格多选
-      this.courseChecked = val
+      this.dialogCourse.courseChecked = val
     },
     handleDeleteCourseSelected (item) { // 删除已选 处理课程已选删除
-      this.courseSelected.splice(this.getItemIndex(this.courseSelected, item), 1)
-      let courseCheckedIndex = this.getItemIndex(this.courseChecked, item) // 判断删除的试题是否在列表中且被选中
+      this.dialogCourse.selectedData.splice(this.getItemIndex(this.dialogCourse.selectedData, item), 1)
+      let courseCheckedIndex = this.getItemIndex(this.dialogCourse.courseChecked, item) // 判断删除的试题是否在列表中且被选中
       if (courseCheckedIndex !== -1) {
-        let courseTableDataIndex = this.getItemIndex(this.courseTableData, item)
+        let courseTableDataIndex = this.getItemIndex(this.dialogCourse.tableData, item)
         this.$nextTick(() => {
-          this.$refs.exTableCourse.toggleRowSelection(this.courseTableData[courseTableDataIndex], false)
+          this.$refs.exTableCourse.toggleRowSelection(this.dialogCourse.tableData[courseTableDataIndex], false)
         })
       }
     },
     handleCourseClick (selection, row) { //  点击checkbox事件,添加试题 处理课程列表checkbox选中
-      if (this.getItemIndex(this.courseSelected, row) === -1) {
-        this.courseSelected.push(row)
+      if (this.getItemIndex(this.dialogCourse.selectedData, row) === -1) {
+        this.dialogCourse.selectedData.push(row)
       } else {
-        this.courseSelected.splice(this.getItemIndex(this.courseSelected, row), 1)
+        this.dialogCourse.selectedData.splice(this.getItemIndex(this.dialogCourse.selectedData, row), 1)
       }
     },
     getItemIndex (list, item) { // 根据id获取index
@@ -523,24 +560,38 @@ export default {
       return itemIndex
     },
     handleStudentDialogOpen () { // 打开指定参训学员 弹窗
-      this.chooseStudentsDialogVisible = true
-      this.transferValue = []
-      getSpecialStudentList({ keyword: this.studentsTransfer.keyword, offset: 0, limit: 20 }).then(res => {
-        this.studentsTransferData = res.data.list
+      this.dialogStudents.visible = true
+      this.dialogStudents.transferSelectedData = []
+      let _this = this
+      getSpecialStudentList({ keyword: this.dialogStudents.keyword, offset: 0, limit: 20 }).then(res => {
+        _this.dialogStudents.transferData = res.data.list
+        // if (_this.dialogStudents.transferSelectedData.length > 0) {
+        //   let selected = _this.dialogStudents.transferSelectedData.map(item => {
+        //     return item.id
+        //   })
+        //   _this.dialogStudents.transferSelectedData = []
+        //   _this.dialogStudents.transferData.map(item => {
+        //     if (selected.indexOf(item.id) > -1) {
+        //       _this.dialogStudents.transferSelectedData.push(item)
+        //     }
+        //   })
+        // }
+        // // eslint-disable-next-line no-console
+        // console.log(_this.dialogStudents.transferSelectedData)
       })
     },
     studentFilterMethod (query, item) { // 穿梭框学员搜索 穿梭框过滤办法
       return item.name.indexOf(query) > -1
     },
     openCourseChooseDialog () {
-      this.chooseCourseDialogVisible = true
+      this.dialogCourse.visible = true
       getTagList().then(res => {
-        this.tags.source = res.data.source
-        this.tags.status = res.data.status
-        this.tags.series = res.data.series
-        this.tags.level = res.data.tag[0].child
-        this.tags.department = res.data.tag[1].child
-        this.tags.custom = res.data.tag[2].child
+        this.dialogCourse.tags.source = res.data.source
+        this.dialogCourse.tags.status = res.data.status
+        this.dialogCourse.tags.series = res.data.series
+        this.dialogCourse.tags.level = res.data.tag[0].child
+        this.dialogCourse.tags.department = res.data.tag[1].child
+        this.dialogCourse.tags.custom = res.data.tag[2].child
       })
     }
   }

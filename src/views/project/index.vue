@@ -337,8 +337,8 @@ export default {
         // console.log(this.projectDetails)
       })
     },
-    handleEdit () {
-
+    handleEdit (id) {
+      this.$router.push({ path: '/project/edit', query: { id: id } })
     },
     handleOffline (id) {
       this.$confirm('您确定下线该项目吗?', '提示', {

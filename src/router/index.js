@@ -53,7 +53,12 @@ const router = new VueRouter({
         { // 项目管理-创建项目
           path: '/project/create',
           name: 'project-create',
-          component: () => import('../views/project/create.vue')
+          component: () => import('../views/project/create_edit.vue')
+        },
+        { // 项目管理-创建项目
+          path: '/project/edit',
+          name: 'project-edit',
+          component: () => import('../views/project/create_edit.vue')
         },
         { // 项目管理-统计详情
           path: '/project/details',

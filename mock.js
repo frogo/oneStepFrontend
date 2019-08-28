@@ -67,11 +67,11 @@ Mock.mock('/v1/lesson/list', {
     'total': 33,
     'list|10': [
       {
-        // 'id|1-100': 3,
-        'id': 3,
+        'id|1-100': 3,
+        // 'id': 3,
         'name': '入职课程',
         'cover': 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-        'minutes|1-120': 20,
+        'minute|1-120': 20,
         'credit|1-120': 10,
         'obj': '实习生',
         'target': '目标',
@@ -273,7 +273,7 @@ Mock.mock('/v1/lesson/info?id=3', {
     'id': '3',
     'name': '入职课程',
     'cover': 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-    'minutes|1-180': 180,
+    'minute|1-180': 180,
     'credit|1-120': 60,
     'obj': '实习生',
     'target': '目标',
@@ -355,7 +355,7 @@ Mock.mock('/v1/project/info?id=2', {
     'target_num': 20,
     'lesson_info|3': [
       {
-        'id': '课程id',
+        'id|1-100': 1,
         'name|1': ['课程名称1', '课程名称2', '课程名称3', '课程名称4'],
         'teacher': '教师姓名',
         'minute': 22,
@@ -369,7 +369,7 @@ Mock.mock('/v1/project/info?id=2', {
     'passwd': '口令',
     'personnel': [
       {
-        'id': '学员id',
+        'id': 5,
         'name': '学员姓名'
       }
     ],
@@ -455,9 +455,9 @@ Mock.mock('/v1/spStudent/list?keyword=&offset=0&limit=20', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
-    'total': 21,
-    'list|10': [{
-      'id|1-100': 5,
+    'total': 1,
+    'list': [{
+      'id|': 5,
       'name|1': ['小强', '王五', '张三', '李四', '王二麻子'],
       'number': '321dcdc',
       'department|1': ['部门1', '部门2', '部门3', '部门4', '部门5'],
