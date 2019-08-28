@@ -140,7 +140,7 @@ export default {
       this.$refs['form'].validate((valid) => {
         if (valid) {
           addQuestionLib({ name: this.form.name }).then(res => {
-            this.$message.success('添加成功')
+            this.$message.success(res.message)
             this.fetchRemoteData()
             this.createQuestionsDialogVisible = false
           })
@@ -175,7 +175,7 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteQuestionLib({ id: row.id }).then(res => {
-          this.$message.success('删除成功')
+          this.$message.success(res.message)
           this.fetchRemoteData()
         })
       }).catch(() => {

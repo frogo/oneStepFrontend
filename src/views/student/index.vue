@@ -323,7 +323,7 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteSpecialStudent({ id: row.id }).then(res => {
-          this.$message.success('删除成功')
+          this.$message.success(res.message)
           this.fetchRemoteData()
         })
       }).catch(() => {
@@ -334,7 +334,7 @@ export default {
       this.$refs['studentAddForm'].validate((valid) => {
         if (valid) {
           addSpecialStudent(this.studentAddForm).then(res => {
-            this.$message.success('添加成功')
+            this.$message.success(res.message)
             this.addStudentDialogVisible = false
             this.fetchRemoteData()
           })
@@ -345,7 +345,7 @@ export default {
       this.$refs['studentEditForm'].validate((valid) => {
         if (valid) {
           editSpecialStudent(this.studentEditForm).then(res => {
-            this.$message.success('修改成功')
+            this.$message.success(res.message)
             this.editStudentDialogVisible = false
             this.fetchRemoteData()
           })
@@ -359,7 +359,7 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteStudentAll({ list: this.multipleSelection }).then(res => {
-          this.$message.success('删除成功')
+          this.$message.success(res.message)
           this.fetchRemoteData()
         })
       }).catch(() => {

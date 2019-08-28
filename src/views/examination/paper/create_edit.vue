@@ -287,7 +287,7 @@
 
 <script>
 import ExTable from '@/components/exTable.js'
-import { getQuestionLibList, addExaminationPaper, getQuestionList, getExaminationPaperDetails } from '@/request/api'
+import { getQuestionLibList, addExaminationPaper, getQuestionList, getExaminationPaperDetails, modifyExaminationPaper } from '@/request/api'
 import { GetUrlParam } from '@/utility'
 export default {
   components: {
@@ -498,9 +498,17 @@ export default {
         'is_option_random': this.createForm.randomOption,
         'is_show_answer': this.createForm.noLookAnswer
       }
-      addExaminationPaper(param).then(res => {
-        this.$message.success('添加成功')
-      })
+      if (this.editMode) {
+        param.id = GetUrlParam('id')
+        modifyExaminationPaper(param).then(res => {
+          this.$message.success(res.message)
+        })
+      } else {
+        addExaminationPaper(param).then(res => {
+          this.$message.success(res.message)
+        })
+      }
+
       // save paper
     },
     handleSavePaper (formName) {

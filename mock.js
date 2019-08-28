@@ -273,8 +273,8 @@ Mock.mock('/v1/lesson/info?id=3', {
     'id': '3',
     'name': '入职课程',
     'cover': 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-    'minutes': '180',
-    'credit': '10',
+    'minutes|1-180': 180,
+    'credit|1-120': 60,
     'obj': '实习生',
     'target': '目标',
     'tags': [4, 5, 6],
@@ -286,15 +286,15 @@ Mock.mock('/v1/lesson/info?id=3', {
       'introduction': '简介内容'
     },
     'examination_info': {
-      'id': '1',
+      'id': 1,
       'name': '试卷名称',
-      'num': '20',
+      'num': 20,
       'rule': '手动出题',
       'add_time': '2019.6.13'
     },
     'attachment': {
       'url': '/att/2898247/file.doc',
-      'name': '附加名称'
+      'name': '附件名称'
     },
     'status': '0',
     'add_time': '2019.6.14'

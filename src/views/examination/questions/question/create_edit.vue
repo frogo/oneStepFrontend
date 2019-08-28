@@ -112,7 +112,8 @@
 </template>
 
 <script>
-import { addQuestion, getQuestionDetails } from '@/request/api'
+import { addQuestion, getQuestionDetails, modifyQuestion } from '@/request/api'
+import { GetUrlParam } from '@/utility'
 export default {
   name: 'Create',
   data () {
@@ -293,10 +294,18 @@ export default {
           }
           // eslint-disable-next-line no-console
           console.log(params)
-          addQuestion(params).then(res => {
-            this.$message.success('添加成功')
-            this.$router.push({ name: 'questionLib-edit' })
-          })
+          if (this.editMode) {
+            params.id = GetUrlParam('id')
+            modifyQuestion(params).then(res => {
+              this.$message.success(res.message)
+              this.$router.push({ name: 'questionLib-edit' })
+            })
+          } else {
+            addQuestion(params).then(res => {
+              this.$message.success(res.message)
+              this.$router.push({ name: 'questionLib-edit' })
+            })
+          }
         } else {
           return false
         }

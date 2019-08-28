@@ -81,11 +81,12 @@
       <div class="head-line">
         <span class="base-info">学习内容</span>
       </div>
-      <el-form-item label="课程文件" prop="courseFile">
+      <el-form-item label="课程文件" prop="courseFileList">
         <el-upload
           :limit="1"
           :file-list="createForm.courseFileList"
           :on-success="handleCourseFileSuccess"
+          :on-preview="handlePreview"
           class="upload-courseFile"
           action="https://jsonplaceholder.typicode.com/posts/"
         >
@@ -97,7 +98,7 @@
           </div>
         </el-upload>
       </el-form-item>
-      <el-form-item label="课后考试" prop="examination">
+      <el-form-item label="课后考试" prop="examinationPaper">
         <el-button @click="handleExaminationDialog" type="primary" size="small">
           选择试卷
         </el-button>
@@ -129,28 +130,29 @@
           />
         </div>
         <div class="right">
-          <el-button type="primary" size="small">
+          <el-button @click="gotoPaperCreate" type="primary" size="small">
             创建试卷
           </el-button>
         </div>
       </div>
-      <el-table :data="dialogExaminationTableData" @current-change="handleSelectionChange" highlight-current-row>
-        <el-table-column property="name" show-overflow-tooltip label="试卷名称" width="150" />
-        <el-table-column property="addtime" show-overflow-tooltip label="创建时间" width="200" />
-        <el-table-column property="num" show-overflow-tooltip label="试题数" />
-        <el-table-column property="rule" show-overflow-tooltip label="试题规则" />
-      </el-table>
 
-      <div class="pager-box">
-        <el-pagination
-          @current-change="handleExaminationPageChange"
-          :current-page.sync="dialogExaminationData.currentPage"
-          :page-size="dialogExaminationData.pageSize"
-          :total="dialogExaminationData.total"
-          layout="total, prev, pager, next"
-        />
+      <div class="exTable">
+        <ex-table
+          ref="exTableExaminationPaper"
+          :data="dialogExaminationTableData"
+          :reload-method="handleExaminationPaperReload"
+          @current-change="handleSelectionChange"
+          :show-pagination="true"
+          highlight-current-row
+          tooltip-effect="dark"
+          height="480"
+        >
+          <el-table-column property="name" show-overflow-tooltip label="试卷名称" width="150" />
+          <el-table-column property="addtime" show-overflow-tooltip label="创建时间" width="200" />
+          <el-table-column property="num" show-overflow-tooltip label="试题数" />
+          <el-table-column property="rule" show-overflow-tooltip label="试题规则" />
+        </ex-table>
       </div>
-
       <div class="btn-box">
         <el-button @click="cancelExaminationSelect" size="small">
           清除
@@ -171,10 +173,13 @@
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getExaminationPaperList, addCourse, addCourseDraft, getDefaultCover } from '@/request/api'
+import { getExaminationPaperList, addCourse, addCourseDraft, getDefaultCover, getCourseDetails, modifyCourse } from '@/request/api'
+import { GetUrlParam } from '@/utility'
+import ExTable from '@/components/exTable.js'
 import TagsEditorDialog from '@/components/tagsEditorDialog'
 export default {
   components: {
+    ExTable,
     TagsEditorDialog
   },
   data () {
@@ -197,13 +202,12 @@ export default {
         coverImageUrl: '',
         radioCover: require('../../assets/img/cover-1.png'),
         // 课程
-        // courseFile: '',
         courseFileList: [
           // {
           //   name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
           // }
         ],
-        examinationPaper: ''// 试卷ID
+        examinationPaper: ''// 试卷信息
       },
       defaultCover: [
         require('../../assets/img/cover-1.png'),
@@ -233,14 +237,13 @@ export default {
         ],
         lecturer: [
           { required: true, message: '请输入讲师信息', trigger: 'blur' }
+        ],
+        courseFileList: [
+          { required: true, message: '请选择课程' }
+        ],
+        examinationPaper: [
+          { required: true, message: '请选择试卷' }
         ]
-        // courseFile: [
-        //   { required: true, message: '请选择课程' }
-        // ]
-        // ],
-        // examination: [
-        //   { required: true, message: '请选择试卷' }
-        // ]
       },
       // 试题弹窗
       dialogExaminationVisible: false,
@@ -255,20 +258,20 @@ export default {
       dialogExaminationTableData: [],
       typeMap: { random: '随机抽题', manual: '手动出题' },
       // 编辑标签弹窗
-      dialogTagsEditorVisible: false
-      // editMode: false,
+      dialogTagsEditorVisible: false,
+      editMode: false
       // selectedTags: []
     }
   },
   computed: {
-    getExaminationPaperListParam: function () {
-      return {
-        type: this.typeMap[this.dialogExaminationData.type],
-        limit: this.dialogExaminationData.pageSize,
-        offset: this.dialogExaminationData.currentPage,
-        keyword: this.dialogExaminationData.keyword
-      }
-    },
+    // getExaminationPaperListParam: function () {
+    //   return {
+    //     type: this.typeMap[this.dialogExaminationData.type],
+    //     limit: this.dialogExaminationData.pageSize,
+    //     offset: this.dialogExaminationData.currentPage,
+    //     keyword: this.dialogExaminationData.keyword
+    //   }
+    // },
     addCourseParam: function () {
       let tags = this.createForm.tags.map(_ => {
         return _.id
@@ -299,17 +302,70 @@ export default {
   watch: {
   },
   mounted: function () {
+    if (this.$route.name === 'course-edit') {
+      this.editMode = true
+      let id = GetUrlParam('id')
+      getCourseDetails({ id: id }).then(res => { // todo 课程详情的封面需要标明是系统的还是用户自定义的
+        this.createForm = { // 编辑回显数据
+          courseName: res.data.name,
+          audience: res.data.obj,
+          target: res.data.target,
+          tags: res.data.tags,
+          hours: res.data.minutes,
+          credit: res.data.credit,
+          intro: res.data.introduction,
+          outline: res.data.syllabus,
+          // 讲师
+          lecturer: res.data.teacher_info.name,
+          lecturerImageUrl: res.data.teacher_info.pic,
+          lecturerIntro: res.data.teacher_info.introduction,
+          // 默认封面
+          activeTabName: 'default',
+          // coverImageUrl: res.data.cover,
+          radioCover: require('../../assets/img/cover-2.png'),
+          // 课程
+          courseFileList: [
+            {
+              url: res.data.attachment.url, name: res.data.attachment.name
+            }
+          // {
+          //   name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+          // }
+          ],
+          examinationPaper: res.data.examination_info // 试卷信息
+        }
+      })
+    }
+
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
         { name: '首页', path: '/' },
         { name: '企业课程库', path: '/course' },
-        { name: '创建课程', path: '/course/create' }
+        { name: this.editMode ? '编辑课程' : '创建课程' }
       ] })
     getDefaultCover().then(res => { // todo  后台传入requeire以后打开
       // this.defaultCover = res.data
     })
   },
   methods: {
+    handleExaminationPaperReload (pagination, { currentPage, pageSize }) {
+      this.fetchExaminationPaperRemoteData(pagination, currentPage, pageSize)
+    },
+    fetchExaminationPaperRemoteData (pagination, currentPage, pageSize) {
+      let param = {
+        type: this.typeMap[this.dialogExaminationData.type],
+        limit: pageSize || 10,
+        offset: currentPage || 1,
+        keyword: this.dialogExaminationData.keyword
+      }
+      let paginationObj = pagination || this.$refs['exTableExaminationPaper'].pagination
+      getExaminationPaperList(param).then(res => {
+        this.dialogExaminationTableData = res.data.list
+        if (paginationObj) {
+          paginationObj.total = res.data.total
+        }
+      })
+    },
     getSelectedTags (tags) {
       this.createForm.tags = tags.map(_ => {
         return _.id
@@ -357,47 +413,35 @@ export default {
       // console.log(file)
       // console.log(fileList)
     },
-    handleSelectionChange (val) {
-      this.dialogExaminationData.currentRow = val
-    },
-    handleExaminationPageChange (val) {
+    handlePreview (file) {
+      // console.log(file)
     },
     handleExamRuleChange () {
-      this.getExaminationPaperList()
+      this.fetchExaminationPaperRemoteData()
     },
     handleKeywordFilter () {
-      this.getExaminationPaperList()
+      this.fetchExaminationPaperRemoteData()
     },
     handleExaminationDialog () {
       this.dialogExaminationVisible = true
-      this.getExaminationPaperList()
-    },
-    getExaminationPaperList () {
-      getExaminationPaperList(this.getExaminationPaperListParam).then(res => {
-        this.dialogExaminationTableData = res.data.list
-        this.dialogExaminationData.total = res.data.total
+      this.$nextTick(() => {
+        this.fetchExaminationPaperRemoteData()
       })
     },
-    cancelExaminationSelect () {
-      this.dialogExaminationVisible = false
-      this.createForm.examinationPaper = ''
+    handleSelectionChange (val) {
+      this.dialogExaminationData.currentRow = val
     },
     confirmExaminationSelect () {
       this.dialogExaminationVisible = false
       this.createForm.examinationPaper = this.dialogExaminationData.currentRow
     },
+    cancelExaminationSelect () {
+      this.dialogExaminationVisible = false
+      this.createForm.examinationPaper = ''
+    },
     handleSaveCourseDraft (formName) { // 保存草稿
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.createForm.courseFileList.length === 0) {
-            this.$message.error('请选择课程文件！')
-            return false
-          }
-          if (!this.createForm.examinationPaper) {
-            this.$message.error('请选择试卷！')
-            return false
-          }
-          // console.log(this.addCourseParam)
           addCourseDraft(this.addCourseParam).then(res => {
             this.$message.success(res.message)
           })
@@ -407,19 +451,42 @@ export default {
     handleSaveCourse (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          addCourse(this.addCourseParam).then(res => {
-            this.$alert('保存成功', '提示', {
-              confirmButtonText: '确定',
-              callback: action => {
-                this.$router.push({
-                  path: '/course'
-                })
-              }
+          if (this.editMode) {
+            this.addCourseParam.id = GetUrlParam('id')
+            modifyCourse(this.addCourseParam).then(res => {
+              this.$alert(res.message, '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  this.$router.push({
+                    path: '/course'
+                  })
+                }
+              })
             })
-          })
+          } else {
+            addCourse(this.addCourseParam).then(res => {
+              this.$alert(res.message, '提示', {
+                confirmButtonText: '确定',
+                callback: action => {
+                  this.$router.push({
+                    path: '/course'
+                  })
+                }
+              })
+            })
+          }
         }
       })
+    },
+    gotoPaperCreate () {
+      this.$router.push({ path: '/paper/create' })
     }
   }
 }
 </script>
+<style lang="scss">
+  .examinationChoose{
+    .el-table--enable-row-hover .el-table__body tr:hover > td{background: #EF6520;color:#fff}
+  }
+
+</style>

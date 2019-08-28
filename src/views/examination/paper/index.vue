@@ -126,7 +126,7 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteExaminationPaper({ id: row.id }).then(res => {
-          this.$message.success('删除成功')
+          this.$message.success(res.message)
           this.fetchRemoteData()
         })
       }).catch(() => {

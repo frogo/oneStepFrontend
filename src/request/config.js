@@ -20,6 +20,7 @@ export default {
     DETAILS: CONTEXTPATH + '/lesson/info',
     DELETE: CONTEXTPATH + '/lesson/delete',
     ONLINE_OR_OFFLINE: CONTEXTPATH + '/lesson/Online',
+    MODIFY: CONTEXTPATH + '/lesson/modify',
     TAG: {
       LIST: CONTEXTPATH + '/tag/list',
       DELETE: CONTEXTPATH + '/tag/delete',
@@ -32,7 +33,8 @@ export default {
       LIST: CONTEXTPATH + '/examinationPaper/list',
       DELETE: CONTEXTPATH + '/examinationPaper/delete',
       ADD: CONTEXTPATH + '/examinationPaper/add',
-      DETAILS: CONTEXTPATH + '/examinationPaper/info'
+      DETAILS: CONTEXTPATH + '/examinationPaper/info',
+      MODIFY: CONTEXTPATH + '/examinationPaper/modify'
     },
     QUESTION: {
       QUESTION_LIB: CONTEXTPATH + '/questionBank/list',
@@ -42,7 +44,10 @@ export default {
       DELETE_QUESTION: CONTEXTPATH + 'question/delete',
       DELETE_QUESTION_ALL: CONTEXTPATH + '/question/deleteAll',
       ADD_QUESTION: CONTEXTPATH + '/question/add',
-      QUESTION_DETAILS: CONTEXTPATH + '/question/info'
+      QUESTION_DETAILS: CONTEXTPATH + '/question/info',
+      QUESTION: {
+        MODIFY: CONTEXTPATH + '/question/modify'
+      }
     }
 
   },

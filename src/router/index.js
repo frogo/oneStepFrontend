@@ -38,7 +38,12 @@ const router = new VueRouter({
         { // 企业课程库-创建课程
           path: '/course/create',
           name: 'course-create',
-          component: () => import('../views/course/create.vue')
+          component: () => import('../views/course/create_edit.vue')
+        },
+        { // 企业课程库-编辑课程
+          path: '/course/edit',
+          name: 'course-edit',
+          component: () => import('../views/course/create_edit.vue')
         },
         { // 项目管理
           path: 'project',

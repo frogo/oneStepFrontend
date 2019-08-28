@@ -252,7 +252,7 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteQuestionAll({ list: this.multipleSelection }).then(res => { // todo 等待入参的key
-          this.$message.success('删除成功')
+          this.$message.success(res.message)
           this.fetchRemoteData()
         })
       }).catch(() => {
@@ -269,7 +269,7 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteQuestion({ id: row.id }).then(res => {
-          this.$message.success('删除成功')
+          this.$message.success(res.message)
           this.fetchRemoteData()
         })
       }).catch(() => {

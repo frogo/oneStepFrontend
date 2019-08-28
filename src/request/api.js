@@ -30,6 +30,7 @@ export const addCourse = p => post(CONFIG.COURSE.ADD, p) // 入参缺少标签 �
 export const addCourseDraft = p => post(CONFIG.COURSE.DRAFT_ADD, p)// 入参缺少标签 课程文件是列表
 export const getCourseDetails = p => get(CONFIG.COURSE.DETAILS, p) // 课程详情
 export const deleteCourse = p => post(CONFIG.COURSE.DELETE, p) // 课程删除
+export const modifyCourse = p => post(CONFIG.COURSE.MODIFY, p) // 课程修改
 export const courseOnlineOrOffline = p => post(CONFIG.COURSE.ONLINE_OR_OFFLINE, p) // 课程上线下线
 export const getDefaultCover = p => get(CONFIG.COURSE.DEFAULT_COVER, p) // 课程封面
 
@@ -54,11 +55,13 @@ export const getQuestionList = p => get(CONFIG.EXAMINATION.QUESTION.QUESTION_LIS
 export const deleteQuestion = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QUESTION, p) // 删除试题
 export const deleteQuestionAll = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QUESTION_ALL, p) // 批量删除试题
 export const addQuestion = p => post(CONFIG.EXAMINATION.QUESTION.ADD_QUESTION, p) // 添加试题
+export const modifyQuestion = p => post(CONFIG.EXAMINATION.QUESTION.QUESTION.MODIFY, p) // 修改试题
 export const getQuestionDetails = p => post(CONFIG.EXAMINATION.QUESTION.QUESTION_DETAILS, p) // 试题详情
 
 // 试卷
 export const getExaminationPaperList = p => get(CONFIG.EXAMINATION.PAPER.LIST, p) // 修改接口 传参试卷出题方式,输出内容加ID
 export const deleteExaminationPaper = p => post(CONFIG.EXAMINATION.PAPER.DELETE, p) // 缺少
+export const modifyExaminationPaper = p => post(CONFIG.EXAMINATION.PAPER.MODIFY, p) // 修改试卷
 export const addExaminationPaper = p => post(CONFIG.EXAMINATION.PAPER.ADD, p) //
 export const getExaminationPaperDetails = p => post(CONFIG.EXAMINATION.PAPER.DETAILS, p) //
 

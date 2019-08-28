@@ -20,7 +20,7 @@
           <li><span class="c999">标签：</span>课程、开发</li>
         </ul>
         <div>
-          <el-button type="primary">
+          <el-button @click="goToEdit" type="primary">
             课程编辑
           </el-button>
         </div>
@@ -88,7 +88,9 @@ export default {
     })
   },
   methods: {
-
+    goToEdit () {
+      this.$router.push({ path: '/course/edit', query: { id: GetUrlParam('id') } })
+    }
   }
 }
 </script>
