@@ -279,7 +279,7 @@ export default {
       return {
         name: this.createForm.courseName,
         cover: (this.createForm.activeTabName === 'default') ? this.createForm.radioCover : this.createForm.coverImageUrl,
-        minutes: this.createForm.hours,
+        minute: this.createForm.hours,
         credit: this.createForm.credit,
         obj: this.createForm.audience,
         target: this.createForm.target,
@@ -311,7 +311,7 @@ export default {
           audience: res.data.obj,
           target: res.data.target,
           tags: res.data.tags,
-          hours: res.data.minutes,
+          hours: res.data.minute,
           credit: res.data.credit,
           intro: res.data.introduction,
           outline: res.data.syllabus,
@@ -353,7 +353,8 @@ export default {
     },
     fetchExaminationPaperRemoteData (pagination, currentPage, pageSize) {
       let param = {
-        type: this.typeMap[this.dialogExaminationData.type],
+        // type: this.typeMap[this.dialogExaminationData.type],
+        rule: this.dialogExaminationData.type,
         limit: pageSize || 10,
         offset: currentPage || 1,
         keyword: this.dialogExaminationData.keyword
@@ -371,12 +372,12 @@ export default {
         return _.id
       })
     },
-    handleTabClick (tab, event) {
-      // console.log(tab, event)
-    },
-    handleCoverClick () {
-    // console.log(this.createForm.radioCover)
-    },
+    // handleTabClick (tab, event) {
+    //   // console.log(tab, event)
+    // },
+    // handleCoverClick () {
+    // // console.log(this.createForm.radioCover)
+    // },
     handleCoverSuccess (res, file) {
       this.createForm.coverImageUrl = URL.createObjectURL(file.raw)
     },

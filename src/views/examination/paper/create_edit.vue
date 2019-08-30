@@ -259,11 +259,11 @@
 
                         / {{ item.single_total }}</span>
                       <span><i class="red">*</i> 多项选择题
-                        <el-input-number v-model="item.multiple" :min="0" :max="item.multiple_total" @change="handleCountChange" size="mini" controls-position="right" />
-                        / {{ item.multiple_total }}</span>
+                        <el-input-number v-model="item.multi" :min="0" :max="item.multi_total" @change="handleCountChange" size="mini" controls-position="right" />
+                        / {{ item.multi_total }}</span>
                       <span><i class="red">*</i> 判断题
-                        <el-input-number v-model="item.judge" :min="0" :max="item.judge_total" @change="handleCountChange" size="mini" controls-position="right" />
-                        / {{ item.judge_total }}</span>
+                        <el-input-number v-model="item.trueFalse" :min="0" :max="item.trueFalse_total" @change="handleCountChange" size="mini" controls-position="right" />
+                        / {{ item.trueFalse_total }}</span>
                     </p>
                   </li>
                 </ul>
@@ -482,8 +482,8 @@ export default {
         let obj = {
           id: item.id,
           single: item.single,
-          multi: item.multiple,
-          judge: item.judge
+          multi: item.multi,
+          trueFalse: item.trueFalse
         }
         questionLibIdList.push(obj)
       })
@@ -586,11 +586,11 @@ export default {
           id: row.id,
           name: row.name,
           single_total: row.single_total,
-          multiple_total: row.multiple_total,
-          judge_total: row.judge_total,
+          multi_total: row.multi_total,
+          trueFalse_total: row.trueFalse_total,
           single: 0,
-          multiple: 0,
-          judge: 0
+          multi: 0,
+          trueFalse: 0
         }
         this.random.questionLibSelected.push(obj)
       } else {
@@ -607,8 +607,8 @@ export default {
       this.random.allTrueFalse = 0
       this.random.questionLibSelected.map(item => {
         this.random.allSingle += item.single
-        this.random.allMulti += item.multiple
-        this.random.allTrueFalse += item.judge
+        this.random.allMulti += item.multi
+        this.random.allTrueFalse += item.trueFalse
       })
     }
   }

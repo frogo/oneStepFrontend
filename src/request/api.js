@@ -7,7 +7,7 @@ import CONFIG from './config'
 export const login = p => post(CONFIG.USER.LOGIN, p)
 export const logout = p => post(CONFIG.USER.LOGOUT, p)
 // 用户session验证
-export const sessionVerify = p => post(CONFIG.USER.VERIFY, p)
+// export const sessionVerify = p => post(CONFIG.USER.VERIFY, p)
 // 注册
 export const register = p => post(CONFIG.USER.REGISTER, p)
 // 找回密码
@@ -25,7 +25,7 @@ export const getStatus = p => get(CONFIG.STATUS, p)
 
 // 课程
 // 课程列表
-export const getCourseList = p => post(CONFIG.COURSE.LIST, p) // 修改接口为post
+export const getCourseList = p => get(CONFIG.COURSE.LIST, p) // 修改接口为post
 export const addCourse = p => post(CONFIG.COURSE.ADD, p) // 入参缺少标签 课程文件是列表
 export const addCourseDraft = p => post(CONFIG.COURSE.DRAFT_ADD, p)// 入参缺少标签 课程文件是列表
 export const getCourseDetails = p => get(CONFIG.COURSE.DETAILS, p) // 课程详情
@@ -38,7 +38,7 @@ export const getTagList = p => get(CONFIG.COURSE.TAG.LIST, p) // 获取标签列
 export const deleteTag = p => post(CONFIG.COURSE.TAG.DELETE, p) // 删除标签
 export const addTag = p => post(CONFIG.COURSE.TAG.ADD, p) // 新增标签
 // 项目
-export const getProjectList = p => post(CONFIG.PROJECT.LIST, p) // 修改接口为post
+export const getProjectList = p => get(CONFIG.PROJECT.LIST, p) // 修改接口为post
 export const getProjectDetails = p => get(CONFIG.PROJECT.DETAILS, p) // 修
 export const deleteProject = p => post(CONFIG.PROJECT.DELETE, p) // 删除
 export const onLineProject = p => post(CONFIG.PROJECT.ONLINE, p) // 上线下线
@@ -47,6 +47,9 @@ export const addDraftProject = p => post(CONFIG.PROJECT.DRAFT, p) // 添加到�
 export const addProject = p => post(CONFIG.PROJECT.ADD, p) // 添加
 export const getApprovalList = p => get(CONFIG.PROJECT.PENDING_LIST, p) // 获取待审批学员
 export const modifyProject = p => post(CONFIG.PROJECT.MODIFY, p) // 修改项目
+export const getProjectStudents = p => get(CONFIG.PROJECT.STUDENTS, p) // 获取参训学员
+export const getProjectStudentCourse = p => get(CONFIG.PROJECT.COURSE_STUDENT, p) // 获取项目培训详情
+export const getStudentLearning = p => get(CONFIG.PROJECT.STUDENT_LEARNING, p)
 
 // 试题
 export const getQuestionLibList = p => get(CONFIG.EXAMINATION.QUESTION.QUESTION_LIB, p) // 题库列表
@@ -54,7 +57,7 @@ export const addQuestionLib = p => post(CONFIG.EXAMINATION.QUESTION.ADD_QUESTION
 export const deleteQuestionLib = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QUESTION_LIB, p) // 删除题库
 export const getQuestionList = p => get(CONFIG.EXAMINATION.QUESTION.QUESTION_LIST, p) // 试题列表
 export const deleteQuestion = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QUESTION, p) // 删除试题
-export const deleteQuestionAll = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QUESTION_ALL, p) // 批量删除试题
+// export const deleteQuestionAll = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QUESTION_ALL, p) // 批量删除试题
 export const addQuestion = p => post(CONFIG.EXAMINATION.QUESTION.ADD_QUESTION, p) // 添加试题
 export const modifyQuestion = p => post(CONFIG.EXAMINATION.QUESTION.QUESTION.MODIFY, p) // 修改试题
 export const getQuestionDetails = p => post(CONFIG.EXAMINATION.QUESTION.QUESTION_DETAILS, p) // 试题详情
@@ -70,5 +73,5 @@ export const getExaminationPaperDetails = p => post(CONFIG.EXAMINATION.PAPER.DET
 export const getSpecialStudentList = p => get(CONFIG.SPECIAL_STUDENT.LIST, p) //
 export const deleteSpecialStudent = p => post(CONFIG.SPECIAL_STUDENT.DELETE, p) //
 export const addSpecialStudent = p => post(CONFIG.SPECIAL_STUDENT.ADD, p) //
-export const deleteStudentAll = p => post(CONFIG.SPECIAL_STUDENT.DELETE_ALL, p) // 批量删除试题
+// export const deleteStudentAll = p => post(CONFIG.SPECIAL_STUDENT.DELETE_ALL, p) // 批量删除试题
 export const editSpecialStudent = p => post(CONFIG.SPECIAL_STUDENT.EDIT, p) // 批量删除试题

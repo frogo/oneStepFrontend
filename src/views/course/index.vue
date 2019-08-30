@@ -97,7 +97,7 @@
                   </div>
                 </div>
                 <div class="statistics">
-                  <span>课时：{{ item.minutes }}分钟</span>
+                  <span>课时：{{ item.minute }}分钟</span>
                   <span>学分：{{ item.credit }}</span>
                 </div>
               </div>
@@ -109,7 +109,7 @@
             <div @click="gotoDetail(item.id)" class="text-area">
               <span class="title">{{ item.name }} {{ item.id }}</span>
               <div class="bottom clearFix">
-                <span class="up-num"><i class="el-icon-user" /> 158</span>
+                <span class="up-num"><i class="el-icon-user" /> {{ item.learn_num }}</span>
                 <span class="teacher">{{ item.teacher_info.name }}</span>
               </div>
             </div>

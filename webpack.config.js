@@ -41,7 +41,7 @@ module.exports = {
     proxy: {
       '/v1/': { //
         // Real api
-        target: 'http://www.frogo.cn/',
+        target: 'http://47.98.116.152:8080',
         changeOrigin: true
       }
     },

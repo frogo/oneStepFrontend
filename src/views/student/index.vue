@@ -177,7 +177,7 @@
 <script>
 import AsideMenu from '@/components/asideMenu'
 import ExTable from '@/components/exTable.js'
-import { getSpecialStudentList, deleteSpecialStudent, addSpecialStudent, deleteStudentAll, editSpecialStudent } from '@/request/api'
+import { getSpecialStudentList, deleteSpecialStudent, addSpecialStudent, editSpecialStudent } from '@/request/api'
 export default {
   components: {
     AsideMenu,
@@ -322,7 +322,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteSpecialStudent({ id: row.id }).then(res => {
+        deleteSpecialStudent({ id: [row.id] }).then(res => {
           this.$message.success(res.message)
           this.fetchRemoteData()
         })
@@ -358,7 +358,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteStudentAll({ list: this.multipleSelection }).then(res => {
+        let list = this.multipleSelection.map(item => {
+          return item.id
+        })
+        deleteSpecialStudent({ id: list }).then(res => {
           this.$message.success(res.message)
           this.fetchRemoteData()
         })

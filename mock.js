@@ -60,7 +60,7 @@ Mock.mock('/v1/user/resetPwd', {
   'message': ''
 })
 
-Mock.mock('/v1/lesson/list', {
+Mock.mock('v1/lesson/list?keyword=&tag_id[]=0&tag_id[]=0&tag_id[]=0&offset=1&limit=20', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -94,20 +94,21 @@ Mock.mock('/v1/lesson/list', {
           'name': '附加名称'
         },
         'status|1': [0, 1, 2], // 状态0下线1上线2草稿
+        'learn_num': 119,
         'add_time': '2019.6.14'
       }
     ]
   }
 })
-Mock.mock('v1/question/list?bank_id=&type=&keyword=', {
+Mock.mock('/v1/question/list?keyword=&type=all&bank_id=6&offset=1&limit=10', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
     'total': 33,
     'list|33': [
       {
-        'id': '3',
-        'bank_id': '24',
+        'id|1-100': 3,
+        'bank_id': 6,
         'type': 'single',
         'subject': 'C#中的类与静态类',
         'options': {
@@ -165,7 +166,7 @@ Mock.mock('/v1/tag/add', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '标签新增成功'
 })
-Mock.mock('/v1/tag/list', {
+Mock.mock('v1/tag/list', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -266,7 +267,7 @@ Mock.mock('/v1/tag/list', {
   }
 })
 
-Mock.mock('/v1/lesson/info?id=3', {
+Mock.mock('/v1/lesson/info?id=6', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -301,7 +302,7 @@ Mock.mock('/v1/lesson/info?id=3', {
   }
 })
 
-Mock.mock('/v1/project/list', {
+Mock.mock('/v1/project/list?keyword=&status=all&offset=1&limit=8', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -342,6 +343,71 @@ Mock.mock('/v1/project/list', {
     ]
   }
 })
+
+Mock.mock('/v1/statistics/getCampOneStudentLesson', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'total': 31,
+    'list|8': [
+      {
+        'lesson_name': '第四课-薪酬福利',
+        'score|1-100': 0, // 考试（分）
+        'reset_score|1-100': 0, // 重考（分）
+        'credit|1-100': 0, // 学分
+        'finish_time': 0,
+        'status': 0
+      }
+    ]
+  }
+})
+
+Mock.mock('/v1/statistics/getCampStudent?camp_id=2&offset=1&limit=10', { // 项目的参训学员信息，因为需要分页，不和项目详情一起返回，单独一个接口
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'total': 31,
+    'list|8': [
+      {
+        'student_name': '张昂',
+        'student_phone': '13277097289',
+        'add_time': '2019-01-21',
+        'sign': 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+        'finish_time': '2019-01-21',
+        'credit': 120,
+        'number': '1324',
+        'department': '销售'
+      }
+    ]
+  }
+})
+
+Mock.mock('/v1/statistics/getCampStudentLesson?camp_id=2&offset=1&limit=10', { // todo 项目的信息
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'total': 31,
+    'list|8': [
+      {
+        'student_name': '张昂',
+        'student_phone': '13277097289',
+        'student_status': '正常',
+        'lesson_name': '课程名称',
+        'lesson_source': '课程来源',
+        'lesson_status': '课程状态',
+        'minute': 100, // 学习时长
+        'completion_percent': 87, // 完成度
+        'start_time': '2019-01-21',
+        'finish_time': '2019-01-21',
+        'score': 0, // 考试成绩
+        'reset_score': 0, // 补考成绩
+        'credit': 120,
+        'number': '1324', // 编号
+        'department': '销售' // 部门
+      }
+    ]
+  }
+})
 Mock.mock('/v1/project/info?id=2', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
@@ -353,6 +419,7 @@ Mock.mock('/v1/project/info?id=2', {
     'introduction': '士大夫撒旦发生隔热隔热哥哥人格人格人格',
     'obj': '一般员工',
     'target_num': 20,
+    'join_num': 7,
     'lesson_info|3': [
       {
         'id|1-100': 1,
@@ -408,13 +475,13 @@ Mock.mock('/v1/questionBank/list?keyword=&offset=1&limit=10', {
     'total': 31,
     'list|10': [
       {
-        'id|1-10': 1,
+        'id': 6,
         'name|1': ['1孙子兵法实践初级入门第一届', '2孙子兵法实践初级入门第一届', '3孙子兵法实践初级入门第一届', '4孙子兵法实践初级入门第一届', '5孙子兵法实践初级入门第一届', '6孙子兵法实践初级入门第一届', '7孙子兵法实践初级入门第一届', '8孙子兵法实践初级入门第一届', '9孙子兵法实践初级入门第一届', '10孙子兵法实践初级入门第一届'],
         'add_time': '2019-02-21',
         'num|10-100': 12,
         'single_total': 20,
-        'multiple_total': 12,
-        'judge_total': 10
+        'multi_total': 12,
+        'trueFalse_total': 10
       }
     ]
   }
@@ -451,13 +518,13 @@ Mock.mock('/v1/question/list', {
   }
 
 })
-Mock.mock('/v1/spStudent/list?keyword=&offset=0&limit=20', {
+Mock.mock('/v1/spStudent/list?keyword=&offset=1&limit=10', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
-    'total': 1,
-    'list': [{
-      'id|': 5,
+    'total': 14,
+    'list|8': [{
+      'id|1-10': 5,
       'name|1': ['小强', '王五', '张三', '李四', '王二麻子'],
       'number': '321dcdc',
       'department|1': ['部门1', '部门2', '部门3', '部门4', '部门5'],
@@ -486,11 +553,11 @@ Mock.mock('/v1/examinationPaper/info', {
       {
         'id|1-10': 1,
         'single|1-20': 2,
-        'multiple|1-30': 3,
-        'judge|1-40': 4,
+        'multi|1-30': 3,
+        'trueFalse|1-40': 4,
         'single_total': 20,
         'multiple_total': 30,
-        'judge_total': 40,
+        'trueFalse_total': 40,
         'name': '题库1'
       }
     ],

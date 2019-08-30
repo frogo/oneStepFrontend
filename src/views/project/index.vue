@@ -19,7 +19,9 @@
         <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
           <el-form-item label="状态：">
             <el-radio-group v-model="filterForm.status" @change="handleChangeStatus">
-              <el-radio :label="item" v-for="item in status" :key="item" border />
+              <el-radio :label="item.label" v-for="item in status" :key="item" border>
+                {{ item.name }}
+              </el-radio>
             </el-radio-group>
           </el-form-item>
         </el-form>
@@ -258,9 +260,14 @@ export default {
       activeName: 'card',
       keyword: '',
       filterForm: {
-        status: '全部'
+        status: 'all'
       },
-      status: ['全部', '正常', '草稿', '下线'],
+      status: [
+        { label: 'all', name: '全部' },
+        { label: 1, name: '正常' },
+        { label: 2, name: '草稿' },
+        { label: 0, name: '下线' }
+      ],
       projectList: [],
       statusMap: {
         bg: { 0: 'gray', 1: 'green', 2: 'blue' },
@@ -328,7 +335,7 @@ export default {
       this.$router.push({ path: '/project/create' })
     },
     gotoDetails (item) {
-      this.$router.push({ path: '/project/details' })
+      this.$router.push({ path: '/project/details', query: { id: item.id } })
     },
     handleView (id) {
       this.viewProjectDialogVisible = true

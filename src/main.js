@@ -10,7 +10,7 @@ import 'normalize.css/normalize.css'
 import 'minireset.css/minireset.css'
 import '@/assets/style/common.scss'
 import ECharts from 'vue-echarts'
-import { sessionVerify } from '@/request/api'
+// import { sessionVerify } from '@/request/api'
 
 Vue.use(ElementUI)
 Vue.component('v-chart', ECharts)
@@ -29,19 +29,41 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login' || to.path === '/register' || to.path === '/forgotPassword' || from.path === '/login') {
     next()
   } else {
-    sessionVerify().then(res => {
-      if (!localStorage.getItem('user') || localStorage.getItem('user') !== res.data.name) {
-        localStorage.setItem('user', res.data.name)
-        // store.commit('$_setUserStorage', res.data.name)
+    axios.post('/v1/user/session').then((res) => {
+      if (res.data && res.data.code === '1') {
+        if (!localStorage.getItem('user') || localStorage.getItem('user') !== res.data.account) {
+          localStorage.setItem('user', res.data.account)
+          // store.commit('$_setUserStorage', res.data.name)
+        }
+        next()
+      } else {
+        next({
+          path: '/login',
+          query: { redirect: to.fullPath }// 将跳转的路由path作为参数，登录成功后跳转到该路由
+        })
       }
-      next()
     }, error => {
-      if (error.response && error.response.status === 404) {
+      if (error.response && error.response.status === 401) {
         next({
           path: '/login',
           query: { redirect: to.fullPath }// 将跳转的路由path作为参数，登录成功后跳转到该路由
         })
       }
     })
+
+    // sessionVerify().then(res => {
+    //   if (!localStorage.getItem('user') || localStorage.getItem('user') !== res.data.name) {
+    //     localStorage.setItem('user', res.data.name)
+    //     // store.commit('$_setUserStorage', res.data.name)
+    //   }
+    //   next()
+    // }, error => {
+    //   if (error.response && error.response.status === 401) {
+    //     next({
+    //       path: '/login',
+    //       query: { redirect: to.fullPath }// 将跳转的路由path作为参数，登录成功后跳转到该路由
+    //     })
+    //   }
+    // })
   }
 })

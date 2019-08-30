@@ -18,7 +18,9 @@
       <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
         <el-form-item label="类型：">
           <el-radio-group v-model="filterForm.type" @change="handleTypeChange">
-            <el-radio :label="item" v-for="item in type" :key="item" border />
+            <el-radio :label="item.label" v-for="item in type" :key="item.label" border>
+              {{ item.name }}
+            </el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -117,7 +119,7 @@
 </template>
 
 <script>
-import { getQuestionList, deleteQuestion, deleteQuestionAll } from '@/request/api'
+import { getQuestionList, deleteQuestion } from '@/request/api'
 import ExTable from '@/components/exTable.js'
 export default {
   components: {
@@ -127,9 +129,14 @@ export default {
     return {
       keyword: '',
       filterForm: {
-        type: '不限'
+        type: 'all'
       },
-      type: ['不限', '单选', '多选', '判断'],
+      type: [
+        { name: '不限', label: 'all' },
+        { name: '单选', label: 'single' },
+        { name: '多选', label: 'multi' },
+        { name: '判断', label: 'trueFalse' }
+      ],
       questionsTableData: [],
       multipleSelection: [],
       importQuestionDialog: false,
@@ -223,7 +230,7 @@ export default {
       let param = {
         keyword: this.keyword,
         type: this.filterForm.type,
-        bank_id: this.$route.params.id,
+        bank_id: this.$route.params.bank_id,
         offset: currentPage || 1,
         limit: pageSize || 10
       }
@@ -251,7 +258,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteQuestionAll({ list: this.multipleSelection }).then(res => { // todo 等待入参的key
+        let list = this.multipleSelection.map(item => {
+          return item.id
+        })
+        deleteQuestion({ id: list }).then(res => { // todo 等待入参的key
           this.$message.success(res.message)
           this.fetchRemoteData()
         })
@@ -268,7 +278,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteQuestion({ id: row.id }).then(res => {
+        deleteQuestion({ id: [row.id] }).then(res => {
           this.$message.success(res.message)
           this.fetchRemoteData()
         })

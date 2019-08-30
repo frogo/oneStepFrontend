@@ -5,7 +5,7 @@ export default {
   USER: {
     LOGIN: CONTEXTPATH + '/user/login',
     LOGOUT: CONTEXTPATH + '/user/loginOut',
-    VERIFY: CONTEXTPATH + '/user/session',
+    // VERIFY: CONTEXTPATH + '/user/session',
     REGISTER: CONTEXTPATH + '/user/register',
     FORGOT_PASSWORD: CONTEXTPATH + '/user/forgotPassword',
     RESET_PASSWORD: CONTEXTPATH + '/user/resetPwd',
@@ -19,7 +19,7 @@ export default {
     DRAFT_ADD: CONTEXTPATH + '/lessonDraft/add',
     DETAILS: CONTEXTPATH + '/lesson/info',
     DELETE: CONTEXTPATH + '/lesson/delete',
-    ONLINE_OR_OFFLINE: CONTEXTPATH + '/lesson/Online',
+    ONLINE_OR_OFFLINE: CONTEXTPATH + '/lesson/online',
     MODIFY: CONTEXTPATH + '/lesson/modify',
     TAG: {
       LIST: CONTEXTPATH + '/tag/list',
@@ -42,7 +42,7 @@ export default {
       DELETE_QUESTION_LIB: CONTEXTPATH + '/questionBank/delete',
       QUESTION_LIST: CONTEXTPATH + '/question/list',
       DELETE_QUESTION: CONTEXTPATH + 'question/delete',
-      DELETE_QUESTION_ALL: CONTEXTPATH + '/question/deleteAll',
+      // DELETE_QUESTION_ALL: CONTEXTPATH + '/question/deleteAll',
       ADD_QUESTION: CONTEXTPATH + '/question/add',
       QUESTION_DETAILS: CONTEXTPATH + '/question/info',
       QUESTION: {
@@ -60,13 +60,16 @@ export default {
     DRAFT: CONTEXTPATH + '/projectDraft/add',
     ADD: CONTEXTPATH + '/project/add',
     PENDING_LIST: CONTEXTPATH + '/projectApproval/list',
-    MODIFY: CONTEXTPATH + '/project/modify'
+    MODIFY: CONTEXTPATH + '/project/modify',
+    STUDENTS: CONTEXTPATH + '/statistics/getCampStudent', //
+    COURSE_STUDENT: CONTEXTPATH + '/statistics/getCampStudentLesson',
+    STUDENT_LEARNING: CONTEXTPATH + '/statistics/getCampOneStudentLesson'
   },
   SPECIAL_STUDENT: {
     LIST: CONTEXTPATH + '/spStudent/list',
     DELETE: CONTEXTPATH + '/spStudent/delete',
     ADD: CONTEXTPATH + '/spStudent/add',
-    DELETE_ALL: CONTEXTPATH + '/spStudent/deleteAll',
+    // DELETE_ALL: CONTEXTPATH + '/spStudent/deleteAll',
     EDIT: CONTEXTPATH + '/spStudent/modify'
   }
 }
