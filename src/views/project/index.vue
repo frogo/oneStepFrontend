@@ -108,7 +108,7 @@
                   <div class="operate-item">
                     <span @click="handleEdit(item.id)"><i class="el-icon-edit" /> 编辑</span>
                     <span @click="handleView(item.id)"><i class="el-icon-view" /> 预览</span>
-                    <span @click="handleOffline(item.id)"><i class="el-icon-download" /> 下线</span>
+                    <span @click="handleOffline(item)"><i class="el-icon-download" /> {{ item.status === 0 ? '上线' : '下线' }}</span>
                     <span @click="handleDelete(item.id)"><i class="el-icon-delete" /> 删除</span>
                   </div>
                 </el-col>
@@ -347,18 +347,27 @@ export default {
     handleEdit (id) {
       this.$router.push({ path: '/project/edit', query: { id: id } })
     },
-    handleOffline (id) {
-      this.$confirm('您确定下线该项目吗?', '提示', {
+    handleOffline (item) {
+      let isOffline = 0
+      let tipTxt = '下线'
+      if (item.status === 2) {
+        this.$message.error('该项目处于编辑状态！')
+        return false
+      } else if (item.status === 0) {
+        isOffline = 1
+        tipTxt = '上线'
+      } else {
+        isOffline = 0
+        tipTxt = '下线'
+      }
+      this.$confirm('您确定要' + tipTxt + '该项目吗?', '提示', {
         confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+        cancelButtonText: '取消'
       }).then(() => {
-        onLineProject({ id: id, online: 0 }).then(res => {
+        onLineProject({ id: item.id, online: isOffline }).then(res => {
           this.$message.success(res.message)
           this.getProjectList()
         })
-      }).catch(() => {
-
       })
     },
     handleDelete (id) {
