@@ -465,16 +465,17 @@ export default {
       this.createForm.examinationPaper = ''
     },
     handleSaveCourseDraft (formName) { // 保存草稿
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          if (GetUrlParam('id')) {
-            this.addCourseParam.id = GetUrlParam('id')
-          }
-          addCourseDraft(this.addCourseParam).then(res => {
-            this.$message.success(res.message)
-          })
-        }
+      if (GetUrlParam('id')) {
+        this.addCourseParam.id = GetUrlParam('id')
+      }
+      addCourseDraft(this.addCourseParam).then(res => {
+        this.$message.success(res.message)
       })
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
+      //
+      //   }
+      // })
     },
     handleSaveCourse (formName) {
       this.$refs[formName].validate((valid) => {

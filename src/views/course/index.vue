@@ -180,7 +180,7 @@ export default {
       return {
         keyword: this.keyword,
         source: this.filterForm.from,
-        from: this.filterForm.status,
+        status: this.filterForm.status,
         tag_id: tags,
         offset: this.currentPage,
         limit: this.pageSize
