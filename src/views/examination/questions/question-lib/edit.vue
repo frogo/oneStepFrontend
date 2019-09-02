@@ -1,7 +1,7 @@
 <template>
   <el-main class="page-questionEdit">
     <h2 class="pageName">
-      编辑试题
+      {{ bank_name }} - 编辑试题
     </h2>
 
     <div class="filter-box">
@@ -207,7 +207,7 @@ export default {
       }
       // eslint-disable-next-line no-console
       console.log(fileFormData)
-      this.$axios.post('question/import', fileFormData, requestConfig).then((res) => { // todo 待验证
+      this.$axios.post('/question/import', fileFormData, requestConfig).then((res) => { // todo 待验证
         if (res.data && res.data.code === '1') {
           this.$message({
             message: '上传成功',

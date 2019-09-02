@@ -66,12 +66,12 @@
                           预览
                         </p>
                       </div>
-                      <div @click="handleOffline(item.id)" class="item">
+                      <div @click="handleOffline(item)" class="item">
                         <p class="icon">
                           <i class="el-icon-download" />
                         </p>
                         <p class="text">
-                          下线
+                          {{ item.status === 0 ? '上线' : '下线' }}
                         </p>
                       </div>
                       <div @click="handleDelete(item.id)" class="item">
@@ -108,7 +108,7 @@
                   <div class="operate-item">
                     <span @click="handleEdit(item.id)"><i class="el-icon-edit" /> 编辑</span>
                     <span @click="handleView(item.id)"><i class="el-icon-view" /> 预览</span>
-                    <span @click="handleOffline(item)"><i class="el-icon-download" /> {{ item.status === 0 ? '上线' : '下线' }}</span>
+                    <span @click="handleOffline(item)"><i class="el-icon-download" />{{ item.status === 0 ? '上线' : '下线' }}</span>
                     <span @click="handleDelete(item.id)"><i class="el-icon-delete" /> 删除</span>
                   </div>
                 </el-col>

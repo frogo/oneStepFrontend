@@ -101,7 +101,7 @@
       </el-form-item>
     </el-form>
     <div class="operation-bar">
-      <el-button @click="handleSaveProjectDraft('createForm')" type="success">
+      <el-button @click="handleSaveProjectDraft('createForm')" :disabled="editMode && currentStatus !== 2 " type="success">
         保存草稿
       </el-button>
       <el-button @click="handleSaveProject('createForm')" type="primary">
@@ -355,7 +355,8 @@ export default {
         editModeStudentSelectedData: [] // 编辑的时候拉取的参训学员数据 //废弃
       },
       // 是否编辑模式
-      editMode: false
+      editMode: false,
+      currentStatus: '' // 当前项目的状态 0下线,1上线中,2草稿
     }
   },
   computed: {
@@ -408,6 +409,7 @@ export default {
       this.editMode = true
       let id = GetUrlParam('id')
       getProjectDetails({ id: id }).then(res => { // todo 项目编辑
+        this.currentStauts = res.data.status
         this.createForm = { // 编辑回显数据
           projectName: res.data.name,
           projectCycle: [res.data.start_time, res.data.end_time],
@@ -476,28 +478,32 @@ export default {
       })
     },
     handleSaveProjectDraft (formName) { // 保存草稿
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          if (this.dialogCourse.selectedData.length === 0) {
-            this.$message.error('请选择课程')
-            return false
-          }
-          if (this.createForm.passwordSwitch && !this.createForm.password) {
-            this.$message.error('请输入参训口令')
-            return false
-          }
-          if (this.createForm.studentsSwitch && (this.dialogStudents.transferSelectedData.length === 0)) {
-            this.$message.error('请制定参训学员')
-            return false
-          }
-          addDraftProject(this.addProjectParam).then(res => {
-            this.$message.success(res.message)
-            this.$router.push({ path: '/project' })
-          })
-        } else {
-          return false
-        }
+      if (GetUrlParam('id')) {
+        this.addProjectParam.id = GetUrlParam('id')
+      }
+      addDraftProject(this.addProjectParam).then(res => {
+        this.$message.success(res.message)
+        this.$router.push({ path: '/project' })
       })
+      // this.$refs[formName].validate((valid) => {
+      //   if (valid) {
+      //     if (this.dialogCourse.selectedData.length === 0) {
+      //       this.$message.error('请选择课程')
+      //       return false
+      //     }
+      //     if (this.createForm.passwordSwitch && !this.createForm.password) {
+      //       this.$message.error('请输入参训口令')
+      //       return false
+      //     }
+      //     if (this.createForm.studentsSwitch && (this.dialogStudents.transferSelectedData.length === 0)) {
+      //       this.$message.error('请制定参训学员')
+      //       return false
+      //     }
+      //
+      //   } else {
+      //     return false
+      //   }
+      // })
     },
     handleSaveProject (formName) { // 保存项目
       this.$refs[formName].validate((valid) => {

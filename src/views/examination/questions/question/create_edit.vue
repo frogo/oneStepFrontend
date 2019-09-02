@@ -113,7 +113,6 @@
 
 <script>
 import { addQuestion, getQuestionDetails, modifyQuestion } from '@/request/api'
-import { GetUrlParam } from '@/utility'
 export default {
   name: 'Create',
   data () {
@@ -204,12 +203,13 @@ export default {
     }
   },
   mounted: function () {
+    this.questionId = this.$route.params.id
     this.bank_id = this.$route.params.bank_id || localStorage.getItem('bank_id')
     this.bank_name = this.$route.params.bank_name || localStorage.getItem('bank_name')
     this.createForm.questionLibName = this.bank_name
     if (this.$route.name === 'question-edit') {
       this.editMode = true
-      let id = this.$route.params.id
+      let id = this.questionId
       getQuestionDetails({ id: id }).then(res => {
         this.createForm.questionName = res.data.subject
         this.createForm.questionType = res.data.type
@@ -295,7 +295,7 @@ export default {
           // eslint-disable-next-line no-console
           console.log(params)
           if (this.editMode) {
-            params.id = GetUrlParam('id')
+            params.id = this.questionId
             modifyQuestion(params).then(res => {
               this.$message.success(res.message)
               this.$router.push({ name: 'questionLib-edit' })

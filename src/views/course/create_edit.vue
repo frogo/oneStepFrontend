@@ -106,7 +106,7 @@
       </el-form-item>
     </el-form>
     <div class="operation-bar">
-      <el-button @click="handleSaveCourseDraft('createForm')" type="success">
+      <el-button @click="handleSaveCourseDraft('createForm')" :disabled="editMode && currentStatus !== 2 " type="success">
         保存草稿
       </el-button>
       <el-button @click="handleSaveCourse('createForm')" type="primary">
@@ -253,7 +253,8 @@ export default {
       // 编辑标签弹窗
       dialogTagsEditorVisible: false,
       editMode: false,
-      coverSettingShow: true
+      coverSettingShow: true,
+      currentStatus: '' // 当前课程状态 0，下线，1，上线中，2，草稿
       // selectedTags: []
     }
   },
@@ -319,6 +320,7 @@ export default {
         activeTabName = 'default'
         radioCover = res.data.cover
       }
+      this.currentStatus = res.data.status
       this.createForm = { // 编辑回显数据
         courseName: res.data.name,
         audience: res.data.obj,
@@ -465,6 +467,9 @@ export default {
     handleSaveCourseDraft (formName) { // 保存草稿
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          if (GetUrlParam('id')) {
+            this.addCourseParam.id = GetUrlParam('id')
+          }
           addCourseDraft(this.addCourseParam).then(res => {
             this.$message.success(res.message)
           })

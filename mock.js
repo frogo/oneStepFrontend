@@ -513,7 +513,7 @@ Mock.mock('/v1/project/delete', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '删除成功'
 })
-Mock.mock('/v1/project/online', {
+Mock.mock('v1/project/online', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '该项目已成功下线'
 })
@@ -533,7 +533,7 @@ Mock.mock('/v1/projectApproval/list?id=2&offset=1&limit=10', {
   }
 })
 
-Mock.mock('/v1/questionBank/list?keyword=&offset=1&limit=10', {
+Mock.mock('v1/questionBank/list?keyword=&offset=1&limit=10', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -551,7 +551,7 @@ Mock.mock('/v1/questionBank/list?keyword=&offset=1&limit=10', {
     ]
   }
 })
-Mock.mock('/v1/questionBank/add', {
+Mock.mock('v1/questionBank/add', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'id': 1

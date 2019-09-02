@@ -152,7 +152,7 @@ export default {
     handleGotoEdit () {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          addQuestionLib(this.form.name).then(res => {
+          addQuestionLib({ name: this.form.name }).then(res => {
             this.$message.success('添加成功')
             this.$router.push({ name: 'questionLib-edit', params: { bank_id: res.id, bank_name: this.form.name } })
             this.createQuestionsDialogVisible = false
@@ -178,8 +178,6 @@ export default {
           this.$message.success(res.message)
           this.fetchRemoteData()
         })
-      }).catch(() => {
-
       })
     }
   }
