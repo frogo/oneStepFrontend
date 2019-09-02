@@ -17,7 +17,7 @@
       <el-form ref="filterForm" :model="filterForm" label-width="60px" size="mini">
         <el-form-item label="来源：">
           <el-radio-group v-model="filterForm.from">
-            <el-radio :label="0" border>
+            <el-radio label="all" border>
               全部
             </el-radio>
             <el-radio :label="item.value" v-for="(item, index) in tags.source" :key="item.name + index" border>
@@ -27,7 +27,7 @@
         </el-form-item>
         <el-form-item label="状态：">
           <el-radio-group v-model="filterForm.status">
-            <el-radio :label="0" border>
+            <el-radio label="all" border>
               全部
             </el-radio>
             <el-radio :label="item.value" v-for="(item, index) in tags.status" :key="item.name + index" border>
@@ -139,7 +139,7 @@
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getCourseList, deleteCourse, courseOnlineOrOffline, getTagList, getCourseDetails } from '@/request/api'
+import { getCourseList, deleteCourse, courseOnlineOrOffline, getTagList, getCourseTags, updateCourseTags } from '@/request/api'
 import TagsEditorDialog from '@/components/tagsEditorDialog'
 export default {
   components: {
@@ -149,8 +149,8 @@ export default {
     return {
       keyword: '',
       filterForm: {
-        from: 0,
-        status: 0,
+        from: 'all',
+        status: 'all',
         series: 0,
         level: [],
         department: [],
@@ -169,15 +169,18 @@ export default {
       pageSize: 20,
       total: 0,
       dialogTagsEditorVisible: false,
-      currentEditCourseTags: [] // 当前正在编辑标签的课程标签
+      currentEditCourseTags: [], // 当前正在编辑标签的课程标签
+      currentCourseTagsEditId: '' // 前正在编辑标签的课程ID
     }
   },
   computed: {
     getCourseListParam: function () {
       let tags = this.filterForm.level.concat(this.filterForm.department, this.filterForm.custom)
-      tags.push(this.filterForm.from, this.filterForm.series, this.filterForm.status)
+      // tags.push(this.filterForm.from, this.filterForm.series, this.filterForm.status)
       return {
         keyword: this.keyword,
+        source: this.filterForm.from,
+        from: this.filterForm.status,
         tag_id: tags,
         offset: this.currentPage,
         limit: this.pageSize
@@ -264,15 +267,22 @@ export default {
         })
       })
     },
-    handleTagsEdit (item) { // 标签编辑
-      getCourseDetails({ id: item.id }).then(res => {
-        this.currentEditCourseTags = res.data.tags
+    handleTagsEdit (item) { // 课程标签编辑
+      this.currentCourseTagsEditId = item.id // 当前编辑标签的课程ID
+      getCourseTags({ lesson_id: item.id }).then(res => { // 获取课程标签
+        this.currentEditCourseTags = res.data.map(_ => {
+          return _.id
+        })
         this.dialogTagsEditorVisible = true
       })
     },
-    getSelectedTags (tags) { // todo 缺少编辑标签成功提交的接口
-      // eslint-disable-next-line no-console
-      console.log(tags)
+    getSelectedTags (tags) { // 更新课程标签
+      let tagList = tags.map(_ => {
+        return _.id
+      })
+      updateCourseTags({ tags: tagList, lesson_id: this.currentCourseTagsEditId }).then(res => {
+        this.$message.success(res.message)
+      })
     }
   }
 }

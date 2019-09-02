@@ -168,11 +168,11 @@ Mock.mock('/v1/lesson/Online', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '课程上线/下线成功'
 })
-Mock.mock('/v1/tag/delete', {
+Mock.mock('v1/tag/delete', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '标签删除成功'
 })
-Mock.mock('/v1/tag/add', {
+Mock.mock('v1/tag/add', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '标签新增成功'
 })
@@ -275,6 +275,20 @@ Mock.mock('v1/tag/list', {
       }
     ]
   }
+})
+Mock.mock('v1/lesson/getLessonTags?lesson_id=117', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': [{
+    'active': true,
+    'child': null,
+    'company_id': 1,
+    'id': 16,
+    'name': '小组长',
+    'parent_id': 1,
+    'readonly': 0
+  }
+  ]
 })
 
 Mock.mock('v1/statistics/getCampCreditRank', {
@@ -472,6 +486,28 @@ Mock.mock('/v1/project/info?id=2', {
     'status|1': ['0', '1', '2'], // '状态0下线 1上线 2草稿',
     'add_time': '2009-12-23'
   }
+})
+
+Mock.mock('/v1/statistics/getCampJoinChart', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': [
+    {
+      'month': 8,
+      'join_num': 78,
+      'finish_num': 30
+    },
+    {
+      'month': 9,
+      'join_num': 46,
+      'finish_num': 21
+    },
+    {
+      'month': 11,
+      'join_num': 65,
+      'finish_num': 30
+    }
+  ]
 })
 Mock.mock('/v1/project/delete', {
   'code': '1', // 这个定义数据的模板形式下面会介绍

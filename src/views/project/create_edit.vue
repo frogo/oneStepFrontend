@@ -17,6 +17,7 @@
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
+          value-format="yyyy-MM-dd"
         />
       </el-form-item>
       <el-form-item label="参训对象" prop="participants">
@@ -148,7 +149,7 @@
         <el-form ref="filterForm" :model="dialogCourse.filterForm" label-width="60px" size="mini">
           <el-form-item label="来源：">
             <el-radio-group v-model="dialogCourse.filterForm.from">
-              <el-radio :label="0" border>
+              <el-radio label="all" border>
                 全部
               </el-radio>
               <el-radio :label="item.value" v-for="(item, index) in dialogCourse.tags.source" :key="item.name + index" border>
@@ -158,7 +159,7 @@
           </el-form-item>
           <el-form-item label="状态：">
             <el-radio-group v-model="dialogCourse.filterForm.status">
-              <el-radio :label="0" border>
+              <el-radio label="all" border>
                 全部
               </el-radio>
               <el-radio :label="item.value" v-for="(item, index) in dialogCourse.tags.status" :key="item.name + index" border>
@@ -166,13 +167,13 @@
               </el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="层级：">
-            <el-checkbox-group v-model="dialogCourse.filterForm.level">
-              <el-checkbox-button :label="item.id" v-for="(item, index) in dialogCourse.tags.level" :key="item + index">
-                {{ item.name }}
-              </el-checkbox-button>
-            </el-checkbox-group>
-          </el-form-item>
+          <!--          <el-form-item label="层级：">-->
+          <!--            <el-checkbox-group v-model="dialogCourse.filterForm.level">-->
+          <!--              <el-checkbox-button :label="item.id" v-for="(item, index) in dialogCourse.tags.level" :key="item + index">-->
+          <!--                {{ item.name }}-->
+          <!--              </el-checkbox-button>-->
+          <!--            </el-checkbox-group>-->
+          <!--          </el-form-item>-->
           <el-form-item label="职能：">
             <el-checkbox-group v-model="dialogCourse.filterForm.department">
               <el-checkbox-button :label="item.id" v-for="(item, index) in dialogCourse.tags.department" :key="item + index">
@@ -321,9 +322,9 @@ export default {
         visible: false,
         keyword: '',
         filterForm: {
-          from: '全部',
-          status: '全部',
-          series: '全部',
+          from: 'all',
+          status: 'all',
+          series: 'all',
           level: [],
           department: [],
           custom: []
@@ -437,9 +438,11 @@ export default {
     },
     fetchRemoteData (pagination, currentPage, pageSize) { // 带翻页表格数据远程拉取
       let tags = this.dialogCourse.filterForm.level.concat(this.dialogCourse.filterForm.department, this.dialogCourse.filterForm.custom)
-      tags.push(this.dialogCourse.filterForm.from, this.dialogCourse.filterForm.series, this.dialogCourse.filterForm.status)
+      // tags.push(this.dialogCourse.filterForm.from, this.dialogCourse.filterForm.series, this.dialogCourse.filterForm.status)
       let param = {
         keyword: this.dialogCourse.keyword,
+        source: this.dialogCourse.filterForm.from,
+        status: this.dialogCourse.filterForm.status,
         tag_id: tags,
         offset: currentPage || 1,
         limit: pageSize || 10

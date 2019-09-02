@@ -163,7 +163,7 @@ export default {
   computed: {
     addSingleParam: function () {
       return {
-        bank_id: this.bank_id,
+        bank_id: parseInt(this.bank_id),
         bank_name: this.bank_name,
         type: this.createForm.questionType,
         subject: this.createForm.questionName,
@@ -179,7 +179,7 @@ export default {
     },
     addMultiParam: function () {
       return {
-        bank_id: this.bank_id,
+        bank_id: parseInt(this.bank_id),
         bank_name: this.bank_name,
         type: this.createForm.questionType,
         subject: this.createForm.questionName,
@@ -188,7 +188,7 @@ export default {
     },
     addTrueFalseParam: function () {
       return {
-        bank_id: this.bank_id,
+        bank_id: parseInt(this.bank_id),
         bank_name: this.bank_name,
         type: this.createForm.questionType,
         subject: this.createForm.questionName,

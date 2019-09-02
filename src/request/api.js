@@ -37,7 +37,7 @@ export const getDefaultCover = p => get(CONFIG.COURSE.DEFAULT_COVER, p) // 课�
 export const getTagList = p => get(CONFIG.COURSE.TAG.LIST, p) // 获取标签列表
 export const deleteTag = p => post(CONFIG.COURSE.TAG.DELETE, p) // 删除标签
 export const addTag = p => post(CONFIG.COURSE.TAG.ADD, p) // 新增标签
-export const getCourseTags = p => post(CONFIG.COURSE.TAG.GET_COURSE_TAGS, p) // 获取课程标签
+export const getCourseTags = p => get(CONFIG.COURSE.TAG.GET_COURSE_TAGS, p) // 获取课程标签
 export const updateCourseTags = p => post(CONFIG.COURSE.TAG.UPDATE_COURSE_TAGS, p) // 更新课程标签
 
 // 项目
@@ -59,6 +59,7 @@ export const exportStudentForm = p => post(CONFIG.PROJECT.EXPORT_STUDENT, p) // 
 export const exportStudentCourseForm = p => post(CONFIG.PROJECT.EXPORT_STUDENT_COURSE, p) // 导出项目详情报表
 export const exportCreditRankingForm = p => post(CONFIG.PROJECT.EXPORT_CREDIT_RANKING, p) // 导出学分排行报表
 export const getCreditRanking = p => get(CONFIG.PROJECT.CREDIT_RANKING, p) // 学分排行
+export const getProjectChartData = p => get(CONFIG.PROJECT.PROJECT_CHART, p) // 图表
 
 // 试题
 export const getQuestionLibList = p => get(CONFIG.EXAMINATION.QUESTION.QUESTION_LIB, p) // 题库列表

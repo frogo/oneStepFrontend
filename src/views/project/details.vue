@@ -269,7 +269,8 @@ import {
   exportStudentForm,
   exportStudentCourseForm,
   exportCreditRankingForm,
-  getCreditRanking
+  getCreditRanking,
+  getProjectChartData
 } from '@/request/api'
 import AsideMenu from '@/components/asideMenu'
 import ExTable from '@/components/exTable.js'
@@ -283,6 +284,16 @@ export default {
     ExTable
   },
   data () {
+    // let dataX = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+    let dataX = this.remoteChartData.map(_ => {
+      return _.month + '月'
+    })
+    let dataJoin = this.remoteChartData.map(_ => {
+      return _.join_num
+    })
+    let dataComplete = this.remoteChartData.map(_ => {
+      return _.finish_num
+    })
     return {
       barData: {
         // title: {
@@ -310,7 +321,7 @@ export default {
         xAxis: [
           {
             type: 'category',
-            data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+            data: dataX
           }
         ],
         yAxis: [
@@ -322,12 +333,12 @@ export default {
           {
             name: '参与人数',
             type: 'bar',
-            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
+            data: dataJoin
           },
           {
             name: '完成人数',
             type: 'bar',
-            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
+            data: dataComplete
           }
         ]
       },
@@ -348,6 +359,7 @@ export default {
         total: 100
       },
       creditRanking: [], // 学分排行远程数据
+      remoteChartData: '',
       ranking: [{ name: 'saad', lesson: '孙子兵法', credit: '90' }, { name: 'saad', lesson: '孙子兵法', credit: '90' }, { name: 'saad', lesson: '孙子兵法', credit: '90' }, { name: 'saad', lesson: '孙子兵法', credit: '90' }, { name: 'saad', lesson: '孙子兵法', credit: '90' }]
     }
   },
@@ -366,6 +378,9 @@ export default {
     })
     getCreditRanking({ camp_id: GetUrlParam('id'), offset: 1, limit: 5 }).then(res => {
       this.creditRanking = res.data.list
+    })
+    getProjectChartData({ camp_id: GetUrlParam('id') }).then(res => {
+      this.remoteChartData = res.data
     })
     this.fetchProjectStudentRemoteData()
     this.fetchProjectStudentCourseRemoteData()

@@ -71,7 +71,8 @@ export default {
     EXPORT_STUDENT: CONTEXTPATH + '/importExport/ExportCampStudent',
     EXPORT_STUDENT_COURSE: CONTEXTPATH + '/importExport/ExportCampStudentLesson',
     EXPORT_CREDIT_RANKING: CONTEXTPATH + '/importExport/ExportCampCreditRank',
-    CREDIT_RANKING: CONTEXTPATH + '/statistics/getCampCreditRank'
+    CREDIT_RANKING: CONTEXTPATH + '/statistics/getCampCreditRank',
+    PROJECT_CHART: CONTEXTPATH + '/statistics/getCampJoinChart'
   },
   SPECIAL_STUDENT: {
     LIST: CONTEXTPATH + '/spStudent/list',

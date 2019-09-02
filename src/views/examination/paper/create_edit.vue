@@ -383,9 +383,9 @@ export default {
           paperName: res.data.name,
           qualifiedPercent: res.data.ratio,
           hours: res.data.minute,
-          randomSequence: res.data.is_question_random,
-          randomOption: res.data.is_option_random,
-          noLookAnswer: res.data.is_show_answer,
+          randomSequence: res.data.is_question_random === 1,
+          randomOption: res.data.is_option_random === 1,
+          noLookAnswer: res.data.is_show_answer === 1,
           rules: res.data.rule
         }
         if (res.data.rule === 'manual') {
