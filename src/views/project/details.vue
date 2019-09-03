@@ -284,16 +284,21 @@ export default {
     ExTable
   },
   data () {
-    // let dataX = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
-    let dataX = this.remoteChartData.map(_ => {
-      return _.month + '月'
-    })
-    let dataJoin = this.remoteChartData.map(_ => {
-      return _.join_num
-    })
-    let dataComplete = this.remoteChartData.map(_ => {
-      return _.finish_num
-    })
+    let dataX = ['3月', '4月']
+    let dataJoin = [12, 14]
+    let dataComplete = [5, 8]
+    // let dataX = []
+    // let dataJoin = []
+    // let dataComplete = []
+    // this.remoteChartData.map(_ => {
+    //   return _.month + '月'
+    // })
+    // let dataJoin = this.remoteChartData.map(_ => {
+    //   return _.join_num
+    // })
+    // let dataComplete = this.remoteChartData.map(_ => {
+    //   return _.finish_num
+    // })
     return {
       barData: {
         // title: {
@@ -379,8 +384,18 @@ export default {
     getCreditRanking({ camp_id: GetUrlParam('id'), offset: 1, limit: 5 }).then(res => {
       this.creditRanking = res.data.list
     })
+    let _this = this
     getProjectChartData({ camp_id: GetUrlParam('id') }).then(res => {
-      this.remoteChartData = res.data
+      _this.remoteChartData = res.data
+      _this.barData.xAxis.data = _this.remoteChartData.map(_ => {
+        return _.month + '月'
+      })
+      _this.barData.series[0].data = _this.remoteChartData.map(_ => {
+        return _.join_num
+      })
+      _this.barData.series[1].data = _this.remoteChartData.map(_ => {
+        return _.finish_num
+      })
     })
     this.fetchProjectStudentRemoteData()
     this.fetchProjectStudentCourseRemoteData()

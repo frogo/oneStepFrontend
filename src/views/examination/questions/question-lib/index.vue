@@ -154,7 +154,7 @@ export default {
         if (valid) {
           addQuestionLib({ name: this.form.name }).then(res => {
             this.$message.success('添加成功')
-            this.$router.push({ name: 'questionLib-edit', params: { bank_id: res.id, bank_name: this.form.name } })
+            this.$router.push({ name: 'questionLib-edit', params: { bank_id: res.data.id, bank_name: this.form.name } })
             this.createQuestionsDialogVisible = false
           })
         } else {

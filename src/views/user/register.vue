@@ -85,7 +85,7 @@
   </div>
 </template>
 <script>
-import { register } from '@/request/api'
+import { register, sendPhone } from '@/request/api'
 export default {
   data () {
     const validCodeName = (rule, value, callback) => {
@@ -110,7 +110,7 @@ export default {
     }
     const checkEmail = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('手机号不能为空'))
+        return callback(new Error('邮箱不能为空'))
       } else {
         const reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
         if (reg.test(value)) {
@@ -211,9 +211,10 @@ export default {
     handleVerificationCode (phoneNumber) {
       if (!phoneNumber) {
         this.$message.error('手机号不能为空！')
-      } else {
-        alert(phoneNumber)
       }
+      sendPhone({ phone: phoneNumber }).then(res => {
+        this.$message(res.message)
+      })
     },
     onSubmit (registerForm) {
       this.$refs[registerForm].validate((valid) => {

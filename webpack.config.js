@@ -17,8 +17,8 @@ module.exports = {
     if (prod) {
       return e
     } else {
-      // return e
-      return e.concat(['./mock.js'])
+      return e
+      // return e.concat(['./mock.js'])
     }
   },
   output: {

@@ -9,7 +9,8 @@ export default {
     REGISTER: CONTEXTPATH + '/user/register',
     FORGOT_PASSWORD: CONTEXTPATH + '/user/forgotPassword',
     RESET_PASSWORD: CONTEXTPATH + '/user/resetPwd',
-    CHANGE_PASSWORD: CONTEXTPATH + '/user/passwd'
+    CHANGE_PASSWORD: CONTEXTPATH + '/user/passwd',
+    SEND_PHONE: CONTEXTPATH + '/user/sendCode'
   },
   TODO: CONTEXTPATH + '/message/stat',
   STATUS: CONTEXTPATH + '/statistics/info',

@@ -16,7 +16,8 @@ export const forgotPassword = p => post(CONFIG.USER.FORGOT_PASSWORD, p)
 export const resetPassword = p => post(CONFIG.USER.RESET_PASSWORD, p)
 // 修改密码
 export const changePassword = p => post(CONFIG.USER.CHANGE_PASSWORD, p)
-
+// 发送手机验证码
+export const sendPhone = p => post(CONFIG.USER.SEND_PHONE, p)
 // 首页
 // 我的待办
 export const getTodo = p => get(CONFIG.TODO, p)

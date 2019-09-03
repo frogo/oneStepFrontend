@@ -18,7 +18,7 @@ Mock.mock('/v1/message/stat', {
     'lesson': 66
   }
 })
-Mock.mock('/v1/user/login', {
+Mock.mock('v1/user/login', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
@@ -28,7 +28,7 @@ Mock.mock('/v1/user/login', {
     'email': ''
   }
 })
-Mock.mock('/v1/user/session', {
+Mock.mock('v1/user/session', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',
   'data': {
