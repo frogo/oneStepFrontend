@@ -166,7 +166,7 @@ export default {
       if (this.step++ > 2) { this.step = 0 }
     },
     check () {
-      forgotPassword(this.input).then(res => {
+      forgotPassword({ info: this.input }).then(res => {
         if (res.code === '1') {
           this.checkPass = true
         } else if (res.code === '0') {

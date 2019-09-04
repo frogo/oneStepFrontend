@@ -303,12 +303,13 @@ a{text-decoration: none}
           padding: 0 8px 10px 0;
           img {
             border: 2px solid #fff;
-            border-radius: 3px
+            border-radius: 3px;
+            max-width: 200px;
           }
         }
         &.is-checked{
           .el-radio__label{
-            img{border: 2px solid #21a7ea;}
+            img{border: 2px solid red;}
           }
         }
         .el-radio__input{display: none}

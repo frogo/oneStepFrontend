@@ -225,6 +225,9 @@ export default {
               })
             }
           })
+        } else {
+          this.createForm.optionsTrueFalse.questionOptionsData = res.data.options
+          this.createForm.optionsTrueFalse.trueOption = res.data.options.filter(item => item.istrue === 1)[0].number
         }
       })
     }

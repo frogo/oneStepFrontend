@@ -550,7 +550,15 @@ export default {
             position: relative;
             padding: 10px;
             margin: 5px 0;
-            &:hover{background: #fff0e9;border-bottom: 1px solid #ef6520;border-top: 1px solid #ef6520}
+            .operate-item{visibility: hidden}
+            &:hover{
+              background: #fff0e9;border-bottom: 1px solid #ef6520;border-top: 1px solid #ef6520;
+              .operate-item{
+                visibility: visible;
+                font-size: 12px; margin-top: 35px;color:#4771d4;
+                span{ margin-left: 10px;cursor: pointer }
+              }
+            }
             .pending{z-index:1;cursor:pointer;display: inline-block;width:60px;height:26px; line-height: 26px; font-size: 12px; text-align: center;background: #15d1a4;color:#fff;position: absolute;top:10px;right:10px;border-radius:4px }
             .el-row{
               .headline {
@@ -562,7 +570,7 @@ export default {
               .pieces{font-size: 12px;color:#999;
                 .end-date{margin: 0 20px}
               }
-              .operate-item{font-size: 12px; margin-top: 35px;color:#4771d4;span{ margin-left: 10px;cursor: pointer }}
+
             }
 
           }

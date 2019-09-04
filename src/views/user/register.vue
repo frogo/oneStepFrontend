@@ -160,9 +160,9 @@ export default {
           { required: true, message: '请输入管理员姓名', trigger: 'blur' },
           { min: 2, max: 8, message: '长度在 3 到 6 个字符', trigger: 'blur' }
         ],
-        invitationCode: [
-          { required: true, message: '请输入邀请码', trigger: 'blur' }
-        ],
+        // invitationCode: [
+        //   { required: true, message: '请输入邀请码', trigger: 'blur' }
+        // ],
         phoneNumber: [
           { required: true, validator: checkPhoneNumber, trigger: 'blur' }
         ],

@@ -380,7 +380,7 @@ export default {
         is_auth: this.createForm.auth ? 1 : 0,
         is_pwd: this.createForm.passwordSwitch ? 1 : 0,
         is_sign: this.createForm.sign ? 1 : 0,
-        password: this.createForm.password,
+        passwd: this.createForm.password,
         personnel: student
       }
     }
@@ -409,7 +409,7 @@ export default {
       this.editMode = true
       let id = GetUrlParam('id')
       getProjectDetails({ id: id }).then(res => { // todo 项目编辑
-        this.currentStauts = res.data.status
+        this.currentStatus = res.data.status
         this.createForm = { // 编辑回显数据
           projectName: res.data.name,
           projectCycle: [res.data.start_time, res.data.end_time],
@@ -573,7 +573,7 @@ export default {
       this.dialogStudents.visible = true
       this.dialogStudents.transferSelectedData = []
       let _this = this
-      getSpecialStudentList({ keyword: this.dialogStudents.keyword, offset: 0, limit: 20 }).then(res => {
+      getSpecialStudentList({ keyword: this.dialogStudents.keyword, offset: 1, limit: 50 }).then(res => {
         _this.dialogStudents.transferData = res.data.list
         // if (_this.dialogStudents.transferSelectedData.length > 0) {
         //   let selected = _this.dialogStudents.transferSelectedData.map(item => {

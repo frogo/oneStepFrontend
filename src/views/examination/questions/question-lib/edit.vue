@@ -101,7 +101,7 @@
         <el-button slot="trigger" size="small" type="primary">
           选取文件
         </el-button>
-        <a href="./static/questionTemplate.xlsx" rel="external nofollow" download="模板"><el-button size="small" type="success">下载模板</el-button></a>
+        <a href="/res/importTemp/question.xlsx" rel="external nofollow" download="模板"><el-button size="small" type="success">下载模板</el-button></a>
         <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
         <div slot="tip" class="el-upload__tip">
           只能上传excel文件，且不超过5MB
@@ -199,7 +199,9 @@ export default {
         return false
       }
       let fileFormData = new FormData()
-      fileFormData.append('question_file', this.files, this.fileName)// filename是键，file是值，就是要传的文件，test.zip是要传的文件名
+      fileFormData.append('question_file', this.files)
+      fileFormData.append('bank_id', this.bank_id)
+      fileFormData.append('bank_name', this.bank_name)
       let requestConfig = {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -207,7 +209,7 @@ export default {
       }
       // eslint-disable-next-line no-console
       console.log(fileFormData)
-      this.$axios.post('/question/import', fileFormData, requestConfig).then((res) => { // todo 待验证
+      this.$axios.post('/v1/question/import', fileFormData, requestConfig).then((res) => { // todo 待验证
         if (res.data && res.data.code === '1') {
           this.$message({
             message: '上传成功',

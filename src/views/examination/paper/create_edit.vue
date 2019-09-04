@@ -353,7 +353,7 @@ export default {
         currentQuestionLib: '',
         filterForm: {
           type: 'all',
-          typeList: [{ val: 'all', label: '不限' }, { val: 'single', label: '单选' }, { val: 'muti', label: '多选' }, { val: 'trueFalse', label: '判断' }]
+          typeList: [{ val: 'all', label: '不限' }, { val: 'single', label: '单选' }, { val: 'multi', label: '多选' }, { val: 'trueFalse', label: '判断' }]
         },
         questionTableData: [
         ], // 手动出题，当前选择的题库的试题列表

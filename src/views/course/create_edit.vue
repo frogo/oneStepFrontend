@@ -87,6 +87,9 @@
           :file-list="createForm.courseFileList"
           :on-success="handleCourseFileSuccess"
           :before-upload="beforeCourseFileUpload"
+          :on-remove="removeCourseFile"
+          :on-exceed="handleExceed"
+          :before-remove="beforeRemove"
           class="upload-courseFile"
           action="/v1/lesson/uploadVideo"
         >
@@ -94,7 +97,7 @@
             点击上传
           </el-button>
           <div slot="tip" class="el-upload__tip">
-            只能上传jpg/png文件，且不超过500kb
+            请上传mp3/mp4文件，且不超过100M
           </div>
         </el-upload>
       </el-form-item>
@@ -213,7 +216,7 @@ export default {
       ], // 默认封面列表
       rules: {
         courseName: [
-          { required: true, message: '请输入活动名称', trigger: 'blur' },
+          { required: true, message: '请输入课程名称', trigger: 'blur' },
           { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
         ],
         audience: [
@@ -293,8 +296,8 @@ export default {
           introduction: this.createForm.lecturerIntro
         },
         attachment: {
-          url: this.createForm.courseFileList[0]['url'],
-          name: this.createForm.courseFileList[0]['name']
+          url: this.createForm.courseFileList.length ? this.createForm.courseFileList[0]['url'] : '',
+          name: this.createForm.courseFileList.length ? this.createForm.courseFileList[0]['name'] : ''
         },
         examination_id: this.createForm.examinationPaper.id
       }
@@ -303,52 +306,57 @@ export default {
   watch: {
   },
   mounted: function () {
-    getDefaultCover().then(res => { // 获取默认封面
-      this.defaultCover = res.data
-      if (this.$route.name === 'course-edit') {
-        this.editMode = true
-        let id = GetUrlParam('id')
+    if (this.$route.name === 'course-edit') { // 编辑模式
+      this.editMode = true
+      let id = GetUrlParam('id')
+      getDefaultCover().then(res => { // 获取默认封面
+        this.defaultCover = res.data
         return getCourseDetails({ id: id })
-      }
-    }).then(res => { // 编辑模式的课程信息
-      // 封面是自定义还是默认，默认取当前的默认封面url
-      let activeTabName
-      let radioCover = ''
-      if (res.data.cover.indexOf('cover') === -1) {
-        activeTabName = 'custom'
-      } else {
-        activeTabName = 'default'
-        radioCover = res.data.cover
-      }
-      this.currentStatus = res.data.status
-      this.createForm = { // 编辑回显数据
-        courseName: res.data.name,
-        audience: res.data.obj,
-        target: res.data.target,
-        tags: res.data.tags,
-        hours: res.data.minute,
-        credit: res.data.credit,
-        intro: res.data.introduction,
-        outline: res.data.syllabus,
-        cover: res.data.cover,
-        activeTabName: activeTabName,
-        // 讲师
-        lecturer: res.data.teacher_info.name,
-        lecturerImageUrl: res.data.teacher_info.pic,
-        lecturerIntro: res.data.teacher_info.introduction,
-        // 默认封面
-        // activeTabName: 'default',
-        coverImageUrl: (activeTabName === 'custom') ? res.data.cover : '',
-        radioCover: radioCover,
-        // 课程
-        courseFileList: [
-          {
-            url: res.data.attachment.url, name: res.data.attachment.name
-          }
-        ],
-        examinationPaper: res.data.examination_info // 试卷信息
-      }
-    })
+      }).then(res => { // 编辑模式的课程信息
+        // 封面是自定义还是默认，默认取当前的默认封面url
+        let activeTabName
+        let radioCover = ''
+        if (this.defaultCover.indexOf(res.data.cover) === -1) {
+          activeTabName = 'custom'
+        } else {
+          activeTabName = 'default'
+          radioCover = res.data.cover
+        }
+        this.currentStatus = res.data.status
+        this.createForm = { // 编辑回显数据
+          courseName: res.data.name,
+          audience: res.data.obj,
+          target: res.data.target,
+          tags: res.data.tags,
+          hours: res.data.minute,
+          credit: res.data.credit,
+          intro: res.data.introduction,
+          outline: res.data.syllabus,
+          cover: res.data.cover,
+          activeTabName: activeTabName,
+          // 讲师
+          lecturer: res.data.teacher_info.name,
+          lecturerImageUrl: res.data.teacher_info.pic,
+          lecturerIntro: res.data.teacher_info.introduction,
+          // 默认封面
+          // activeTabName: 'default',
+          coverImageUrl: (activeTabName === 'custom') ? res.data.cover : '',
+          radioCover: radioCover,
+          // 课程
+          courseFileList: res.data.attachment.url !== '' ? [
+            {
+              url: res.data.attachment.url,
+              name: res.data.attachment.name
+            }
+          ] : [],
+          examinationPaper: res.data.examination_info // 试卷信息
+        }
+      })
+    } else { // 非编辑模式
+      getDefaultCover().then(res => { // 获取默认封面
+        this.defaultCover = res.data
+      })
+    }
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
         { name: '首页', path: '/' },
@@ -426,12 +434,12 @@ export default {
       }
       return isLt2M
     },
+    removeCourseFile (file, fileList) {
+    },
     handleCourseFileSuccess (res, file, fileList) {
       if (res.code === '1') {
-        this.createForm.courseFileList.push({
-          name: file.name,
-          url: res.data
-        })
+        this.createForm.courseFileList[0]['name'] = file.name
+        this.createForm.courseFileList[0]['url'] = res.data
       }
     },
     beforeCourseFileUpload (file) {
@@ -440,6 +448,14 @@ export default {
         this.$message.error('上传的课程文件大小不能超过 100MB!')
       }
       return isLt100M
+    },
+    handleExceed () {
+      if (this.createForm.courseFileList.length) {
+        this.$message.error('请先删除原有课程文件!')
+      }
+    },
+    beforeRemove (file) {
+      return this.$confirm(`确定移除 ${file.name}？`)
     },
     handleExamRuleChange () {
       this.fetchExaminationPaperRemoteData()
@@ -467,6 +483,10 @@ export default {
     handleSaveCourseDraft (formName) { // 保存草稿
       if (GetUrlParam('id')) {
         this.addCourseParam.id = GetUrlParam('id')
+      }
+      if (!this.createForm.courseName) {
+        this.$message.error('请至少输入课程名称！')
+        return false
       }
       addCourseDraft(this.addCourseParam).then(res => {
         this.$message.success(res.message)
