@@ -438,8 +438,11 @@ export default {
     },
     handleCourseFileSuccess (res, file, fileList) {
       if (res.code === '1') {
-        this.createForm.courseFileList[0]['name'] = file.name
-        this.createForm.courseFileList[0]['url'] = res.data
+        this.createForm.courseFileList = []
+        this.createForm.courseFileList.push({
+          name: file.name,
+          url: res.data
+        })
       }
     },
     beforeCourseFileUpload (file) {
@@ -490,6 +493,9 @@ export default {
       }
       addCourseDraft(this.addCourseParam).then(res => {
         this.$message.success(res.message)
+        this.$router.push({
+          path: '/course'
+        })
       })
       // this.$refs[formName].validate((valid) => {
       //   if (valid) {

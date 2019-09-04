@@ -33,7 +33,6 @@ router.beforeEach((to, from, next) => {
       if (res.data && res.data.code === '1') {
         if (!localStorage.getItem('user') || localStorage.getItem('user') !== res.data.data.account) {
           localStorage.setItem('user', res.data.data.account)
-          // store.commit('$_setUserStorage', res.data.name)
         }
         next()
       } else {

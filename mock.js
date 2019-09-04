@@ -160,7 +160,7 @@ Mock.mock('v1/lessonDraft/add', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '保存成功'
 })
-Mock.mock('/v1/lesson/delete', {
+Mock.mock('v1/lesson/delete', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '课程删除成功'
 })

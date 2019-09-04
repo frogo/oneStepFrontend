@@ -34,7 +34,7 @@
                 找回
               </p>
               <p v-else>
-                我们已向你注册邮箱xxxxx***@qq.com发送了一封密码找回邮件，<br>请注意查收邮件并按照邮件中的提示操作，完成密码重置！
+                我们已向你注册邮箱{{ userEmail }}发送了一封密码找回邮件，<br>请注意查收邮件并按照邮件中的提示操作，完成密码重置！
               </p>
             </div>
             <div v-else-if="step === 2">
@@ -113,6 +113,7 @@ export default {
       }
     }
     return {
+      userEmail: '', // 用户名的邮箱
       token: '',
       account: '',
       step: 0,
@@ -155,6 +156,21 @@ export default {
     }
   },
   methods: {
+    // 替换邮箱字符
+    regEmail (email) {
+      let newEmail
+      if (String(email).indexOf('@') > 0) {
+        let str = email.split('@')
+        let _s = ''
+        if (str[0].length > 3) {
+          for (let i = 0; i < str[0].length - 3; i++) {
+            _s += '*'
+          }
+        }
+        newEmail = str[0].substr(0, 3) + _s + '@' + str[1]
+      }
+      return newEmail
+    },
     next () {
       if (!this.input) {
         this.$message.error('请输入用户名或注册邮箱')
@@ -169,6 +185,7 @@ export default {
       forgotPassword({ info: this.input }).then(res => {
         if (res.code === '1') {
           this.checkPass = true
+          this.userEmail = this.regEmail(res.data)
         } else if (res.code === '0') {
           this.$alert(res.message, '提示', {
             confirmButtonText: '知道了',

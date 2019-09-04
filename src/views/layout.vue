@@ -63,11 +63,12 @@
 <script>
 import { mapState } from 'vuex'
 import { logout } from '@/request/api'
-import BreadCrumb from '@/components/breadCrumb'
+// import BreadCrumb from '@/components/breadCrumb'
+// import { GetUrlParam } from '@/utility'
 export default {
-  components: {
-    BreadCrumb
-  },
+  // components: {
+  //   BreadCrumb
+  // },
   data () {
     return {
       loginStatus: 0,
@@ -90,10 +91,6 @@ export default {
       if (res.data && res.data.code === '1') {
         localStorage.setItem('user', res.data.data.account)
         this.$store.commit('$_setUserStorage', res.data.data.account)
-        // if (!localStorage.getItem('user') || localStorage.getItem('user') !== res.data.data.account) {
-        //   localStorage.setItem('user', res.data.data.account)
-        //   this.$store.commit('$_setUserStorage', res.data.data.account)
-        // }
       } else {
         this.$router.push({ path: '/login' })
       }
@@ -102,11 +99,6 @@ export default {
         this.$router.push({ path: '/login' })
       }
     })
-    // if (localStorage.getItem('user')) {
-    //   this.$store.commit('$_setUserStorage', localStorage.getItem('user'))
-    // } else {
-    //   this.$router.push({ path: '/login' })
-    // }
   },
   methods: {
     logoutHandler () {
