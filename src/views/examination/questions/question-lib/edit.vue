@@ -166,7 +166,7 @@ export default {
     this.fetchRemoteData() // 初始化数据
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
-        { name: '首页', path: '/' }, { name: '题库管理', path: '/questionLib' }, { name: '试题编辑' }
+        { name: '题库管理', path: '/questionLib' }, { name: '试题编辑' }
       ] })
   },
   methods: {

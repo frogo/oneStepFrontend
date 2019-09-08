@@ -227,19 +227,19 @@ export default {
           { required: true, message: '请输入课时', trigger: 'blur' },
           { type: 'number', message: '课时必须为数字值' }
         ],
-        credit: [
-          { required: true, message: '请输入学分', trigger: 'blur' },
-          { type: 'number', message: '学分必须为数字值' }
-        ],
-        lecturer: [
-          { required: true, message: '请输入讲师信息', trigger: 'blur' }
-        ],
+        // credit: [
+        //   { required: true, message: '请输入学分', trigger: 'blur' },
+        //   { type: 'number', message: '学分必须为数字值' }
+        // ],
+        // lecturer: [
+        //   { required: true, message: '请输入讲师信息', trigger: 'blur' }
+        // ],
         courseFileList: [
           { required: true, message: '请选择课程' }
-        ],
-        examinationPaper: [
-          { required: true, message: '请选择试卷' }
         ]
+        // examinationPaper: [
+        //   { required: true, message: '请选择试卷' }
+        // ]
       },
       // 试题弹窗
       dialogExaminationVisible: false,
@@ -359,7 +359,6 @@ export default {
     }
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
-        { name: '首页', path: '/' },
         { name: '企业课程库', path: '/course' },
         { name: this.editMode ? '编辑课程' : '创建课程' }
       ] })

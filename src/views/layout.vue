@@ -63,12 +63,12 @@
 <script>
 import { mapState } from 'vuex'
 import { logout } from '@/request/api'
-// import BreadCrumb from '@/components/breadCrumb'
+import BreadCrumb from '@/components/breadCrumb'
 // import { GetUrlParam } from '@/utility'
 export default {
-  // components: {
-  //   BreadCrumb
-  // },
+  components: {
+    BreadCrumb
+  },
   data () {
     return {
       loginStatus: 0,

@@ -86,3 +86,7 @@ export const deleteSpecialStudent = p => post(CONFIG.SPECIAL_STUDENT.DELETE, p) 
 export const addSpecialStudent = p => post(CONFIG.SPECIAL_STUDENT.ADD, p) //
 // export const deleteStudentAll = p => post(CONFIG.SPECIAL_STUDENT.DELETE_ALL, p) // 批量删除试题
 export const editSpecialStudent = p => post(CONFIG.SPECIAL_STUDENT.EDIT, p) // 批量删除试题
+
+// 统计
+export const getTrainTotal = p => get(CONFIG.STATISTIC.GET_TRAIN_TOTAL, p) // 项目总计
+export const getCourseRank = p => get(CONFIG.COURSE.RANK, p) // 课程排行

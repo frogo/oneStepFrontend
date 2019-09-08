@@ -60,6 +60,18 @@ Mock.mock('/v1/user/resetPwd', {
   'message': ''
 })
 
+Mock.mock('/v1/statistics/getCampTotal', {
+  'code': '1', // 这个定义数据的模板形式下面会介绍
+  'message': '',
+  'data': {
+    'project': 203,
+    'lesson_minute': 1420,
+    'people': 98,
+    'pass': 56,
+    'ratio': 0
+  }
+})
+
 Mock.mock('v1/lesson/list?keyword=&tag_id[]=0&tag_id[]=0&tag_id[]=0&offset=1&limit=20', {
   'code': '1', // 这个定义数据的模板形式下面会介绍
   'message': '',

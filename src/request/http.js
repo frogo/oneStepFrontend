@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { Loading, Message } from 'element-ui'
-let loadingInstance
+import { Message } from 'element-ui'
+// let loadingInstance
 const httpClient = axios.create()
 // 环境转换
 if (process.env.NODE_ENV === 'development') {
@@ -27,17 +27,17 @@ httpClient.defaults.headers['X-Requested-With'] = 'XMLHttpRequest'
  */
 httpClient.interceptors.request.use(config => {
   // element ui Loading方法
-  loadingInstance = Loading.service({
-    lock: true,
-    text: 'Loading',
-    spinner: 'el-icon-loading',
-    background: 'rgba(0, 0, 0, 0.3)',
-    customClass: 'mask-loading',
-    fullscreen: true
-  })
+  // loadingInstance = Loading.service({
+  //   lock: true,
+  //   text: 'Loading',
+  //   spinner: 'el-icon-loading',
+  //   background: 'rgba(0, 0, 0, 0.3)',
+  //   customClass: 'mask-loading',
+  //   fullscreen: true
+  // })
   return config
 }, function (error) {
-  loadingInstance.close()
+  // loadingInstance.close()
   return Promise.reject(error)
 })
 
@@ -47,10 +47,10 @@ httpClient.interceptors.request.use(config => {
  * @return {Promise}         Promise
  */
 httpClient.interceptors.response.use(function (response) {
-  loadingInstance.close()
+  // loadingInstance.close()
   return response
 }, function (error) {
-  loadingInstance.close()
+  // loadingInstance.close()
   return Promise.reject(error)
 })
 

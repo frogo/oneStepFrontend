@@ -16,14 +16,14 @@
       <el-main>
         <div class="login-wrap">
           <div class="login-banner">
-            <div class="text">
-              <p class="cn">
-                学无新旧，唯其致用
-              </p>
-              <p class="en">
-                Give me a place stand and I will move the world
-              </p>
-            </div>
+            <!--            <div class="text">-->
+            <!--              <p class="cn">-->
+            <!--                学无新旧，唯其致用-->
+            <!--              </p>-->
+            <!--              <p class="en">-->
+            <!--                Give me a place stand and I will move the world-->
+            <!--              </p>-->
+            <!--            </div>-->
             <div class="login-box">
               <h2>账号登陆</h2>
               <el-form ref="loginForm" :model="loginForm" :rules="rules" label-width="">
@@ -119,3 +119,6 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .login-banner{height:100%; background: url("../assets/img/load-bg.png") no-repeat}
+</style>

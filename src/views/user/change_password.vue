@@ -91,7 +91,7 @@ export default {
   mounted: function () {
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
-        { name: '首页', path: '/' }, { name: '修改密码', path: '/change_password' }
+        { name: '修改密码', path: '/change_password' }
       ] })
   },
   methods: {

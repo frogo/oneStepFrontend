@@ -410,8 +410,7 @@ export default {
     }
     // getExaminationPaperDetails
     this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [
-        { name: '首页', path: '/' }, { name: '试卷管理', path: '/paper' }, { name: this.editMode ? '编辑试卷' : '创建试卷' }
+      list: [{ name: '试卷管理', path: '/paper' }, { name: this.editMode ? '编辑试卷' : '创建试卷' }
       ] })
     this.fetchQuestionLibRemoteData() // 获取题库数据
   },
@@ -502,10 +501,12 @@ export default {
         param.id = GetUrlParam('id')
         modifyExaminationPaper(param).then(res => {
           this.$message.success(res.message)
+          this.$router.push({ name: 'paper' })
         })
       } else {
         addExaminationPaper(param).then(res => {
           this.$message.success(res.message)
+          this.$router.push({ name: 'paper' })
         })
       }
 

@@ -233,8 +233,7 @@ export default {
   mounted: function () {
     this.fetchRemoteData() // 初始化数据
     this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [
-        { name: '首页', path: '/' }, { name: '特殊学员', path: '/specialStudent' }
+      list: [{ name: '特殊学员', path: '/specialStudent' }
       ] })
   },
   methods: {

@@ -27,9 +27,9 @@ export default {
     return {
       menu: [
         {
-          name: '项目培训',
+          name: '培训项目',
           children: [
-            { name: '在线项目培训', link: '/project', icon: 'el-icon-monitor' }
+            { name: '在线培训项目', link: '/project', icon: 'el-icon-monitor' }
           ]
         },
         {

@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { getCourseRank } from '@/request/api'
 import AsideMenu from '@/components/asideMenu'
 export default {
   components: {
@@ -23,11 +24,17 @@ export default {
   mounted: function () {
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
-        { name: '首页', path: '/' }, { name: '课程排行', path: '/courseRanking' }
+        { name: '课程排行', path: '/courseRanking' }
       ] })
   },
   methods: {
-
+    getCourseRank () {
+      let param = {}
+      getCourseRank(param).then(res => {
+        // eslint-disable-next-line no-console
+        console.log(res)
+      })
+    }
   }
 }
 </script>

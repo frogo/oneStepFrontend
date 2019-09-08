@@ -29,7 +29,8 @@ export default {
       GET_COURSE_TAGS: CONTEXTPATH + '/lesson/getLessonTags',
       UPDATE_COURSE_TAGS: CONTEXTPATH + '/lesson/updateLessonTags'
     },
-    DEFAULT_COVER: CONTEXTPATH + '/lesson/cover'
+    DEFAULT_COVER: CONTEXTPATH + '/lesson/cover',
+    RANK: CONTEXTPATH + '/lesson/lessonRank'
   },
   EXAMINATION: {
     PAPER: {
@@ -81,5 +82,8 @@ export default {
     ADD: CONTEXTPATH + '/spStudent/add',
     // DELETE_ALL: CONTEXTPATH + '/spStudent/deleteAll',
     EDIT: CONTEXTPATH + '/spStudent/modify'
+  },
+  STATISTIC: {
+    GET_TRAIN_TOTAL: CONTEXTPATH + '/statistics/getCampTotal'
   }
 }

@@ -113,7 +113,6 @@ export default {
     this.fetchRemoteData() // 初始化数据
     this.$store.commit('$_setBreadCrumb', { isShow: true, // 面包屑
       list: [
-        { name: '首页', path: '/' },
         { name: '题库管理' }
       ] })
   },

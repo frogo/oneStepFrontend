@@ -77,7 +77,6 @@ export default {
   mounted: function () {
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
-        { name: '首页', path: '/' },
         { name: '企业课程库', path: '/course' },
         { name: '课程详情', path: '/course/details' }
       ] })

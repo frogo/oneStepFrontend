@@ -416,7 +416,7 @@ export default {
           participants: res.data.obj,
           number: res.data.target_num,
           intro: res.data.introduction,
-          auth: res.data.auth === 1,
+          auth: res.data.is_auth === 1,
           sign: res.data.is_sign === 1,
           approval: res.data.is_review === 1,
           passwordSwitch: res.data.is_pwd === 1,
@@ -430,7 +430,7 @@ export default {
     }
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
-        { name: '首页', path: '/' }, { name: '培训项目管理', path: '/project' }, { name: this.editMode ? '编辑项目' : '创建项目' }
+        { name: '培训项目管理', path: '/project' }, { name: this.editMode ? '编辑项目' : '创建项目' }
       ] })
     this.getCourseList()
   },
@@ -480,6 +480,10 @@ export default {
     handleSaveProjectDraft (formName) { // 保存草稿
       if (GetUrlParam('id')) {
         this.addProjectParam.id = GetUrlParam('id')
+      }
+      if (!this.createForm.projectName) {
+        this.$message.error('请至少输入课程名称！')
+        return false
       }
       addDraftProject(this.addProjectParam).then(res => {
         this.$message.success(res.message)

@@ -375,8 +375,7 @@ export default {
   },
   mounted: function () {
     this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [
-        { name: '首页', path: '/' }, { name: '培训项目管理', path: '/project' }, { name: '项目详情' }
+      list: [{ name: '培训项目管理', path: '/project' }, { name: '项目详情' }
       ] })
     getProjectDetails({ id: GetUrlParam('id') }).then(res => {
       this.projectDetails = res.data
