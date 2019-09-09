@@ -157,7 +157,11 @@
         >
           <el-table-column label="选择" width="50" align="center">
             <template scope="scope">
-              <el-radio v-model="dialogExaminationData.courseRadio" :label="scope.$index" class="radio">
+              <el-radio
+                v-model="dialogExaminationData.courseRadio"
+                :label="scope.$index"
+                class="radio"
+              >
 &nbsp;
               </el-radio>
             </template>

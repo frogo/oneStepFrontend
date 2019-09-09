@@ -109,16 +109,21 @@
                     ref="exTableQuestionLib"
                     :data="questionLibDataRemote"
                     :reload-method="handleQuestionLibReload"
-                    @current-change="handleQuestionLibCurrentChange"
+                    @row-click="handleQuestionLibCurrentChange"
                     :show-pagination="false"
                     tooltip-effect="dark"
-                    highlight-current-row
                     height="480"
                   >
-                    <el-table-column
-                      type="index"
-                      width="40"
-                    />
+                    <el-table-column label="选择" width="50" align="center">
+                      <template scope="scope">
+                        <el-radio
+                          v-model="manual.questionRadio"
+                          :label="scope.$index"
+                        >
+&nbsp;
+                        </el-radio>
+                      </template>
+                    </el-table-column>
                     <el-table-column
                       prop="name"
                       label="题库名"
@@ -187,11 +192,6 @@
                       label="题目"
                       show-overflow-tooltip
                     />
-                    <!--                    <el-table-column-->
-                    <!--                      prop="id"-->
-                    <!--                      label="id"-->
-                    <!--                      show-overflow-tooltip-->
-                    <!--                    />-->
                     <el-table-column
                       prop="type"
                       label="题型"
@@ -351,6 +351,7 @@ export default {
         keyword: ''
       },
       manual: {
+        questionRadio: '',
         currentQuestionLib: '',
         filterForm: {
           type: 'all',
@@ -544,8 +545,9 @@ export default {
       return itemIndex
     },
     // 手动选择 ======================================
-    handleQuestionLibCurrentChange (val) { // 左侧题库数据初始
-      this.manual.currentQuestionLib = val
+    handleQuestionLibCurrentChange (row) { // 左侧题库数据初始
+      this.manual.questionRadio = this.questionLibDataRemote.indexOf(row)
+      this.manual.currentQuestionLib = row
       this.fetchQuestionRemoteData()
     },
     handleQuestionsSearch () { // 关键字过滤左侧题库
