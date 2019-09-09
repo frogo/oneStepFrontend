@@ -149,13 +149,19 @@
           ref="exTableExaminationPaper"
           :data="dialogExaminationTableData"
           :reload-method="handleExaminationPaperReload"
-          @current-change="handleSelectionChange"
+          @row-click="handleSelectionChange"
           :show-pagination="true"
-          highlight-current-row
           tooltip-effect="dark"
           height="480"
           stripe
         >
+          <el-table-column label="选择" width="50" align="center">
+            <template scope="scope">
+              <el-radio v-model="dialogExaminationData.courseRadio" :label="scope.$index" class="radio">
+&nbsp;
+              </el-radio>
+            </template>
+          </el-table-column>
           <el-table-column property="name" show-overflow-tooltip label="试卷名称" />
           <el-table-column property="add_time" show-overflow-tooltip label="创建时间" width="150" />
           <el-table-column property="num" show-overflow-tooltip label="试题数" width="90" />
@@ -250,6 +256,7 @@ export default {
       // 试题弹窗
       dialogExaminationVisible: false,
       dialogExaminationData: { // 试题列表弹窗数据
+        courseRadio: '',
         type: 'manual',
         keyword: '',
         currentPage: 1,
@@ -384,6 +391,7 @@ export default {
       let paginationObj = pagination || this.$refs['exTableExaminationPaper'].pagination
       getExaminationPaperList(param).then(res => {
         this.dialogExaminationTableData = res.data.list
+        this.dialogExaminationData.courseRadio = ''
         if (paginationObj) {
           paginationObj.total = res.data.total
         }
@@ -477,8 +485,9 @@ export default {
         this.fetchExaminationPaperRemoteData()
       })
     },
-    handleSelectionChange (val) {
-      this.dialogExaminationData.currentRow = val
+    handleSelectionChange (row) {
+      this.dialogExaminationData.courseRadio = this.dialogExaminationTableData.indexOf(row)
+      this.dialogExaminationData.currentRow = row
     },
     confirmExaminationSelect () {
       this.dialogExaminationVisible = false
@@ -546,7 +555,7 @@ export default {
 </script>
 <style lang="scss">
   .examinationChoose{
-    .el-table--enable-row-hover .el-table__body tr:hover > td{background: #EF6520;color:#fff}
+    /*.el-table--enable-row-hover .el-table__body tr:hover > td{background: #EF6520;color:#fff}*/
     .exTable{
       margin-top: 20px;
       .el-pagination{margin-top: 20px;text-align: right}
