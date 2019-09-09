@@ -5,7 +5,7 @@
       <el-row>
         <el-col :span="18">
           <div class="main">
-            <h2>营销基础训练营</h2>
+            <h2>{{ projectDetails.name }}</h2>
             <div class="pieces">
               <div class="left">
                 <el-tag effect="plain" size="small">
@@ -44,44 +44,52 @@
                     <el-table-column
                       prop="number"
                       label="编号"
-                      width="80"
+                      width="90"
+                      align="center"
                     />
                     <el-table-column
                       prop="student_name"
                       label="姓名"
-                      width="60"
+                      width="90"
                       fixed="left"
+                      align="center"
                     />
                     <el-table-column
                       prop="student_phone"
                       label="电话"
                       width="120"
+                      align="center"
                     />
                     <el-table-column
                       prop="department"
                       label="部门"
                       width="100"
+                      align="center"
                     />
                     <el-table-column
-                      prop="add_time"
+                      prop="addtime"
                       label="参加时间"
                       width="120"
+                      align="center"
                     />
                     <el-table-column
                       prop="finish_time"
                       label="完成时间"
                       width="120"
+                      align="center"
                     />
                     <el-table-column
                       prop="credit"
                       label="获得学分"
                       width="80"
+                      align="center"
                     />
                     <el-table-column
                       prop="sign"
                       label="签到"
                       width="80"
                       class-name="sign"
+                      align="center"
                     >
                       <template slot-scope="scope">
                         <img :src="scope.row.sign">
@@ -130,62 +138,74 @@
                     <el-table-column
                       prop="student_status"
                       label="学员状态"
-                      width="90"
+                      width="80"
+                      align="center"
                     />
                     <el-table-column
                       prop="department"
                       label="部门"
-                      width="90"
+                      width="80"
+                      align="center"
                     />
                     <el-table-column
                       prop="lesson_name"
                       label="课程"
-                      width="200"
+                      width="180"
+                      show-overflow-tooltip
                     />
                     <el-table-column
                       prop="lesson_source"
                       label="课程来源"
-                      width="90"
+                      width="80"
+                      align="center"
                     />
                     <el-table-column
                       prop="lesson_status"
                       label="课程状态"
-                      width="90"
+                      width="80"
+                      align="center"
                     />
                     <el-table-column
                       prop="start_time"
                       label="开始时间"
-                      width="120"
+                      width="100"
+                      align="center"
                     />
                     <el-table-column
                       prop="minute"
                       label="学习时长"
-                      width="90"
+                      width="80"
+                      align="center"
                     />
                     <el-table-column
                       prop="completion_percent"
                       label="完成度"
-                      width="90"
+                      width="80"
+                      align="center"
                     />
                     <el-table-column
                       prop="finish_time"
                       label="完成时间"
-                      width="120"
+                      width="100"
+                      align="center"
                     />
                     <el-table-column
                       prop="score"
-                      label="考试(分)"
+                      label="考试"
                       width="80"
+                      align="center"
                     />
                     <el-table-column
                       prop="reset_score"
-                      label="补考(分)"
+                      label="补考"
                       width="80"
+                      align="center"
                     />
                     <el-table-column
                       prop="credit"
                       label="获得学分"
                       width="80"
+                      align="center"
                     />
                   </ex-table>
                 </div>
@@ -235,18 +255,18 @@
           />
           <el-table-column
             prop="score"
-            label="考试（分）"
-            width="120"
+            label="考试"
+            width="90"
           />
           <el-table-column
             prop="reset_score"
-            label="补考（分）"
-            width="120"
+            label="补考"
+            width="90"
           />
           <el-table-column
             prop="credit"
-            label="获得学分（分）"
-            width="120"
+            label="获得学分"
+            width="90"
           />
         </ex-table>
       </div>

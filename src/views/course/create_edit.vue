@@ -116,7 +116,12 @@
         完成
       </el-button>
     </div>
-    <el-dialog :visible.sync="dialogExaminationVisible" title="试卷选择" custom-class="examinationChoose">
+    <el-dialog
+      :visible.sync="dialogExaminationVisible"
+      title="选择试卷"
+      custom-class="examinationChoose"
+      width="42%"
+    >
       <div class="filter-box">
         <div class="left">
           <el-select v-model="dialogExaminationData.type" @change="handleExamRuleChange" placeholder="请选择" class="select" size="small">
@@ -149,11 +154,12 @@
           highlight-current-row
           tooltip-effect="dark"
           height="480"
+          stripe
         >
-          <el-table-column property="name" show-overflow-tooltip label="试卷名称" width="150" />
-          <el-table-column property="add_time" show-overflow-tooltip label="创建时间" width="200" />
-          <el-table-column property="num" show-overflow-tooltip label="试题数" />
-          <el-table-column property="rule" show-overflow-tooltip label="试题规则" />
+          <el-table-column property="name" show-overflow-tooltip label="试卷名称" />
+          <el-table-column property="add_time" show-overflow-tooltip label="创建时间" width="150" />
+          <el-table-column property="num" show-overflow-tooltip label="试题数" width="90" />
+          <el-table-column property="rule" show-overflow-tooltip label="试题规则" width="120" />
         </ex-table>
       </div>
       <div class="btn-box">
@@ -541,6 +547,10 @@ export default {
 <style lang="scss">
   .examinationChoose{
     .el-table--enable-row-hover .el-table__body tr:hover > td{background: #EF6520;color:#fff}
+    .exTable{
+      margin-top: 20px;
+      .el-pagination{margin-top: 20px;text-align: right}
+    }
   }
 
 </style>

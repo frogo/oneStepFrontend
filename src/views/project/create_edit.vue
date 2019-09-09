@@ -133,7 +133,7 @@
       :visible.sync="dialogCourse.visible"
       title="课程设置"
       class="chooseCourse"
-      width="80%"
+      width="56%"
     >
       <div class="filter-box">
         <div class="keyword-input">
@@ -208,11 +208,11 @@
             prop="name"
             label="课程"
           />
-          <el-table-column
-            prop="id"
-            label="id"
-            width="100"
-          />
+          <!--          <el-table-column-->
+          <!--            prop="id"-->
+          <!--            label="id"-->
+          <!--            width="100"-->
+          <!--          />-->
           <el-table-column
             prop="teacher_info.name"
             label="讲师"
@@ -654,14 +654,20 @@ export default {
     .chooseCourse{
       min-width:900px;
       .exTable{
+        .el-table{
+          height:300px;
+          overflow: auto;
+        }
+
         .el-pagination{margin-top: 20px;text-align: right}
           .el-table th:first-child{
             .cell{display: none}
         }
       }
+      .el-dialog__body{ padding-top: 10px}
       .filter-box{
         position: relative;
-        margin: 20px 0;
+        margin: 0 0 10px;
         .el-form{
           .el-form-item{border-bottom: 1px dashed #ccc;padding-bottom: 10px; margin-bottom: 10px;
             &.keyword-input{      border-bottom: none;}
@@ -685,7 +691,7 @@ export default {
         width:100%;
         height:auto;
         position: absolute;
-        left:0;bottom:0;background:#fff;z-index: 2;
+        left:0;bottom:-15px;background:#fff;z-index: 2;
         .operator{position: absolute;top:-30px;left:45%}
         .box{
           height:200px;

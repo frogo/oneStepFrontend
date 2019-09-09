@@ -128,6 +128,7 @@
                       prop="num"
                       label="试题数"
                       width="70"
+                      align="center"
                     />
                   </ex-table>
                 </div>
@@ -186,11 +187,11 @@
                       label="题目"
                       show-overflow-tooltip
                     />
-                    <el-table-column
-                      prop="id"
-                      label="id"
-                      show-overflow-tooltip
-                    />
+                    <!--                    <el-table-column-->
+                    <!--                      prop="id"-->
+                    <!--                      label="id"-->
+                    <!--                      show-overflow-tooltip-->
+                    <!--                    />-->
                     <el-table-column
                       prop="type"
                       label="题型"
@@ -353,7 +354,7 @@ export default {
         currentQuestionLib: '',
         filterForm: {
           type: 'all',
-          typeList: [{ val: 'all', label: '不限' }, { val: 'single', label: '单选' }, { val: 'multi', label: '多选' }, { val: 'trueFalse', label: '判断' }]
+          typeList: [{ val: 'all', label: '全部' }, { val: 'single', label: '单选' }, { val: 'multi', label: '多选' }, { val: 'trueFalse', label: '判断' }]
         },
         questionTableData: [
         ], // 手动出题，当前选择的题库的试题列表

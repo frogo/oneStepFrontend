@@ -3,7 +3,7 @@
     :visible.sync="dialogTagsEditorVisible"
     :before-close="handleDialogClose"
     :title="editMode? '编辑标签' : '选择标签'"
-    width="60%"
+    width="36%"
     custom-class="tagsEditor"
   >
     <div v-for="(item, index) in tags" :key="item.id + index" class="tags-box">
@@ -36,7 +36,7 @@
     </div>
 
     <span slot="footer" class="dialog-footer">
-      <el-button @click="editMode = !editMode"> {{ editMode ? '取消编辑模式' : '编辑模式' }}</el-button>
+      <el-button @click="editMode = !editMode"> {{ editMode ? '取消编辑标签' : '编辑标签' }}</el-button>
       <el-button @click="handleDialogCancel">取消</el-button>
       <el-button @click="handleDialogConfirm" type="primary">确定</el-button>
     </span>

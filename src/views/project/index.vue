@@ -129,8 +129,8 @@
     </el-main>
     <el-dialog
       :visible.sync="viewProjectDialogVisible"
-      title="预览项目"
-      width="50%"
+      :title="projectDetails.name"
+      width="36%"
       class="projectViewDialog"
     >
       <div class="project-view-box">
@@ -264,7 +264,7 @@ export default {
       },
       status: [
         { label: 'all', name: '全部' },
-        { label: 1, name: '正常' },
+        { label: 1, name: '发布中' },
         { label: 2, name: '草稿' },
         { label: 0, name: '下线' }
       ],
@@ -592,13 +592,15 @@ export default {
         .head{color:#8c939d}
         .content{
           &.flex{display: flex;justify-content: space-between;
-            .chapter{width:70%}
-            .qrCode{width:30%;text-align: center;img{margin:0 auto 10px;display: block}}
+            .chapter{width:70%;height:200px;overflow: auto}
+            .qrCode{width:22%;text-align: center;img{margin:0 auto 10px;display: block}}
           }
         }
         &.copyLink{display: flex;justify-content: space-between; margin-top: 20px;.el-input{width:80%}}
       }
     }
+    .el-dialog__title{ font-weight: bold}
+    .el-dialog__body{ padding-top: 15px}
   }
   .exTable{
     .el-pagination{margin-top: 20px;text-align: right}
