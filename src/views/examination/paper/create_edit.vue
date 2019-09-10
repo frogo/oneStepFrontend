@@ -167,7 +167,7 @@
                   <el-form-item label="题型：">
                     <el-radio-group v-model="manual.filterForm.type" @change="handleRulesSwitch">
                       <el-radio :label="item.val" v-for="(item, index) in manual.filterForm.typeList" :key="item.val + index" border>
-                        {{ item.label }}
+                        {{ item.label }} <span v-if="item.val !== 'all'">({{ item.total }}) </span>
                       </el-radio>
                     </el-radio-group>
                   </el-form-item>
@@ -355,7 +355,8 @@ export default {
         currentQuestionLib: '',
         filterForm: {
           type: 'all',
-          typeList: [{ val: 'all', label: '全部' }, { val: 'single', label: '单选' }, { val: 'multi', label: '多选' }, { val: 'trueFalse', label: '判断' }]
+          // eslint-disable-next-line standard/object-curly-even-spacing
+          typeList: [{ val: 'all', label: '全部', total: 0 }, { val: 'single', label: '单选', total: 0 }, { val: 'multi', label: '多选', total: 0 }, { val: 'trueFalse', label: '判断', total: 0 }]
         },
         questionTableData: [
         ], // 手动出题，当前选择的题库的试题列表
@@ -548,6 +549,9 @@ export default {
     handleQuestionLibCurrentChange (row) { // 左侧题库数据初始
       this.manual.questionRadio = this.questionLibDataRemote.indexOf(row)
       this.manual.currentQuestionLib = row
+      this.manual.filterForm.typeList[1].total = row.single_total
+      this.manual.filterForm.typeList[2].total = row.multi_total
+      this.manual.filterForm.typeList[3].total = row.trueFalse_total
       this.fetchQuestionRemoteData()
     },
     handleQuestionsSearch () { // 关键字过滤左侧题库
