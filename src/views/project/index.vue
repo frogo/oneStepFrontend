@@ -479,11 +479,12 @@ export default {
               padding: 0;
               .status-bg{
                 /*cursor: pointer;*/
-                height:105px;position: relative;
+                height:42px;position: relative;
                 color:#fff;
-                font-size: 12px;
+                font-size: 16px;
+                font-weight: bold;
                 text-align: center;
-                line-height: 105px;
+                line-height: 42px;
                 &.blue{ background:#29ABE2 }
                 &.green{ background: #15D1A4}
                 &.gray{ background: #afafaf}
