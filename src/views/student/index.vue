@@ -22,7 +22,7 @@
       </div>
       <div class="list">
         <div class="operate">
-          <el-button @click="addStudentDialogVisible = true" type="primary" size="small">
+          <el-button @click="handleOpenAddStudent" type="primary" size="small">
             添加学员
           </el-button>
           <el-button @click="handleDeleteAll" :disabled="multipleSelection.length > 0 ? false: true" type="primary" size="small">
@@ -121,11 +121,11 @@
         width="30%"
       >
         <el-form ref="studentEditForm" :model="studentEditForm" :rules="rules" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="编号" prop="number">
+            <el-input v-model="studentEditForm.number" />
+          </el-form-item>
           <el-form-item label="姓名" prop="name">
             <el-input v-model="studentEditForm.name" />
-          </el-form-item>
-          <el-form-item label="工号" prop="number">
-            <el-input v-model="studentEditForm.number" />
           </el-form-item>
           <el-form-item label="部门" prop="department">
             <el-input v-model="studentEditForm.department" />
@@ -149,11 +149,11 @@
         width="30%"
       >
         <el-form ref="studentAddForm" :model="studentAddForm" :rules="rules" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="编号" prop="number">
+            <el-input v-model="studentAddForm.number" />
+          </el-form-item>
           <el-form-item label="姓名" prop="name">
             <el-input v-model="studentAddForm.name" />
-          </el-form-item>
-          <el-form-item label="工号" prop="number">
-            <el-input v-model="studentAddForm.number" />
           </el-form-item>
           <el-form-item label="部门" prop="department">
             <el-input v-model="studentAddForm.department" />
@@ -328,6 +328,16 @@ export default {
       }).catch(() => {
 
       })
+    },
+    handleOpenAddStudent () {
+      this.studentAddForm = {
+        name: '',
+        number: '',
+        department: '',
+        account: '',
+        pwd: ''
+      }
+      this.addStudentDialogVisible = true
     },
     handleAddStudent () { // 增加学员&编辑学员
       this.$refs['studentAddForm'].validate((valid) => {

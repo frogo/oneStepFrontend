@@ -46,25 +46,25 @@
 
       <div class="inline-form">
         <el-form-item>
+          试题顺序随机
           <el-switch
             v-model="createForm.randomSequence"
-            active-text="试题顺序随机"
             active-color="#EF6520"
             inactive-color="gray"
           />
         </el-form-item>
         <el-form-item>
+          试题选项随机
           <el-switch
             v-model="createForm.randomOption"
-            active-text="试题选项随机"
             active-color="#EF6520"
             inactive-color="gray"
           />
         </el-form-item>
         <el-form-item>
+          不许查看答案
           <el-switch
             v-model="createForm.noLookAnswer"
-            active-text="不许查看答案"
             active-color="#EF6520"
             inactive-color="gray"
           />
@@ -738,7 +738,10 @@ export default {
             }
             .exTable{
                 .el-table th:first-child{
-                  .cell{display: none}
+                  .cell{
+                    .el-checkbox{display: none}
+                    &:after{content: '选择';display: inline-block;width:40px}
+                  }
                 }
               .el-pagination{
                 margin: 10px auto 0;
