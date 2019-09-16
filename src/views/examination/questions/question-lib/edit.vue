@@ -1,12 +1,12 @@
 <template>
   <el-main class="page-questionEdit">
     <h2 class="pageName">
-      编辑题库 - <span class="bank-title">{{ bank_name }}</span>
-      <el-input v-model="bank_name" class="bank-title-input" />
-      <el-button @click="bankTitleEdit" size="mini" type="primary" icon="el-icon-edit">
+      编辑题库 - <span v-if="!titleEditMode" class="bank-title">{{ bank_name }}</span>
+      <el-input v-if="titleEditMode" v-model="bank_name" class="bank-title-input" />
+      <el-button v-if="!titleEditMode" @click="bankTitleEdit" size="mini" type="text" icon="el-icon-edit">
         修改
       </el-button>
-      <el-button @click="bankTitleEditComplete" size="mini" type="success" icon="el-icon-finished">
+      <el-button v-if="titleEditMode" @click="bankTitleEditComplete" size="mini" type="text" icon="el-icon-finished">
         完成
       </el-button>
     </h2>
@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import { getQuestionList, deleteQuestion } from '@/request/api'
+import { getQuestionList, deleteQuestion, modifyQuestionLib } from '@/request/api'
 import ExTable from '@/components/exTable.js'
 export default {
   components: {
@@ -134,6 +134,7 @@ export default {
   },
   data () {
     return {
+      titleEditMode: false,
       keyword: '',
       filterForm: {
         type: 'all'
@@ -296,10 +297,13 @@ export default {
       })
     },
     bankTitleEdit () {
-
+      this.titleEditMode = true
     },
     bankTitleEditComplete () {
-
+      this.titleEditMode = false
+      modifyQuestionLib({ id: parseInt(this.bank_id), name: this.bank_name }).then(res => {
+        this.$message.success(res.message)
+      })
     }
   }
 }
@@ -312,7 +316,7 @@ export default {
       padding: 20px;
         position: relative;
         h2 {
-          font-size: 26px;.bank-title-input{width:100px; vertical-align: middle}
+          font-size: 26px;.bank-title-input{width:200px; vertical-align: middle}
         }
 
     .filter-box{
