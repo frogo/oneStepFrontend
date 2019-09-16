@@ -141,9 +141,9 @@
           <li class="flex">
             <span><i>开始日期：</i>{{ projectDetails.start_time }}</span> <span><i>结束日期：</i>{{ projectDetails.end_time }}</span>
           </li>
-          <li>
+          <li class="intro">
             <div class="head">
-              简介：
+              项目简介：
             </div>
             <div class="content">
               {{ projectDetails.introduction }}
@@ -153,7 +153,7 @@
             <div class="head">
               包含课程：
             </div>
-            <div class="content flex">
+            <div class="content">
               <div class="chapter">
                 <p v-for="(item, index) in projectDetails.lesson_info" :key="item + index">
                   {{ item.name }}
@@ -582,24 +582,25 @@ export default {
   .projectViewDialog{
     .project-view-box{
       ul li{
-        font-size: 12px;
+        font-size: 16px;
         line-height: 2em;
         &.flex{ display: flex;justify-content: space-between;
           span{display: inline-block;width:200px;
             i{font-style: normal;color:#8c939d}
           }
         }
+        &.intro{
+          padding: 10px 0 30px;
+        }
         .head{color:#8c939d}
-        .content{
-          &.flex{display: flex;justify-content: space-between;
-            .chapter{width:70%;height:200px;overflow: auto}
-            .qrCode{width:22%;text-align: center;img{margin:0 auto 10px;display: block}}
-          }
+        .content{position: relative;
+          .chapter{width:70%;height:200px;overflow: auto}
+          .qrCode{position:absolute;top:-60px;right:0;width:22%;text-align: center;img{margin:0 auto 10px;display: block}}
         }
         &.copyLink{display: flex;justify-content: space-between; margin-top: 20px;.el-input{width:80%}}
       }
     }
-    .el-dialog__title{ font-weight: bold}
+    .el-dialog__title{ font-weight: bold;font-size: 22px}
     .el-dialog__body{ padding-top: 15px}
   }
   .exTable{
