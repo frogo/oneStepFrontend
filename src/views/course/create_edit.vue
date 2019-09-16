@@ -552,7 +552,8 @@ export default {
       })
     },
     gotoPaperCreate () {
-      this.$router.push({ path: '/paper/create' })
+      let target = this.$router.resolve({ path: '/paper/create' })
+      window.open(target.href, '_blank')
     }
   }
 }
@@ -564,6 +565,8 @@ export default {
       margin-top: 20px;
       .el-pagination{margin-top: 20px;text-align: right}
     }
+
   }
+  .el-tabs {.el-tabs__content{height:140px}}
 
 </style>
