@@ -119,6 +119,7 @@
       custom-class="chooseStudents"
     >
       <el-transfer
+        @change="handleTransferChange"
         v-model="dialogStudents.transferSelectedData" :data="dialogStudents.transferData"
         :filter-method="studentFilterMethod"
         :props="{
@@ -430,7 +431,9 @@ export default {
           students: res.data.personnel || []
         }
         this.dialogCourse.selectedData = res.data.lesson_info
-        this.dialogStudents.transferSelectedData = res.data.personnel || []
+        // this.dialogStudents.transferSelectedData = res.data.personnel || []
+        this.dialogStudents.transferSelectedData = res.data.personnel.map(item => item.id)
+        // console.log(this.dialogStudents.transferSelectedData)
       })
     }
     this.$store.commit('$_setBreadCrumb', { isShow: true,
@@ -580,10 +583,11 @@ export default {
     },
     handleStudentDialogOpen () { // 打开指定参训学员 弹窗
       this.dialogStudents.visible = true
-      this.dialogStudents.transferSelectedData = []
+      // this.dialogStudents.transferSelectedData = []
       let _this = this
       getSpecialStudentList({ keyword: this.dialogStudents.keyword, offset: 1, limit: 50 }).then(res => {
         _this.dialogStudents.transferData = res.data.list
+        // eslint-disable-next-line no-console
         // if (_this.dialogStudents.transferSelectedData.length > 0) {
         //   let selected = _this.dialogStudents.transferSelectedData.map(item => {
         //     return item.id
@@ -612,6 +616,8 @@ export default {
         this.dialogCourse.tags.department = res.data.tag[1].child
         this.dialogCourse.tags.custom = res.data.tag[2].child
       })
+    },
+    handleTransferChange (item, lr, array) {
     }
   }
 }
