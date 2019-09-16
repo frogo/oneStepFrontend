@@ -1,7 +1,14 @@
 <template>
   <el-main class="page-questionEdit">
     <h2 class="pageName">
-      {{ bank_name }} - 编辑试题
+      编辑题库 - <span class="bank-title">{{ bank_name }}</span>
+      <el-input v-model="bank_name" class="bank-title-input" />
+      <el-button @click="bankTitleEdit" size="mini" type="primary" icon="el-icon-edit">
+        修改
+      </el-button>
+      <el-button @click="bankTitleEditComplete" size="mini" type="success" icon="el-icon-finished">
+        完成
+      </el-button>
     </h2>
 
     <div class="filter-box">
@@ -287,6 +294,12 @@ export default {
       }).catch(() => {
 
       })
+    },
+    bankTitleEdit () {
+
+    },
+    bankTitleEditComplete () {
+
     }
   }
 }
@@ -299,8 +312,9 @@ export default {
       padding: 20px;
         position: relative;
         h2 {
-          font-size: 26px
+          font-size: 26px;.bank-title-input{width:100px; vertical-align: middle}
         }
+
     .filter-box{
       position: relative;
       margin: 20px 0;
