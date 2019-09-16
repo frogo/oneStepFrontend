@@ -44,6 +44,11 @@
           </el-button>
           <span>已选课程数 <i>{{ dialogCourse.selectedData.length }}</i> 总学分 <i>{{ dialogCourse.courseChooseTotal.credit }}</i> 总课时 <i>{{ dialogCourse.courseChooseTotal.hours }}</i></span>
         </div>
+        <div class="courseSelected">
+          <el-tag v-for="item in dialogCourse.selectedData">
+            {{ item.name }}
+          </el-tag>
+        </div>
       </el-form-item>
       <div class="head-line">
         <span class="base-info">项目设置
@@ -627,7 +632,7 @@ export default {
       .el-textarea{width:400px}
       .chooseCourse{
         .btn-box{display: flex;justify-content: space-between;span{i{color:red;font-style: normal}}}
-
+        .courseSelected{padding:15px 0; .el-tag{ margin-right: 10px}}
       }
       .setting{
         div.box {
