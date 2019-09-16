@@ -115,7 +115,8 @@ export default {
       })
     },
     handleCreate () { // 创建试卷
-      this.$router.push({ path: '/paper/create' })
+      let target = this.$router.resolve({ path: '/paper/create' })
+      window.open(target.href, '_blank')
     },
     handleSearch () { // 搜索触发
       this.fetchRemoteData()

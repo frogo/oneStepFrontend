@@ -260,7 +260,9 @@ export default {
       this.$router.push({ name: 'question-edit', params: { id: row.id, bank_id: this.bank_id, bank_name: this.bank_name } })
     },
     gotoCreate () {
-      this.$router.push({ name: 'question-create', params: { bank_id: this.bank_id, bank_name: this.bank_name } })
+      let target = this.$router.resolve({ name: 'question-create', params: { bank_id: this.bank_id, bank_name: this.bank_name } })
+      window.open(target.href, '_blank')
+      // this.$router.push({ name: 'question-create', params: { bank_id: this.bank_id, bank_name: this.bank_name } })
     },
     deleteAll () {
       this.$confirm('您确定要删除吗?', '提示', {

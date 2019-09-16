@@ -228,7 +228,8 @@ export default {
       this.getCourseList()
     },
     gotoCreate () {
-      this.$router.push({ path: '/course/create' })
+      let target = this.$router.resolve({ path: '/course/create' })
+      window.open(target.href, '_blank')
     },
     gotoDetail (lessonId) {
       this.$router.push({ path: '/course/details', query: { id: lessonId } })

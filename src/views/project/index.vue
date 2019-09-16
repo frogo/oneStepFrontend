@@ -331,7 +331,8 @@ export default {
       })
     },
     gotoCreate () {
-      this.$router.push({ path: '/project/create' })
+      let target = this.$router.resolve({ path: '/project/create' })
+      window.open(target.href, '_blank')
     },
     gotoDetails (item) {
       this.$router.push({ path: '/project/details', query: { id: item.id } })
