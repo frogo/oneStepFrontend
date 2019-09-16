@@ -236,10 +236,16 @@ export default {
         this.createForm.questionName = res.data.subject
         this.createForm.questionType = res.data.type
         if (res.data.type === 'single') {
-          this.createForm.optionsSingle.questionOptionsData = res.data.options
+          this.createForm.optionsSingle.questionOptionsData = res.data.options.map(item => {
+            item.number = String.fromCharCode(64 + parseInt(item.number))
+            return item
+          })
           this.createForm.optionsSingle.trueOption = res.data.options.filter(item => item.istrue === 1)[0].number
         } else if (res.data.type === 'multi') {
-          this.createForm.optionsMulti.questionOptionsData = res.data.options
+          this.createForm.optionsMulti.questionOptionsData = res.data.options.map(item => {
+            item.number = String.fromCharCode(64 + parseInt(item.number))
+            return item
+          })
           this.createForm.optionsMulti.questionOptionsData.map(item => {
             if (item.istrue === 1) {
               this.$nextTick(() => {
@@ -248,7 +254,10 @@ export default {
             }
           })
         } else {
-          this.createForm.optionsTrueFalse.questionOptionsData = res.data.options
+          this.createForm.optionsTrueFalse.questionOptionsData = res.data.options.map(item => {
+            item.number = String.fromCharCode(64 + parseInt(item.number))
+            return item
+          })
           this.createForm.optionsTrueFalse.trueOption = res.data.options.filter(item => item.istrue === 1)[0].number
         }
       })

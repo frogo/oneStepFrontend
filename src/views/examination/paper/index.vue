@@ -30,21 +30,25 @@
             <el-table-column
               prop="add_time"
               label="创建时间"
-              width="180"
+              width="120"
+              align="center"
             />
             <el-table-column
               prop="num"
               label="试题数"
-              width="180"
+              width="100"
+              align="center"
             />
             <el-table-column
               prop="rule"
               label="试题规则"
-              width="180"
+              width="120"
+              align="center"
             />
             <el-table-column
               label="操作"
               width="180"
+              align="center"
             >
               <template slot-scope="scope">
                 <el-button
