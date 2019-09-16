@@ -38,12 +38,21 @@
         >
           <el-table-column
             label="正确"
-            width="100"
+            width="60"
+            align="center"
           >
             <template slot-scope="scope">
-              <el-radio v-model="createForm.optionsSingle.trueOption" :label="scope.row.number" />
+              <el-radio v-model="createForm.optionsSingle.trueOption" :label="scope.row.number">
+&nbsp;
+              </el-radio>
             </template>
           </el-table-column>
+          <el-table-column
+            label="编号"
+            width="60"
+            prop="number"
+            align="center"
+          />
           <el-table-column
             label="描述"
           >
@@ -64,12 +73,14 @@
         >
           <el-table-column
             type="selection"
-            width="55"
+            width="60"
+            align="center"
           />
           <el-table-column
             label="编号"
-            width="100"
+            width="60"
             prop="number"
+            align="center"
           />
           <el-table-column
             label="描述(请在左侧勾选正确答案)"
@@ -81,19 +92,28 @@
         </el-table>
 
         <el-table
-          ref="singleTable"
+          ref="trueFalseTable"
           v-show="createForm.questionType === 'trueFalse'"
           :data="createForm.optionsTrueFalse.questionOptionsData"
           style="width: 100%"
         >
           <el-table-column
             label="正确"
-            width="100"
+            width="60"
+            align="center"
           >
             <template slot-scope="scope">
-              <el-radio v-model="createForm.optionsTrueFalse.trueOption" :label="scope.row.number" />
+              <el-radio v-model="createForm.optionsTrueFalse.trueOption" :label="scope.row.number">
+&nbsp;
+              </el-radio>
             </template>
           </el-table-column>
+          <el-table-column
+            label="编号"
+            width="60"
+            align="center"
+            prop="number"
+          />
           <el-table-column
             label="描述"
             prop="content"
@@ -106,7 +126,9 @@
       <el-button @click="submit('createForm')" type="primary">
         提交
       </el-button>
-      <el-button>重置</el-button>
+      <el-button @click="handleBack">
+        返回
+      </el-button>
     </div>
   </el-main>
 </template>
@@ -312,6 +334,9 @@ export default {
           return false
         }
       })
+    },
+    handleBack () {
+      this.$router.push({ path: '/questionLib/edit' })
     }
   }
 }
@@ -337,7 +362,10 @@ export default {
   }
   .multiTable {
      th:first-child{
-      .cell{display: none}
+      .cell{
+        .el-checkbox{display: none}
+        &:after{content: '正确';display: inline-block;width:40px}
+      }
     }
   }
 }
