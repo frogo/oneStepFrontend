@@ -32,10 +32,10 @@
         <span>已选择 <span class="red">{{ createForm.tags ? createForm.tags.length : 0 }}</span> 个标签</span>
       </el-form-item>
       <el-form-item label="课程简介" prop="">
-        <el-input v-model="createForm.outline" :rows="4" type="textarea" />
+        <el-input v-model="createForm.intro" :rows="4" type="textarea" />
       </el-form-item>
       <el-form-item label="课程大纲" prop="">
-        <el-input v-model="createForm.intro" :rows="4" type="textarea" />
+        <el-input v-model="createForm.outline" :rows="4" type="textarea" />
       </el-form-item>
       <el-form-item label="课程封面" prop="" class="cover">
         <el-tabs v-model="createForm.activeTabName" type="card">
