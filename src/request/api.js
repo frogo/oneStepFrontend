@@ -91,3 +91,4 @@ export const editSpecialStudent = p => post(CONFIG.SPECIAL_STUDENT.EDIT, p) // �
 // 统计
 export const getTrainTotal = p => get(CONFIG.STATISTIC.GET_TRAIN_TOTAL, p) // 项目总计
 export const getCourseRank = p => get(CONFIG.COURSE.RANK, p) // 课程排行
+export const exportCourseRank = p => post(CONFIG.STATISTIC.EXPORT_COURSE_RANKING, p) // 导出课程排行

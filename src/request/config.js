@@ -85,6 +85,7 @@ export default {
     EDIT: CONTEXTPATH + '/spStudent/modify'
   },
   STATISTIC: {
-    GET_TRAIN_TOTAL: CONTEXTPATH + '/statistics/getCampTotal'
+    GET_TRAIN_TOTAL: CONTEXTPATH + '/statistics/getCampTotal',
+    EXPORT_COURSE_RANKING: CONTEXTPATH + '/importExport/ExportCourseRank'
   }
 }

@@ -566,6 +566,7 @@ export default {
                 margin: 4px 0 15px 0;
                 font-size: 14px;
                 color:#666;
+                overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
                 .status{color:#15d1a4}
               }
               .pieces{font-size: 12px;color:#999;
