@@ -310,7 +310,8 @@ export default {
       // 验证规则
       rules: {
         projectName: [
-          { required: true, message: '请输入项目名称', trigger: 'blur' }
+          { required: true, message: '请输入项目名称', trigger: 'blur' },
+          { min: 2, max: 24, message: '长度在 2 到 24 个字符', trigger: 'blur' }
         ],
         projectCycle: [
           { required: true, message: '请指定项目周期', trigger: 'blur' }

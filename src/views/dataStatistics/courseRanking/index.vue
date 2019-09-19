@@ -4,7 +4,7 @@
     <el-main>
       <h2>课程排行</h2>
       <div class="filter-box">
-        <span>排序：
+        <span><i>排序：</i>
           <el-radio-group v-model="radio" @change="radioChange" size="mini">
             <el-radio-button label="0">不限</el-radio-button>
             <el-radio-button label="1">学习数</el-radio-button>
@@ -139,7 +139,7 @@ export default {
       this.getCourseRank()
     },
     handleExport () {
-      exportCourseRank({}).then(res => { // todo 空参数
+      exportCourseRank({ rankType: this.radio }).then(res => { // todo 空参数
         window.location.href = res.data.url
       })
     },
@@ -172,7 +172,9 @@ export default {
       display: flex;
       justify-content: space-between;
       margin: 20px 0;
-      padding: 15px 0;}
+      padding: 15px 0;
+      span{i{color:#999;font-size: 12px;vertical-align: middle;font-style: normal}}
+    }
     .block-list {
       ul{
         li{

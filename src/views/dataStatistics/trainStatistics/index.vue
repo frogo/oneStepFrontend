@@ -17,7 +17,7 @@
           <el-button @click="handleSearch" type="primary"> 搜索</el-button>
         </span>
         <span>
-          <el-button type="primary"> 项目详情</el-button>
+          <el-button @click="handleGotoDetail" type="primary"> 项目详情</el-button>
         </span>
       </div>
       <div class="card-list">
@@ -158,12 +158,13 @@ export default {
         abstractData.seriesData[0].data[1] = res.data.people - res.data.pass
 
         this.ringData.series = abstractData.seriesOption()
-        // eslint-disable-next-line no-console
-        console.log(abstractData)
       })
     },
     handleSearch () {
       this.getTrainTotal()
+    },
+    handleGotoDetail () {
+      this.$router.push({ path: '/trainStatistics/details', query: { start_time: this.date[0], end_time: this.date[1] } })
     }
   }
 }

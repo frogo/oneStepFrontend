@@ -107,7 +107,7 @@
               <img :src="item.cover" class="image">
             </div>
             <div @click="gotoDetail(item.id)" class="text-area">
-              <span class="title">{{ item.name }} {{ item.id }}</span>
+              <span class="title">{{ item.name }} </span>
               <div class="bottom clearFix">
                 <span class="up-num"><i class="el-icon-user" /> {{ item.learn_num }}</span>
                 <span class="teacher">{{ item.teacher_info.name }}</span>

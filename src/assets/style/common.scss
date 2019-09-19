@@ -179,6 +179,7 @@ a{text-decoration: none}
   .card-list{
     .el-card{
       width:90%;
+      margin: 0 auto;
       &:hover{border: 1px solid #EF6520}
       .item-card{
         display: flex;
@@ -286,7 +287,7 @@ a{text-decoration: none}
 }
 .page-courseCreate{
   box-shadow: 0px 0px 5px #888888;
-/*  margin: 15px auto;*/
+ margin: 0 auto 50px;
   padding: 20px;
   h2.pageName{font-size: 26px}
   .el-form.createForm{

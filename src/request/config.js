@@ -86,6 +86,8 @@ export default {
   },
   STATISTIC: {
     GET_TRAIN_TOTAL: CONTEXTPATH + '/statistics/getCampTotal',
-    EXPORT_COURSE_RANKING: CONTEXTPATH + '/importExport/ExportCourseRank'
+    EXPORT_COURSE_RANKING: CONTEXTPATH + '/importExport/ExportLessonRank',
+    CAMP_STATISTICS_INFO: CONTEXTPATH + '/statistics/getCampStatisInfo',
+    EXPORT_CAMP_STATISTICS_INFO: CONTEXTPATH + '/importExport/ExportCampStatisInfo'
   }
 }

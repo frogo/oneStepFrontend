@@ -502,7 +502,7 @@ export default {
                   border-radius: 0 0 3px 0;
                 }
               }
-              .headline{padding: 10px; line-height: 1.4em; font-size: 14px;cursor: pointer}
+              .headline{height:58px;padding: 10px; line-height: 1.4em; font-size: 14px;cursor: pointer}
               .date{padding:0 10px;font-size: 12px;color:#a0a0a0; line-height: 1.6em}
               .percent{
                 padding: 5px 10px;margin-top: 20px;

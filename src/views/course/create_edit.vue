@@ -7,18 +7,23 @@
       <div class="head-line">
         <span class="base-info">基本信息</span>
       </div>
-      <el-form-item label="课程名称" prop="courseName">
-        <el-input v-model="createForm.courseName" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="课程对象" prop="audience">
-        <el-input v-model="createForm.audience" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="课时" prop="hours">
-        <el-input v-model.number="createForm.hours" placeholder="请输入" class="w200" /> <span>分钟</span>
-      </el-form-item>
-      <el-form-item label="学分" prop="credit">
-        <el-input v-model.number="createForm.credit" placeholder="请输入" class="w200" /> <span>分</span>
-      </el-form-item>
+      <div class="inline-form">
+        <el-form-item label="课程名称" prop="courseName">
+          <el-input v-model="createForm.courseName" placeholder="请输入" style="width:583px" />
+        </el-form-item>
+        <el-form-item label="课时" prop="hours">
+          <el-input v-model.number="createForm.hours" placeholder="请输入" class="w200" /> <span>分钟</span>
+        </el-form-item>
+      </div>
+      <div class="inline-form">
+        <el-form-item label="课程对象" prop="audience">
+          <el-input v-model="createForm.audience" placeholder="请输入" style="width:583px" />
+        </el-form-item>
+        <el-form-item label="学分" prop="credit">
+          <el-input v-model.number="createForm.credit" placeholder="请输入" class="w200" /> <span>分</span>
+        </el-form-item>
+      </div>
+
       <el-form-item label="课程目标" prop="">
         <el-input v-model="createForm.target" placeholder="请输入" />
       </el-form-item>
@@ -559,14 +564,24 @@ export default {
 }
 </script>
 <style lang="scss">
+.page-courseCreate{
+  .inline-form{
+    display: flex; justify-content:flex-start;
+    .el-form-item{
+      margin-right: 50px
+    }
+  }
+  .upload-courseFile{ position: relative;
+    .el-upload-list{position: absolute;top:0px;left:100px}
+  }
+}
   .examinationChoose{
     /*.el-table--enable-row-hover .el-table__body tr:hover > td{background: #EF6520;color:#fff}*/
     .exTable{
       margin-top: 20px;
       .el-pagination{margin-top: 20px;text-align: right}
     }
-
+    .el-tabs {.el-tabs__content{height:140px}}
   }
-  .el-tabs {.el-tabs__content{height:140px}}
 
 </style>
