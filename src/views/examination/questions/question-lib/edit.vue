@@ -46,7 +46,7 @@
     </div>
     <div class="list">
       <div class="exTable">
-        <ex-table ref="exTable" :data="questionsTableData" :reload-method="handleReload" @selection-change="handleSelectionChange" show-pagination stripe>
+        <ex-table ref="exTable" :data="questionsTableData" :reload-method="handleReload" @selection-change="handleSelectionChange" header-row-class-name="ex-table-header" show-pagination stripe>
           <el-table-column
             type="selection"
             width="55"
@@ -54,6 +54,7 @@
           <el-table-column
             prop="type"
             label="题型"
+            width="90"
           />
           <el-table-column
             prop="subject"
@@ -61,7 +62,7 @@
           />
           <el-table-column
             prop="creator"
-            label="创始人"
+            label="创建人"
             width="180"
           />
           <el-table-column
@@ -174,7 +175,7 @@ export default {
     this.fetchRemoteData() // 初始化数据
     this.$store.commit('$_setBreadCrumb', { isShow: true,
       list: [
-        { name: '题库管理', path: '/questionLib' }, { name: '试题编辑' }
+        { name: '题库管理', path: '/questionLib' }, { name: '编辑题库' }
       ] })
   },
   methods: {

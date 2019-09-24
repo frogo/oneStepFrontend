@@ -7,29 +7,34 @@
       <div class="head-line">
         <span class="base-info">基本信息</span>
       </div>
-      <el-form-item label="项目名称" prop="projectName">
-        <el-input v-model="createForm.projectName" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="项目周期" prop="projectCycle">
-        <el-date-picker
-          v-model="createForm.projectCycle"
-          type="daterange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          value-format="yyyy-MM-dd"
-        />
-      </el-form-item>
-      <el-form-item label="参训对象" prop="participants">
-        <el-input v-model="createForm.participants" placeholder="请输入" />
-      </el-form-item>
-      <el-form-item label="目标人数" prop="number">
-        <el-input v-model.number="createForm.number" placeholder="请输入" />
-      </el-form-item>
+      <div class="inline-form">
+        <el-form-item label="项目名称" prop="projectName">
+          <el-input v-model="createForm.projectName" placeholder="请输入" style="width:500px" />
+        </el-form-item>
+        <el-form-item label="项目周期" prop="projectCycle">
+          <el-date-picker
+            v-model="createForm.projectCycle"
+            type="daterange"
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="yyyy-MM-dd"
+          />
+        </el-form-item>
+      </div>
+      <div class="inline-form">
+        <el-form-item label="参训对象" prop="participants">
+          <el-input v-model="createForm.participants" placeholder="请输入" style="width:500px" />
+        </el-form-item>
+        <el-form-item label="目标人数" prop="number">
+          <el-input v-model.number="createForm.number" placeholder="请输入" style="width:350px" />
+        </el-form-item>
+      </div>
       <el-form-item label="项目简介" prop="intro">
         <el-input
           :rows="4"
           v-model="createForm.intro"
+          style="width:500px"
           type="textarea"
           placeholder="请输入内容"
         />
@@ -54,12 +59,17 @@
         <span class="base-info">项目设置
           <el-popover
             placement="top-start"
-            title="标题"
-            width="200"
+            width="700"
             trigger="hover"
-            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
           >
             <i slot="reference" class="el-icon-question" />
+            <slot>
+              <strong>学员认证：</strong>学员参加项目前需填写真实姓名和手机号码，记录参训学员信息。<br>
+              <strong>手写签到：</strong>学员参加项目前需手写签名，签名会保存于项目报表中。<br>
+              <strong>报名审批：</strong>学员参加项目前需经过项目发布方平台审批后方能参加项目。<br>
+              <strong>参训口令：</strong>学员参加项目前需填写正确的项目参训口令后方能参加项目。<br>
+              <strong>指定参训学员：</strong>管理员需在人员管理中添加特殊学员后，学员方能通过管理员设定的用户名密码参加项目。
+            </slot>
           </el-popover>
         </span>
       </div>
@@ -393,6 +403,26 @@ export default {
     }
   },
   watch: {
+    'createForm.approval' (newVal) {
+      if (newVal) {
+        this.createForm.auth = true
+        this.createForm.passwordSwitch = false
+        this.createForm.studentsSwitch = false
+      }
+    },
+    'createForm.passwordSwitch' (newVal) {
+      if (newVal) {
+        this.createForm.approval = false
+        this.createForm.studentsSwitch = false
+      }
+    },
+    'createForm.studentsSwitch' (newVal) {
+      if (newVal) {
+        this.createForm.auth = false
+        this.createForm.approval = false
+        this.createForm.passwordSwitch = false
+      }
+    },
     'dialogCourse.filterForm': {
       handler (newVal, oldVal) {
         this.fetchRemoteData()
@@ -630,6 +660,12 @@ export default {
     padding: 20px;
     h2.pageName{font-size: 26px}
     .el-form.createForm{
+      .inline-form{
+        display: flex; justify-content:flex-start;
+        .el-form-item{
+          margin-right: 50px
+        }
+      }
       .head-line{margin: 25px 0;height:1px;position:relative;background:#f3f3f3;
         span.base-info{display: inline-block;position: absolute;top:-10px;background: #fff;padding-right: 1em;color:#EF6520}
         i{color:#8c939d;}
@@ -722,5 +758,6 @@ export default {
       }
       /*.pager{ margin: 30px 20px; text-align: right}*/
     }
+
   }
 </style>

@@ -145,7 +145,7 @@
             <div class="head">
               项目简介：
             </div>
-            <div class="content">
+            <div class="content intro">
               {{ projectDetails.introduction }}
             </div>
           </li>
@@ -160,8 +160,10 @@
                 </p>
               </div>
               <div class="qrCode">
-                <img :src="projectDetails.wx_qrcode">
-                <el-button type="primary" size="small">
+                <img ref="qrcode" :src="projectDetails.wx_qrcode">
+                <!--                <img src="http://localhost:3003/public/1568888782.jpg" ref="qrcode">-->
+
+                <el-button @click="handleDownloadQrCode" type="primary" size="small">
                   下载培训项目二维码
                 </el-button>
               </div>
@@ -178,7 +180,7 @@
     <el-dialog
       :visible.sync="approvalProjectDialogVisible"
       title="报名审批"
-      width="60%"
+      width="38%"
       class="projectApprovalDialog"
     >
       <div class="btn-box">
@@ -206,20 +208,24 @@
           <el-table-column
             prop="name"
             label="学员姓名"
-            width="180"
+            width="90"
+            align="center"
           />
           <el-table-column
             prop="phone"
             label="联系电话"
-            width="180"
+            width="120"
+            align="center"
           />
           <el-table-column
             prop="add_time"
             label="申请时间"
-            width="180"
+            width="120"
+            align="center"
           />
           <el-table-column
             label="操作"
+            align="center"
           >
             <template slot-scope="scope">
               <el-button
@@ -305,6 +311,38 @@ export default {
       ] })
   },
   methods: {
+    handleDownloadQrCode () {
+      this.downloadIamge(this.$refs.qrcode, '二维码')
+    },
+    downloadIamge (selector, name) {
+      let image = new Image()
+      // 解决跨域 Canvas 污染问题
+      image.setAttribute('crossOrigin', 'anonymous')
+      image.onload = function () {
+        let canvas = document.createElement('canvas')
+        canvas.width = image.width
+        canvas.height = image.height
+
+        let context = canvas.getContext('2d')
+        context.drawImage(image, 0, 0, image.width, image.height)
+        let url = canvas.toDataURL('image/png')
+
+        // 生成一个a元素
+        let a = document.createElement('a')
+        // 创建一个单击事件
+        let event = new MouseEvent('click')
+
+        // 将a的download属性设置为我们想要下载的图片名称，若name不存在则使用‘下载图片名称’作为默认名称
+        a.download = name || '下载图片名称'
+        // 将生成的URL设置为a.href属性
+        a.href = url
+
+        // 触发a的单击事件
+        a.dispatchEvent(event)
+      }
+
+      image.src = selector.src
+    },
     handleReload (pagination, { currentPage, pageSize }) {
       this.fetchRemoteData(pagination, currentPage, pageSize)
     }, // 带翻页表格数据重载
@@ -451,7 +489,7 @@ export default {
         position: relative;
         margin: 20px 0;
         .el-form{
-          .el-form-item{border-bottom: 1px dashed #ccc;padding-bottom: 10px; margin-bottom: 10px;
+          .el-form-item{padding-bottom: 10px; margin-bottom: 10px;
             &.keyword-input{      border-bottom: none;}
             .el-radio{ margin-right: 0;
               .el-radio__input{display:none}
@@ -468,6 +506,7 @@ export default {
         .add-button{position: absolute;right:0;top:0}
       }
       .project-block{
+        box-shadow: 0px 2px 5px #888888;
         .el-tabs{
           .el-tabs__nav-wrap::after{display: none}
           .el-tabs__active-bar{display: none}
@@ -583,6 +622,8 @@ export default {
 
   }
   .projectViewDialog{
+    /*width:680px;*/
+    /*height:680px;*/
     .project-view-box{
       ul li{
         font-size: 16px;
@@ -594,11 +635,15 @@ export default {
         }
         &.intro{
           padding: 10px 0 30px;
+          .content.intro{
+            max-height: 180px;
+            overflow: auto;
+          }
         }
         .head{color:#8c939d}
         .content{position: relative;
           .chapter{width:70%;height:200px;overflow: auto}
-          .qrCode{position:absolute;top:-60px;right:0;width:22%;text-align: center;img{margin:0 auto 10px;display: block}}
+          .qrCode{position:absolute;top:-40px;right:0;width:22%;text-align: center;img{margin:0 auto 10px;display: block}}
         }
         &.copyLink{display: flex;justify-content: space-between; margin-top: 20px;.el-input{width:80%}}
       }

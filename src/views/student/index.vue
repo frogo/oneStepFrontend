@@ -40,29 +40,35 @@
               prop="name"
               label="姓名"
               width="150"
+              align="center"
             />
             <el-table-column
               prop="number"
-              label="工号"
+              label="编号"
               width="150"
+              align="center"
             />
             <el-table-column
               prop="department"
               label="部门"
               width="150"
+              align="center"
             />
             <el-table-column
               prop="account"
               label="用户名"
               width="150"
+              align="center"
             />
             <el-table-column
               prop="pwd"
               label="密码"
               width="150"
+              align="center"
             />
             <el-table-column
               label="操作"
+              align="center"
             >
               <template slot-scope="scope">
                 <el-button
@@ -121,11 +127,11 @@
         width="30%"
       >
         <el-form ref="studentEditForm" :model="studentEditForm" :rules="rules" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="编号" prop="number">
-            <el-input v-model="studentEditForm.number" />
-          </el-form-item>
           <el-form-item label="姓名" prop="name">
             <el-input v-model="studentEditForm.name" />
+          </el-form-item>
+          <el-form-item label="编号" prop="number">
+            <el-input v-model="studentEditForm.number" />
           </el-form-item>
           <el-form-item label="部门" prop="department">
             <el-input v-model="studentEditForm.department" />
@@ -149,11 +155,11 @@
         width="30%"
       >
         <el-form ref="studentAddForm" :model="studentAddForm" :rules="rules" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="编号" prop="number">
-            <el-input v-model="studentAddForm.number" />
-          </el-form-item>
           <el-form-item label="姓名" prop="name">
             <el-input v-model="studentAddForm.name" />
+          </el-form-item>
+          <el-form-item label="编号" prop="number">
+            <el-input v-model="studentAddForm.number" />
           </el-form-item>
           <el-form-item label="部门" prop="department">
             <el-input v-model="studentAddForm.department" />

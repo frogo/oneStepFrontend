@@ -15,10 +15,9 @@
           <div slot="label" class="label">
             <span>合格分数比</span><el-popover
               placement="top-start"
-              title="标题"
-              width="200"
+              width="400"
               trigger="hover"
-              content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
+              content="试卷满分以一百分计算，学员答对试题数占试题总数的百分比为多少视为考试合格。"
             >
               <i slot="reference" class="el-icon-question" />
             </el-popover>
@@ -31,12 +30,15 @@
         <span class="base-info">考试设置
           <el-popover
             placement="top-start"
-            title="标题"
-            width="200"
+            width="700"
             trigger="hover"
-            content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。"
           >
             <i slot="reference" class="el-icon-question" />
+            <slot>
+              <strong>考试时长：</strong>设置允许学员考试的时长，考试时间结束试卷自动提交。<br>
+              <strong>试题顺序随机：</strong>试卷中同一题型的题目顺序随机排列，仅对手动出题试卷有效。<br>
+              <strong>试题选项随机：</strong>试卷中同一试题的选项顺序随机排列。<br>
+              <strong>不允许查看答案：</strong>学员完成考试后查看试卷，试卷上仅显示试题是否回答正确，不显示试题正确答案。</slot>
           </el-popover>
         </span>
       </div>
@@ -158,7 +160,7 @@
                         size="small"
                         effect="plain"
                       >
-                        {{ item.subject }} {{ item.id }}
+                        {{ item.subject }}
                       </el-tag>
                     </div>
                   </transition>

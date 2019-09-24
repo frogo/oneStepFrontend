@@ -36,7 +36,7 @@
     </div>
 
     <span slot="footer" class="dialog-footer">
-      <el-button @click="editMode = !editMode"> {{ editMode ? '取消编辑标签' : '编辑标签' }}</el-button>
+      <el-button @click="editMode = !editMode"> {{ editMode ? '选择标签' : '编辑标签' }}</el-button>
       <el-button @click="handleDialogCancel">取消</el-button>
       <el-button @click="handleDialogConfirm" type="primary">确定</el-button>
     </span>

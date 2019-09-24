@@ -42,16 +42,22 @@
                 <div class="exTable">
                   <ex-table ref="projectStudent_exTable" :data="projectStudentTableData" :reload-method="handleProjectStudentReload" show-pagination stripe>
                     <el-table-column
+                      prop="student_name"
+                      label="姓名"
+                      width="90"
+                      fixed="left"
+                      align="center"
+                    />
+                    <el-table-column
                       prop="number"
                       label="编号"
                       width="90"
                       align="center"
                     />
                     <el-table-column
-                      prop="student_name"
-                      label="姓名"
-                      width="90"
-                      fixed="left"
+                      prop="student_status"
+                      label="状态"
+                      width="60"
                       align="center"
                     />
                     <el-table-column
@@ -137,7 +143,13 @@
                     />
                     <el-table-column
                       prop="student_status"
-                      label="学员状态"
+                      label="编号"
+                      width="90"
+                      align="center"
+                    />
+                    <el-table-column
+                      prop="lesson_status"
+                      label="状态"
                       width="80"
                       align="center"
                     />
@@ -173,8 +185,8 @@
                     />
                     <el-table-column
                       prop="minute"
-                      label="学习时长"
-                      width="80"
+                      label="学习时长(分钟)"
+                      width="120"
                       align="center"
                     />
                     <el-table-column
@@ -236,8 +248,16 @@
     <el-dialog
       :visible.sync="learningDetailDialogVisible"
       title="学习详情"
-      width="70%"
+      width="40%"
     >
+      <div class="studentInfo">
+        <div class="name">
+          <span>{{ learningDetailDialog.currentStudent }}</span>
+        </div>
+        <div class="info">
+          总共学习课程<span class="red">{{ learningDetailDialog.lessonTotal }}</span>门，完成课程<span class="red">{{ learningDetailDialog.lessonFinish }}</span>门，获得学分<span class="red">{{ learningDetailDialog.credit }}</span>分
+        </div>
+      </div>
       <div class="exTable">
         <ex-table ref="studentLearning_exTable" @selection-change="handleSelectionChange" :data="studentLearningTableData" :reload-method="handleStudentLearningReload" :show-pagination="false" stripe>
           <el-table-column
@@ -256,17 +276,20 @@
           <el-table-column
             prop="score"
             label="考试"
-            width="90"
+            width="70"
+            align="center"
           />
           <el-table-column
             prop="reset_score"
             label="补考"
-            width="90"
+            width="70"
+            align="center"
           />
           <el-table-column
             prop="credit"
             label="获得学分"
             width="90"
+            align="center"
           />
         </ex-table>
       </div>
@@ -374,6 +397,10 @@ export default {
       studentLearningTableData: [], // 学生学习详情远程数据
       learningDetailDialogVisible: false,
       learningDetailDialog: {
+        currentStudent: '',
+        lessonTotal: 0,
+        lessonFinish: 0,
+        credit: 0,
         lessonSelected: [] // 已选择的学员学习课程，重置考试
       },
       currentStudentId: '', // 学习详情的当前学员的ID
@@ -466,12 +493,16 @@ export default {
       // let paginationObj = pagination || this.$refs.studentLearning_exTable.pagination
       getStudentLearning(param).then(res => {
         this.studentLearningTableData = res.data.list
+        this.learningDetailDialog.lessonTotal = res.data.lesson_total
+        this.learningDetailDialog.lessonFinish = res.data.lesson_finish_num
+        this.learningDetailDialog.credit = res.data.credit_total
         // paginationObj.total = res.data.total
       })
     },
     handleViewLearning (index, row) { // 查看学员学习
       this.learningDetailDialogVisible = true
       this.currentStudentId = row.student_id
+      this.learningDetailDialog.currentStudent = row.student_name
       this.$nextTick(() => {
         this.fetchStudentLearningRemoteData()
       })
@@ -482,6 +513,8 @@ export default {
           deleteProjectStudent({ camp_id: GetUrlParam('id'), student_id: [row.student_id] }).then(res => {
             this.$message.success(res.message)
           })
+          this.fetchProjectStudentRemoteData()
+          this.fetchProjectStudentCourseRemoteData()
         })
     },
     handleExportRanking () { // 学分排行导出
@@ -554,9 +587,18 @@ export default {
       }
     }
     .exTable{
+      .el-table{
+        min-height: 320px;
+      }
+      .el-table__fixed,.el-table__fixed-right{box-shadow:none}
       .el-pagination{margin-top: 20px;text-align: right}
     }
 
+    .studentInfo{
+      display: flex;justify-content: space-between;
+      .name{span{font-size: 20px;color:#666;padding-left: 10px}}
+      .info{span{padding: 0 10px}}
+    }
   }
   .vueChart{
     width:730px;

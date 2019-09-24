@@ -29,12 +29,13 @@
       </el-form-item>
       <el-form-item label="标签" prop="">
         <el-button @click="dialogTagsEditorVisible = true; editMode = false" type="info" icon="el-icon-plus" plain size="small">
-          编辑标签
+          选择标签
         </el-button>
         <!--        <el-button @click="dialogTagsEditorVisible = true; editMode = true" type="primary" plain size="small">-->
         <!--          维护标签-->
         <!--        </el-button>-->
         <span>已选择 <span class="red">{{ createForm.tags ? createForm.tags.length : 0 }}</span> 个标签</span>
+        <!--        <span v-for="item in createForm.tags">{{item.name}}</span>-->
       </el-form-item>
       <el-form-item label="课程简介" prop="">
         <el-input v-model="createForm.intro" :rows="4" type="textarea" />
@@ -167,7 +168,7 @@
                 :label="scope.$index"
                 class="radio"
               >
-&nbsp;
+              &nbsp;
               </el-radio>
             </template>
           </el-table-column>
@@ -238,7 +239,7 @@ export default {
       rules: {
         courseName: [
           { required: true, message: '请输入课程名称', trigger: 'blur' },
-          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+          { min: 2, max: 22, message: '长度在 2 到 22 个字符', trigger: 'blur' }
         ],
         audience: [
           { required: true, message: '请输入课程对象名称', trigger: 'blur' },
@@ -532,14 +533,18 @@ export default {
           if (this.editMode) {
             this.addCourseParam.id = GetUrlParam('id')
             modifyCourse(this.addCourseParam).then(res => {
-              this.$alert(res.message, '提示', {
-                confirmButtonText: '确定',
-                callback: action => {
-                  this.$router.push({
-                    path: '/course'
-                  })
-                }
+              this.$message.success(res.message)
+              this.$router.push({
+                path: '/course'
               })
+              // this.$alert(res.message, '提示', {
+              //   confirmButtonText: '确定',
+              //   callback: action => {
+              //     this.$router.push({
+              //       path: '/course'
+              //     })
+              //   }
+              // })
             })
           } else {
             addCourse(this.addCourseParam).then(res => {

@@ -275,7 +275,7 @@ a{text-decoration: none}
         .text-area{
           cursor: pointer;
           padding: 10px;
-          .title{margin-bottom: 10px; line-height:1.6em;display: inline-block}
+          .title{margin-bottom: 10px; line-height:1.6em;display: inline-block;height:50px}
           .up-num{font-size: 12px;color:#999}
           .teacher{float:right;font-size: 12px;color:#999}
         }
@@ -430,11 +430,12 @@ a{text-decoration: none}
 
 .el-container.main-content{
   width:1200px;margin: 0 auto;padding: 0  0 20px 0;min-height: calc(100vh - 148px);
-  border-top: 1px solid #efefef;
+  /*border-top: 1px solid #efefef;*/
   .el-aside{
     padding: 0 0 8px 0;
-    border-right: 1px solid #ededed;
+    box-shadow: 0px 2px 5px #888888;
     dl{
+      padding: 0 10px;
       dt{ font-size: 16px;line-height: 2em;margin-top: 15px;
       &:not(:first-child){margin-top: 15px}
       }
@@ -541,3 +542,5 @@ a{text-decoration: none}
 
 
 .el-table__body tr.current-row > td{ background: #ef6520;color:#fff}
+
+.ex-table-header{ th{background: #fafafa} }

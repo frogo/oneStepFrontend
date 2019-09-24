@@ -288,3 +288,17 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .course-list .el-row{ min-height: 230px}
+  .el-radio.is-bordered.is-checked{border:1px solid #ef6520}
+  .el-radio.is-bordered{border: none}
+  .page-course .filter-box .el-checkbox-button__inner{border: 1px solid #fff}
+  .el-checkbox-button{ margin-right: 10px}
+  .el-checkbox-button.is-checked .el-checkbox-button__inner{
+    color: #EF6520;
+    background-color: #fff;
+    border:1px solid #EF6520;
+    border-radius:3px;
+    box-shadow: none;
+  }
+</style>
