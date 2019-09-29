@@ -238,9 +238,9 @@ export default {
   },
   mounted: function () {
     this.fetchRemoteData() // 初始化数据
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [{ name: '特殊学员', path: '/specialStudent' }
-      ] })
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [{ name: '特殊学员', path: '/specialStudent' }
+    //   ] })
   },
   methods: {
     beforeUpload (file) {

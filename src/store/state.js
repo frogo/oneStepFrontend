@@ -5,9 +5,6 @@ export default {
   user: null,
   breadCrumb: {
     isShow: false,
-    list: {
-      index: { name: '首页', path: '/' },
-      other: []
-    }
+    list: []
   } // 面包屑
 }

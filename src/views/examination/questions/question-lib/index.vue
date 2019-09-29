@@ -114,10 +114,10 @@ export default {
   },
   mounted: function () {
     this.fetchRemoteData() // 初始化数据
-    this.$store.commit('$_setBreadCrumb', { isShow: true, // 面包屑
-      list: [
-        { name: '题库管理' }
-      ] })
+    // this.$store.commit('$_setBreadCrumb', { isShow: true, // 面包屑
+    //   list: [
+    //     { name: '题库管理' }
+    //   ] })
   },
   methods: {
     handleReload (pagination, { currentPage, pageSize }) {

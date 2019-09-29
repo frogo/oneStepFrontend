@@ -1,5 +1,5 @@
 <template>
-  <el-aside width="160px">
+  <el-aside width="180px">
     <dl>
       <template v-for="item in menu">
         <dt>{{ item.name }}</dt>

@@ -262,12 +262,12 @@ export default {
         }
       })
     }
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [
-        { name: '题库管理', path: '/questionLib' },
-        { name: '题库编辑', path: '/questionLib/edit' },
-        { name: this.editMode ? '编辑试题' : '创建试题' }
-      ] })
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [
+    //     { name: '题库管理', path: '/questionLib' },
+    //     { name: '题库编辑', path: '/questionLib/edit' },
+    //     { name: this.editMode ? '编辑试题' : '创建试题' }
+    //   ] })
   },
   methods: {
     handleCheckboxClick (selection, row) {

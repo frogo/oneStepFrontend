@@ -14,8 +14,8 @@
         </span>
         <span><el-button @click="handleExport" type="success" size="mini">导出报表</el-button></span>
       </div>
-      <div class="block-list">
-        <ul>
+      <div class="block-list list">
+        <ul class="block">
           <li v-for="(item, index) in listData" :class="{'gray':(index+1)%2 === 0}">
             <h4>{{ item.name }}</h4>
             <div class="detail">
@@ -32,16 +32,16 @@
             </div>
           </li>
         </ul>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pager.currentPage"
+          :page-sizes="[5, 10, 20]"
+          :page-size="pager.pageSize"
+          :total="pager.total"
+          layout="total, sizes, prev, pager, next, jumper"
+        />
       </div>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="pager.currentPage"
-        :page-sizes="[10, 20, 30, 50]"
-        :page-size="pager.pageSize"
-        :total="pager.total"
-        layout="total, sizes, prev, pager, next, jumper"
-      />
     </el-main>
   </el-container>
 </template>
@@ -56,8 +56,8 @@ export default {
   data () {
     return {
       pager: {
-        pageSize: 10,
-        total: 40,
+        pageSize: 5,
+        total: 0,
         currentPage: 1
       },
       radio: 0,
@@ -127,11 +127,13 @@ export default {
   },
   watch: {
   },
+  created () {
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [
+    //     { name: '课程排行', path: '/courseRanking' }
+    //   ] })
+  },
   mounted: function () {
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [
-        { name: '课程排行', path: '/courseRanking' }
-      ] })
     this.getCourseRank()
   },
   methods: {
@@ -151,6 +153,7 @@ export default {
       }
       getCourseRank(param).then(res => {
         this.listData = res.data.list
+        this.pager.total = res.data.total
       })
     },
     handleSizeChange (val) {
@@ -172,11 +175,12 @@ export default {
       display: flex;
       justify-content: space-between;
       margin: 20px 0;
-      padding: 15px 0;
+      padding: 15px 5px;
       span{i{color:#999;font-size: 12px;vertical-align: middle;font-style: normal}}
     }
     .block-list {
-      ul{
+      height: calc(100% - 231px)!important;
+      ul.block{
         li{
           padding: 15px;
           border-bottom: 1px solid #f3f3f3;border-top: 1px solid #fff;
@@ -190,7 +194,8 @@ export default {
           }
         }
       }
+      .el-pagination{ text-align: right; margin: 20px 0}
     }
-    .el-pagination{ text-align: right; margin: 20px 0}
+
   }
 </style>

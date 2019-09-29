@@ -82,9 +82,17 @@ export default {
   },
   // 监听,当路由发生变化的时候执行
   watch: {
+    // $route (newVal) {
+    //   if (newVal.meta && newVal.meta.list) {
+    //     this.$store.commit('$_setBreadCrumb', { isShow: true, list: newVal.meta.list })
+    //   }
+    //   console.log(newVal)
+    // }
   },
   created: function () {
-
+    if (this.$route.meta && this.$route.meta.breadCrumb && !this.$store.state.breadCrumb.isShow) {
+      this.$store.commit('$_setBreadCrumb', { isShow: true, list: this.$route.meta.breadCrumb })
+    }
   },
   mounted: function () {
     this.$axios.post('/v1/user/session').then((res) => {
@@ -92,11 +100,11 @@ export default {
         localStorage.setItem('user', res.data.data.account)
         this.$store.commit('$_setUserStorage', res.data.data.account)
       } else {
-        this.$router.push({ path: '/login' })
+        this.$router.push({ path: '/login', query: { redirect: this.$route.path } })
       }
     }, error => {
       if (error.response && error.response.status === 401) {
-        this.$router.push({ path: '/login' })
+        this.$router.push({ path: '/login', query: { redirect: this.$route.path } })
       }
     })
   },

@@ -306,9 +306,9 @@ export default {
   },
   mounted: function () {
     this.getProjectList()
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [{ name: '培训项目管理', path: '/project' }
-      ] })
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [{ name: '培训项目管理', path: '/project' }
+    //   ] })
   },
   methods: {
     handleDownloadQrCode () {
@@ -485,9 +485,11 @@ export default {
 <style lang="scss">
   .page-project{
     .el-main{
+
       .filter-box{
         position: relative;
         margin: 20px 0;
+        padding: 0 20px;
         .el-form{
           .el-form-item{padding-bottom: 10px; margin-bottom: 10px;
             &.keyword-input{      border-bottom: none;}
@@ -507,7 +509,12 @@ export default {
       }
       .project-block{
         box-shadow: 0px 2px 5px #888888;
+        width:99%;
+        margin: 0 auto;
+        height: calc(100% - 220px);
         .el-tabs{
+          width:98%;
+          margin: 0 auto;
           .el-tabs__nav-wrap::after{display: none}
           .el-tabs__active-bar{display: none}
           .el-tabs__item{ font-size: 20px;padding: 0 4px}

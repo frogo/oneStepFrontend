@@ -75,11 +75,11 @@ export default {
   watch: {
   },
   mounted: function () {
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [
-        { name: '企业课程库', path: '/course' },
-        { name: '课程详情', path: '/course/details' }
-      ] })
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [
+    //     { name: '企业课程库', path: '/course' },
+    //     { name: '课程详情', path: '/course/details' }
+    //   ] })
     let param = { id: GetUrlParam('id') }
     getCourseDetails(param).then(res => {
       this.courseDetails = res.data

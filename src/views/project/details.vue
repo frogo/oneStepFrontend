@@ -2,245 +2,240 @@
   <el-container class="main-content page-projectDetails">
     <AsideMenu />
     <el-main>
-      <el-row>
-        <el-col :span="18">
+      <el-row style="height:100%">
+        <el-col :span="18" style="height:100%">
           <div class="main">
-            <h2>{{ projectDetails.name }}</h2>
-            <div class="pieces">
-              <div class="left">
-                <el-tag effect="plain" size="small">
-                  <span class="c666">参与总数:</span>  {{ projectDetails.join_num }}
-                </el-tag>
-                <el-tag effect="plain" size="small">
-                  <span class="c666">完成总数:</span>  {{ projectDetails.complete_num }}
-                </el-tag>
-              </div>
-
-              <div class="right">
-                开始时间：{{ projectDetails.start_time }} 结束时间：{{ projectDetails.end_time }}
-              </div>
-            </div>
-            <div class="vueChart">
-              <v-chart :options="barData" />
-            </div>
-            <!--            <div class="operate-btn">-->
-            <!--              <el-button @click="handleStudentStats" size="small" type="success">-->
-            <!--                学员报表-->
-            <!--              </el-button>-->
-            <!--              <el-button @click="handleTrainingDetail" size="small" type="primary">-->
-            <!--                详情报表-->
-            <!--              </el-button>-->
-            <!--            </div>-->
-
-            <el-tabs v-model="activeName">
-              <el-tab-pane label="学员详情" name="projectStudent">
-                <div style="text-align: right">
-                  <el-button @click="handleExportStudent" size="small" type="success">
-                    导出学员报表
-                  </el-button>
+            <div class="center">
+              <h2>{{ projectDetails.name }}</h2>
+              <div class="pieces">
+                <div class="left">
+                  <el-tag effect="plain" size="small">
+                    <span class="c666">参与总数:</span>  {{ projectDetails.join_num }}
+                  </el-tag>
+                  <el-tag effect="plain" size="small">
+                    <span class="c666">完成总数:</span>  {{ projectDetails.complete_num }}
+                  </el-tag>
                 </div>
-                <div class="exTable">
-                  <ex-table ref="projectStudent_exTable" :data="projectStudentTableData" :reload-method="handleProjectStudentReload" show-pagination stripe>
-                    <el-table-column
-                      prop="student_name"
-                      label="姓名"
-                      width="90"
-                      fixed="left"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="number"
-                      label="编号"
-                      width="90"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="student_status"
-                      label="状态"
-                      width="60"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="student_phone"
-                      label="电话"
-                      width="120"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="department"
-                      label="部门"
-                      width="100"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="addtime"
-                      label="参加时间"
-                      width="120"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="finish_time"
-                      label="完成时间"
-                      width="120"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="credit"
-                      label="获得学分"
-                      width="80"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="sign"
-                      label="签到"
-                      width="80"
-                      class-name="sign"
-                      align="center"
-                    >
-                      <template slot-scope="scope">
-                        <img :src="scope.row.sign">
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      label="操作"
-                      fixed="right"
-                      width="160"
-                      header-align="center"
-                    >
-                      <template slot-scope="scope">
-                        <el-button
-                          @click="handleViewLearning(scope.$index, scope.row)"
-                          size="mini"
-                        >
-                          查看
-                        </el-button>
-                        <el-button
-                          @click="handleDeleteLearning(scope.$index, scope.row)"
-                          size="mini"
-                          type="danger"
-                        >
-                          删除
-                        </el-button>
-                      </template>
-                    </el-table-column>
-                  </ex-table>
+
+                <div class="right">
+                  开始时间：{{ projectDetails.start_time }} 结束时间：{{ projectDetails.end_time }}
                 </div>
-              </el-tab-pane>
-              <el-tab-pane label="项目详情" name="projectDetails">
-                <div class="exTable">
-                  <div style="text-align: right;">
-                    <el-button @click="handleExportStudentCourse" size="small" type="success">
-                      导出项目详情报表
+              </div>
+              <div class="vueChart">
+                <v-chart :options="barData" />
+              </div>
+              <el-tabs v-model="activeName">
+                <el-tab-pane label="学员详情" name="projectStudent">
+                  <div style="text-align: right">
+                    <el-button @click="handleExportStudent" size="small" type="success">
+                      导出学员报表
                     </el-button>
                   </div>
+                  <div class="exTable">
+                    <ex-table ref="projectStudent_exTable" :data="projectStudentTableData" :reload-method="handleProjectStudentReload" show-pagination stripe>
+                      <el-table-column
+                        prop="student_name"
+                        label="姓名"
+                        width="90"
+                        fixed="left"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="number"
+                        label="编号"
+                        width="90"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="student_status"
+                        label="状态"
+                        width="60"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="student_phone"
+                        label="电话"
+                        width="120"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="department"
+                        label="部门"
+                        width="100"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="addtime"
+                        label="参加时间"
+                        width="120"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="finish_time"
+                        label="完成时间"
+                        width="120"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="credit"
+                        label="获得学分"
+                        width="80"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="sign"
+                        label="签到"
+                        width="80"
+                        class-name="sign"
+                        align="center"
+                      >
+                        <template slot-scope="scope">
+                          <img :src="scope.row.sign">
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        label="操作"
+                        fixed="right"
+                        width="160"
+                        header-align="center"
+                      >
+                        <template slot-scope="scope">
+                          <el-button
+                            @click="handleViewLearning(scope.$index, scope.row)"
+                            size="mini"
+                          >
+                            查看
+                          </el-button>
+                          <el-button
+                            @click="handleDeleteLearning(scope.$index, scope.row)"
+                            size="mini"
+                            type="danger"
+                          >
+                            删除
+                          </el-button>
+                        </template>
+                      </el-table-column>
+                    </ex-table>
+                  </div>
+                </el-tab-pane>
+                <el-tab-pane label="项目详情" name="projectDetails">
+                  <div class="exTable">
+                    <div style="text-align: right;">
+                      <el-button @click="handleExportStudentCourse" size="small" type="success">
+                        导出项目详情报表
+                      </el-button>
+                    </div>
 
-                  <ex-table ref="projectStudentCourse_exTable" :data="projectStudentCourseTableData" :reload-method="handleProjectStudentCourseReload" show-pagination stripe>
-                    <el-table-column
-                      prop="student_name"
-                      label="姓名"
-                      width="90"
-                      fixed="left"
-                    />
-                    <el-table-column
-                      prop="student_status"
-                      label="编号"
-                      width="90"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="lesson_status"
-                      label="状态"
-                      width="80"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="department"
-                      label="部门"
-                      width="80"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="lesson_name"
-                      label="课程"
-                      width="180"
-                      show-overflow-tooltip
-                    />
-                    <el-table-column
-                      prop="lesson_source"
-                      label="课程来源"
-                      width="80"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="lesson_status"
-                      label="课程状态"
-                      width="80"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="start_time"
-                      label="开始时间"
-                      width="100"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="minute"
-                      label="学习时长(分钟)"
-                      width="120"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="completion_percent"
-                      label="完成度"
-                      width="80"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="finish_time"
-                      label="完成时间"
-                      width="100"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="score"
-                      label="考试"
-                      width="80"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="reset_score"
-                      label="补考"
-                      width="80"
-                      align="center"
-                    />
-                    <el-table-column
-                      prop="credit"
-                      label="获得学分"
-                      width="80"
-                      align="center"
-                    />
-                  </ex-table>
-                </div>
-              </el-tab-pane>
-            </el-tabs>
+                    <ex-table ref="projectStudentCourse_exTable" :data="projectStudentCourseTableData" :reload-method="handleProjectStudentCourseReload" show-pagination stripe>
+                      <el-table-column
+                        prop="student_name"
+                        label="姓名"
+                        width="90"
+                        fixed="left"
+                      />
+                      <el-table-column
+                        prop="student_status"
+                        label="编号"
+                        width="90"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="lesson_status"
+                        label="状态"
+                        width="80"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="department"
+                        label="部门"
+                        width="80"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="lesson_name"
+                        label="课程"
+                        width="180"
+                        show-overflow-tooltip
+                      />
+                      <el-table-column
+                        prop="lesson_source"
+                        label="课程来源"
+                        width="80"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="lesson_status"
+                        label="课程状态"
+                        width="80"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="start_time"
+                        label="开始时间"
+                        width="100"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="minute"
+                        label="学习时长(分钟)"
+                        width="120"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="completion_percent"
+                        label="完成度"
+                        width="80"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="finish_time"
+                        label="完成时间"
+                        width="100"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="score"
+                        label="考试"
+                        width="80"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="reset_score"
+                        label="补考"
+                        width="80"
+                        align="center"
+                      />
+                      <el-table-column
+                        prop="credit"
+                        label="获得学分"
+                        width="80"
+                        align="center"
+                      />
+                    </ex-table>
+                  </div>
+                </el-tab-pane>
+              </el-tabs>
+            </div>
           </div>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="6" style="height:100%">
           <div class="sideBar">
-            <h3>
-              学分排行
-              <el-button @click="handleExportRanking" type="text">
-                导出报表
-              </el-button>
-            </h3>
-            <ul>
-              <li class="title">
-                <span><i>0</i>姓名</span><span>完成课程</span><span>学分</span>
-              </li>
-              <li v-for="(item, index) in creditRanking" class="item">
-                <span><i :class="`color_${index+1}`">{{ index + 1 }}</i>{{ item.student_name }}</span><span>{{ item.lesson_count }}</span><span>{{ item.credit }}</span>
-              </li>
-            </ul>
+            <div class="inner">
+              <h3>
+                学分排行
+                <el-button @click="handleExportRanking" type="text">
+                  导出报表
+                </el-button>
+              </h3>
+              <ul>
+                <li class="title">
+                  <span><i>0</i>姓名</span><span>完成课程</span><span>学分</span>
+                </li>
+                <li v-for="(item, index) in creditRanking" class="item">
+                  <span><i :class="`color_${index+1}`">{{ index + 1 }}</i>{{ item.student_name }}</span><span>{{ item.lesson_count }}</span><span>{{ item.credit }}</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -421,9 +416,9 @@ export default {
   watch: {
   },
   mounted: function () {
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [{ name: '培训项目管理', path: '/project' }, { name: '项目详情' }
-      ] })
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [{ name: '培训项目管理', path: '/project' }, { name: '项目详情' }
+    //   ] })
     getProjectDetails({ id: GetUrlParam('id') }).then(res => {
       this.projectDetails = res.data
     })
@@ -550,9 +545,13 @@ export default {
   .page-projectDetails{
     .el-main{
       .main{
+        width:99%;
+        margin: 0 auto;
+        box-shadow: 0px 2px 5px #888888;
+        height:calc(100% - 100px);
+        .center{ margin-top: 5px;   padding: 15px;}
         border-right:1px solid #ededed;
-        min-height: 400px;
-        padding: 0 25px 0 0;
+        padding: 0 0px 0 0;
         h2{ font-size: 22px}
         .pieces{font-size: 12px; padding: 15px 0;color:#666666;display:flex;justify-content: space-between;
           span{ font-size: 14px}
@@ -564,7 +563,13 @@ export default {
 
       }
       .sideBar{
-        height:100%;padding: 10px;
+        height:calc(100% - 100px);padding: 0;
+        .inner{
+          padding: 10px;
+          margin: 5px;
+          box-shadow: 0px 2px 5px #888888;
+          height:100%;
+        }
         .el-button{ margin-left: 100px}
         ul li{ font-size: 12px;
           padding: 10px;
@@ -588,7 +593,7 @@ export default {
     }
     .exTable{
       .el-table{
-        min-height: 320px;
+        /*min-height: 320px;*/
       }
       .el-table__fixed,.el-table__fixed-right{box-shadow:none}
       .el-pagination{margin-top: 20px;text-align: right}

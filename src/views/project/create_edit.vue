@@ -467,10 +467,10 @@ export default {
         // console.log(this.dialogStudents.transferSelectedData)
       })
     }
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [
-        { name: '培训项目管理', path: '/project' }, { name: this.editMode ? '编辑项目' : '创建项目' }
-      ] })
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [
+    //     { name: '培训项目管理', path: '/project' }, { name: this.editMode ? '编辑项目' : '创建项目' }
+    //   ] })
     this.getCourseList()
   },
   methods: {

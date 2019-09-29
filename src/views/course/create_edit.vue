@@ -167,15 +167,13 @@
                 v-model="dialogExaminationData.courseRadio"
                 :label="scope.$index"
                 class="radio"
-              >
-              &nbsp;
-              </el-radio>
+              />
             </template>
           </el-table-column>
           <el-table-column property="name" show-overflow-tooltip label="试卷名称" />
-          <el-table-column property="add_time" show-overflow-tooltip label="创建时间" width="150" />
-          <el-table-column property="num" show-overflow-tooltip label="试题数" width="90" />
-          <el-table-column property="rule" show-overflow-tooltip label="试题规则" width="120" />
+          <el-table-column property="add_time" show-overflow-tooltip label="创建时间" width="150" align="center" />
+          <el-table-column property="num" show-overflow-tooltip label="试题数" width="90" align="center" />
+          <el-table-column property="rule" show-overflow-tooltip label="试题规则" width="120" align="center" />
         </ex-table>
       </div>
       <div class="btn-box">
@@ -380,11 +378,11 @@ export default {
         this.defaultCover = res.data
       })
     }
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [
-        { name: '企业课程库', path: '/course' },
-        { name: this.editMode ? '编辑课程' : '创建课程' }
-      ] })
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [
+    //     { name: '企业课程库', path: '/course' },
+    //     { name: this.editMode ? '编辑课程' : '创建课程' }
+    //   ] })
   },
   methods: {
     handleExaminationPaperReload (pagination, { currentPage, pageSize }) {
@@ -401,7 +399,19 @@ export default {
       let paginationObj = pagination || this.$refs['exTableExaminationPaper'].pagination
       getExaminationPaperList(param).then(res => {
         this.dialogExaminationTableData = res.data.list
-        this.dialogExaminationData.courseRadio = ''
+
+        this.dialogExaminationData.courseRadio = this.dialogExaminationTableData.indexOf(this.dialogExaminationData.currentRow)
+
+        let a = this.dialogExaminationTableData.map((item, index) => {
+          if (item.id === this.dialogExaminationData.currentRow.id) {
+            return index
+          }
+        })
+        // console.log(a)
+        this.dialogExaminationData.courseRadio = a[0]
+        // console.log(this.dialogExaminationTableData)
+        // console.log(this.dialogExaminationData.currentRow)
+        // console.log(this.dialogExaminationTableData.indexOf(this.dialogExaminationData.currentRow))
         if (paginationObj) {
           paginationObj.total = res.data.total
         }
@@ -504,8 +514,10 @@ export default {
       this.createForm.examinationPaper = this.dialogExaminationData.currentRow
     },
     cancelExaminationSelect () {
-      this.dialogExaminationVisible = false
-      this.createForm.examinationPaper = ''
+      // this.dialogExaminationVisible = false
+      // this.createForm.examinationPaper = ''
+      this.dialogExaminationData.courseRadio = ''
+      this.dialogExaminationData.currentRow = ''
     },
     handleSaveCourseDraft (formName) { // 保存草稿
       if (GetUrlParam('id')) {
@@ -585,8 +597,11 @@ export default {
     .exTable{
       margin-top: 20px;
       .el-pagination{margin-top: 20px;text-align: right}
+      tr td:first-child{
+        .el-radio__label{display: none}
+      }
     }
-    .el-tabs {.el-tabs__content{height:140px}}
-  }
 
+  }
+.el-tabs {.el-tabs__content{height:140px}}
 </style>

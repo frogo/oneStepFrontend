@@ -51,6 +51,7 @@
           试题顺序随机
           <el-switch
             v-model="createForm.randomSequence"
+            :disabled="createForm.randomSequenceDisabled"
             active-color="#EF6520"
             inactive-color="gray"
           />
@@ -121,9 +122,7 @@
                         <el-radio
                           v-model="manual.questionRadio"
                           :label="scope.$index"
-                        >
-&nbsp;
-                        </el-radio>
+                        />
                       </template>
                     </el-table-column>
                     <el-table-column
@@ -182,6 +181,7 @@
                     :reload-method="handleQuestionReload"
                     @selection-change="handleQuestionCurrentChange"
                     @select="handleQuestionClick"
+                    @select-all="handleQuestionClickAll"
                     tooltip-effect="light"
                     height="320"
                   >
@@ -230,6 +230,7 @@
                     <el-table-column
                       type="selection"
                       width="55"
+                      align="center"
                     />
                     <el-table-column
                       prop="name"
@@ -240,16 +241,17 @@
                       prop="num"
                       label="试题数"
                       width="70"
+                      align="center"
                     />
                   </ex-table>
                 </div>
               </div>
               <div class="questions">
                 <div class="collect">
-                  <span><i>总试题：</i>{{ random.allSingle + random.allMulti + random.allTrueFalse }}</span>
-                  <span><i>单项选择题：</i>{{ random.allSingle }}</span>
-                  <span><i>多项选择题：</i>{{ random.allMulti }}</span>
-                  <span><i>判断题：</i>{{ random.allTrueFalse }}</span>
+                  <span class="box"><span class="line" /><i>总试题数：</i><span class="num">{{ random.allSingle + random.allMulti + random.allTrueFalse }}</span></span>
+                  <span class="box"><span class="line" /><i>单项选择：</i><span class="num">{{ random.allSingle }}</span></span>
+                  <span class="box"><span class="line" /><i>多项选择：</i><span class="num">{{ random.allMulti }}</span></span>
+                  <span class="box"><span class="line" /><i>判断题数：</i><span class="num">{{ random.allTrueFalse }}</span></span>
                 </div>
                 <ul>
                   <li v-for="(item, index) in random.questionLibSelected" :key="item.name + index">
@@ -331,6 +333,7 @@ export default {
         qualifiedPercent: '',
         hours: '',
         randomSequence: true,
+        randomSequenceDisabled: false,
         randomOption: false,
         noLookAnswer: false,
         rules: 'manual'
@@ -378,6 +381,17 @@ export default {
     }
   },
   watch: {
+    'createForm.rules': {
+      handler: function (newVal) {
+        if (newVal === 'random') {
+          this.createForm.randomSequence = false
+          this.createForm.randomSequenceDisabled = true
+        } else {
+          this.createForm.randomSequence = true
+          this.createForm.randomSequenceDisabled = false
+        }
+      }
+    }
   },
   mounted: function () {
     if (this.$route.name === 'paper-edit') {
@@ -414,9 +428,9 @@ export default {
       })
     }
     // getExaminationPaperDetails
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [{ name: '试卷管理', path: '/paper' }, { name: this.editMode ? '编辑试卷' : '创建试卷' }
-      ] })
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [{ name: '试卷管理', path: '/paper' }, { name: this.editMode ? '编辑试卷' : '创建试卷' }
+    //   ] })
     this.fetchQuestionLibRemoteData() // 获取题库数据
   },
   methods: {
@@ -572,6 +586,33 @@ export default {
         this.manual.questionSelected.splice(this.getItemIndex(this.manual.questionSelected, row), 1)
       }
     },
+    handleQuestionClickAll (selection) { //  点击checkbox全选事件
+      if (selection.length > 0) { // 全选
+        if (this.manual.questionSelected.length > 0) { // 已选择课程长度大于0
+          for (let i = 0; i < selection.length; i++) {
+            for (let j = 0; j < this.manual.questionSelected.length; j++) {
+              if (selection[i].id === this.manual.questionSelected[j].id) {
+                this.manual.questionSelected.splice(j, 1)
+              }
+            }
+          }
+        }
+        this.manual.questionSelected = this.manual.questionSelected.concat(selection)
+      } else {
+        for (let i = 0; i < this.manual.questionSelected.length; i++) { // 取消全选
+          for (let j = 0; j < this.manual.questionTableData.length; j++) {
+            if (this.manual.questionSelected[i].id === this.manual.questionTableData[j].id) {
+              this.manual.questionSelected.splice(i, 1)
+            }
+          }
+        }
+      }
+
+      // console.log(selection)
+      // console.log(this.manual.questionChecked)
+      // console.log(this.manual.questionTableData)
+      // console.log(this.manual.questionSelected)
+    },
     handleQuestionCurrentChange (val) { // 手动选题 右侧试题选择
       this.manual.questionChecked = val
     },
@@ -658,7 +699,7 @@ export default {
       .head{padding:0 15px;background: #fafafa;height:30px;line-height: 30px;display: flex;justify-content: space-between;
         span{color:#999;display: inline-block;
           &:nth-child(1){width:28%}
-          &:nth-child(2){width:70%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
+          &:nth-child(2){transform: scale(0.9);overflow: hidden;text-overflow:ellipsis;white-space: nowrap;}
         }
       }
       .list{
@@ -670,6 +711,9 @@ export default {
           .questionLib{width:28%;border-right: 1px solid #efefef;
             .keyword-input{padding:15px 15px 0 15px}
             .exTable{
+              tr td:first-child{
+                .el-radio__label{display: none}
+              }
               .el-pagination{
                 margin: 10px auto 0;
                 text-align: center;
@@ -683,7 +727,7 @@ export default {
             position: relative;
             .exTable{
               .el-table th:first-child{
-                .cell{display: none}
+                /*.cell{display: none}*/
               }
             }
             .el-pagination{
@@ -739,12 +783,15 @@ export default {
               padding: 15px 15px 0 15px
             }
             .exTable{
-                .el-table th:first-child{
-                  .cell{
-                    .el-checkbox{display: none}
-                    &:after{content: '选择';display: inline-block;width:40px}
+              .el-table{
+                  th:first-child{
+                    .cell{
+                      .el-checkbox{display: none}
+                      &:after{content: '选择';display: inline-block;width:40px}
+                    }
                   }
-                }
+                .el-checkbox{ margin-left: 10px}
+              }
               .el-pagination{
                 margin: 10px auto 0;
                 text-align: center;
@@ -763,8 +810,15 @@ export default {
               justify-content: space-around;
               padding: 15px 0;
               border-bottom: 1px solid #efefef;
-              span{display: inline-block;color:red;font-size: 24px;position: relative;width:25%;text-align: center;height:40px;
-              i{position: absolute;left:0;top:0;font-style: normal;font-size: 12px;display: inline-block;height:20px;color:#999;line-height: 20px}
+              span.box{display: inline-block;color:red;font-size: 24px;position: relative;width:25%;text-align: center;height:40px;
+                i{position: absolute;left:0;top:0;font-style: normal;font-size: 12px;display: inline-block;height:20px;color:#999;line-height: 20px}
+               span.num{
+                 display: block;
+                 position: absolute;
+                 top:10px;
+                 left:55px
+               }
+                span.line{width:1px ;background: #dcdfe6;height:50%;position: absolute;top:25%;right:30px}
               }
             }
             ul{

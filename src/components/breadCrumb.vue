@@ -22,5 +22,5 @@ export default {
 }
 </script>
 <style lang="scss">
-  .breadCrumb{width:1200px;margin: 15px auto;height:14px;}
+  .breadCrumb{width:1200px;margin: 15px auto;height:14px}
 </style>

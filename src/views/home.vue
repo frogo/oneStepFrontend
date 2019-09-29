@@ -25,10 +25,7 @@
         我的待办
       </h2>
       <el-row class="card-list todo">
-        <el-col :span="6">
-          <img src="../assets/img/tqyb.jpg">
-        </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-card shadow="hover">
             <div class="item-card">
               <div class="img">
@@ -48,7 +45,7 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-card shadow="hover">
             <div class="item-card">
               <div class="img">
@@ -68,7 +65,7 @@
             </div>
           </el-card>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="8">
           <el-card shadow="hover">
             <div class="item-card">
               <div class="img">

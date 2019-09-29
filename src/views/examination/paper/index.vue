@@ -93,10 +93,10 @@ export default {
   },
   mounted: function () {
     this.fetchRemoteData() // 初始化数据
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [
-        { name: '试卷管理', path: '/paper' }
-      ] })
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [
+    //     { name: '试卷管理', path: '/paper' }
+    //   ] })
   },
   methods: {
     handleReload (pagination, { currentPage, pageSize }) {

@@ -11,26 +11,28 @@
       </dl>
     </el-aside>
     <el-main class="bg">
-      <h2>修改密码</h2>
-      <el-form ref="changeForm" :model="changeForm" :rules="rules" label-position="left" status-icon label-width="100px" class="changForm">
-        <el-form-item label="旧密码" prop="oldPassword">
-          <el-input v-model="changeForm.oldPassword" type="password" autocomplete="off" />
-        </el-form-item>
-        <el-form-item label="新密码" prop="newPassword">
-          <el-input v-model="changeForm.newPassword" type="password" autocomplete="off" />
-        </el-form-item>
-        <el-form-item label="确认新密码" prop="checkPassword">
-          <el-input v-model="changeForm.checkPassword" type="password" autocomplete="off" />
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="submitForm('changeForm')" type="primary">
-            确认修改
-          </el-button>
-          <el-button @click="resetForm('changeForm')">
-            重置
-          </el-button>
-        </el-form-item>
-      </el-form>
+      <div class="inner">
+        <h2>修改密码</h2>
+        <el-form ref="changeForm" :model="changeForm" :rules="rules" label-position="left" status-icon label-width="100px" class="changForm">
+          <el-form-item label="旧密码" prop="oldPassword">
+            <el-input v-model="changeForm.oldPassword" type="password" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="新密码" prop="newPassword">
+            <el-input v-model="changeForm.newPassword" type="password" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="确认新密码" prop="checkPassword">
+            <el-input v-model="changeForm.checkPassword" type="password" autocomplete="off" />
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="submitForm('changeForm')" type="primary">
+              确认修改
+            </el-button>
+            <el-button @click="resetForm('changeForm')">
+              重置
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -89,10 +91,10 @@ export default {
   watch: {
   },
   mounted: function () {
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [
-        { name: '修改密码', path: '/change_password' }
-      ] })
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [
+    //     { name: '修改密码', path: '/change_password' }
+    //   ] })
   },
   methods: {
     submitForm (formName) {
@@ -119,3 +121,13 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .page-changePassword{
+    .inner{
+      margin: 5px;
+      box-shadow: 0px 2px 5px #888888;
+      padding: 15px;
+      height:calc(100% - 100px)
+    }
+  }
+</style>

@@ -173,10 +173,10 @@ export default {
       this.bank_name = localStorage.getItem('bank_name')
     }
     this.fetchRemoteData() // 初始化数据
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [
-        { name: '题库管理', path: '/questionLib' }, { name: '编辑题库' }
-      ] })
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [
+    //     { name: '题库管理', path: '/questionLib' }, { name: '编辑题库' }
+    //   ] })
   },
   methods: {
     beforeUpload (file) {

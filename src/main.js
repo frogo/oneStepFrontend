@@ -25,7 +25,11 @@ new Vue({
 }).$mount('#app')
 
 router.beforeEach((to, from, next) => {
-  store.commit('$_setBreadCrumb', { isShow: false, list: [] })
+  if (to.meta && to.meta.breadCrumb) {
+    store.commit('$_setBreadCrumb', { isShow: true, list: to.meta.breadCrumb })
+  } else {
+    store.commit('$_setBreadCrumb', { isShow: false, list: [] })
+  }
   if (to.path === '/login' || to.path === '/register' || to.path === '/forgotPassword' || from.path === '/login') {
     next()
   } else {

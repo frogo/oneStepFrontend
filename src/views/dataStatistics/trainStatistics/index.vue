@@ -2,47 +2,49 @@
   <el-container class="main-content page-trainStatistics">
     <AsideMenu />
     <el-main>
-      <h2>培训统计</h2>
-      <div class="filter-box">
-        <span>
-          <el-date-picker
-            v-model="date"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            value-format="yyyy-MM-dd"
-          />
+      <div class="inner">
+        <h2>培训统计</h2>
+        <div class="filter-box">
+          <span>
+            <el-date-picker
+              v-model="date"
+              type="daterange"
+              range-separator="~"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy-MM-dd"
+            />
 
-          <el-button @click="handleSearch" type="primary"> 搜索</el-button>
-        </span>
-        <span>
-          <el-button @click="handleGotoDetail" type="primary"> 项目详情</el-button>
-        </span>
-      </div>
-      <div class="card-list">
-        <el-card class="box-card">
-          <h3>项目数</h3>
-          <p>{{ totalData.project }}</p>
-        </el-card>
-        <el-card class="box-card">
-          <h3>总课时</h3>
-          <p>{{ totalData.lesson_minute }}</p>
-        </el-card>
-        <el-card class="box-card">
-          <h3>参训人数</h3>
-          <p>{{ totalData.people }}</p>
-        </el-card>
-        <el-card class="box-card">
-          <h3>完成人数</h3>
-          <p>{{ totalData.pass }}</p>
-        </el-card>
-      </div>
-      <div class="ring-chart">
-        <v-chart :options="ringData" />
-      </div>
-      <div class="thumbs">
-        <img src="../../../assets/img/indexBg.png">
+            <el-button @click="handleSearch" type="primary"> 搜索</el-button>
+          </span>
+          <span>
+            <el-button @click="handleGotoDetail" type="primary"> 项目详情</el-button>
+          </span>
+        </div>
+        <div class="card-list">
+          <el-card class="box-card">
+            <h3>项目数</h3>
+            <p>{{ totalData.project }}</p>
+          </el-card>
+          <el-card class="box-card">
+            <h3>总课时</h3>
+            <p>{{ totalData.lesson_minute }}</p>
+          </el-card>
+          <el-card class="box-card">
+            <h3>参训人数</h3>
+            <p>{{ totalData.people }}</p>
+          </el-card>
+          <el-card class="box-card">
+            <h3>完成人数</h3>
+            <p>{{ totalData.pass }}</p>
+          </el-card>
+        </div>
+        <div class="ring-chart">
+          <v-chart :options="ringData" />
+        </div>
+        <div class="thumbs">
+          <img src="../../../assets/img/indexBg.png">
+        </div>
       </div>
     </el-main>
   </el-container>
@@ -139,11 +141,13 @@ export default {
   },
   watch: {
   },
+  created () {
+    // this.$store.commit('$_setBreadCrumb', { isShow: true,
+    //   list: [
+    //     { name: '培训统计', path: '/trainStatistics' }
+    //   ] })
+  },
   mounted: function () {
-    this.$store.commit('$_setBreadCrumb', { isShow: true,
-      list: [
-        { name: '培训统计', path: '/trainStatistics' }
-      ] })
     this.getTrainTotal()
   },
   methods: {
@@ -172,6 +176,12 @@ export default {
 
 <style lang="scss">
   .page-trainStatistics{
+    .inner{
+      margin: 5px;
+      box-shadow: 0px 2px 5px #888888;
+      padding: 15px;
+      height:calc(100% - 100px)
+    }
     padding: 0;
     .filter-box{
       margin: 20px 0;
@@ -181,7 +191,7 @@ export default {
       border-bottom: 1px solid #efefef;
     }
     .card-list{
-      width:80%; margin: 50px auto 0;
+      width:80%; margin: 20px auto 0;
       display: flex;
       justify-content: space-around;
       .box-card{width:160px;
@@ -193,7 +203,7 @@ export default {
         p{font-size: 28px;color:#E84D4D;text-align: center; padding-top: 20px}
       }
     }
-    .thumbs{ text-align: center}
+    .thumbs{ text-align: center; margin-top: -100px}
     .echarts{ margin: 0 auto}
   }
 </style>
