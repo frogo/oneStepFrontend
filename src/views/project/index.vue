@@ -30,7 +30,7 @@
         <el-tabs v-model="activeName">
           <el-tab-pane name="card">
             <span slot="label"><i class="el-icon-menu" /> </span>
-            <el-row>
+            <el-row style="padding-left: 35px">
               <el-col :span="5" v-for="(item, index) in projectList" :key="`project_card_${index}`" :offset="index%4 ==0 ? 0 : 1">
                 <el-card class="project-card">
                   <div :class="`status-bg ${statusMap.bg[item.status]}`">
@@ -209,35 +209,36 @@
             prop="name"
             label="学员姓名"
             width="90"
-            align="center"
           />
           <el-table-column
             prop="phone"
             label="联系电话"
-            width="120"
+            width="150"
             align="center"
           />
           <el-table-column
             prop="add_time"
             label="申请时间"
-            width="120"
+            width="150"
             align="center"
           />
           <el-table-column
             label="操作"
-            align="center"
+            align="right"
           >
             <template slot-scope="scope">
               <el-button
                 @click="handlePass([scope.row])"
                 size="mini"
+                type="text"
+                style="color:dodgerblue"
               >
                 通过
               </el-button>
               <el-button
                 @click="handleNoPass([scope.row])"
                 size="mini"
-                type="danger"
+                type="text"
               >
                 不通过
               </el-button>
@@ -312,9 +313,9 @@ export default {
   },
   methods: {
     handleDownloadQrCode () {
-      this.downloadIamge(this.$refs.qrcode, '二维码')
+      this.downloadImage(this.$refs.qrcode, '二维码')
     },
-    downloadIamge (selector, name) {
+    downloadImage (selector, name) {
       let image = new Image()
       // 解决跨域 Canvas 污染问题
       image.setAttribute('crossOrigin', 'anonymous')
@@ -484,9 +485,15 @@ export default {
 </script>
 <style lang="scss">
   .page-project{
+    .el-aside{
+      dl{
+       height: calc(100% - 10px)!important;
+      }
+    }
     .el-main{
 
       .filter-box{
+        .el-radio.is-bordered{border: 1px solid #fff;&.is-checked{border-color: #EF6520}}
         position: relative;
         margin: 20px 0;
         padding: 0 20px;
@@ -511,7 +518,7 @@ export default {
         box-shadow: 0px 2px 5px #888888;
         width:99%;
         margin: 0 auto;
-        height: calc(100% - 220px);
+        height: calc(100% - 130px);
         .el-tabs{
           width:98%;
           margin: 0 auto;

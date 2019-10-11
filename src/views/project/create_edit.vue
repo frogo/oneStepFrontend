@@ -101,14 +101,14 @@
             inactive-color="gray"
           /> <el-input v-if="createForm.passwordSwitch" v-model="createForm.password" placeholder="请输入口令" size="small" style="width:160px; margin-left: 10px" /></span>
 
-          <span class="item w500">指定参训人员 <el-switch
+          <span class="item w500">指定参训学员 <el-switch
             v-model="createForm.studentsSwitch"
             active-color="#EF6520"
             inactive-color="gray"
           />
             <span v-if="createForm.studentsSwitch">
               <el-button @click="handleStudentDialogOpen" size="small" type="primary">{{ editMode ? '重新指定' : '设置' }}</el-button>
-              已选择参数人员<span class="red">{{ dialogStudents.transferSelectedData.length }}</span>人
+              已选择参训学员<span class="red">{{ dialogStudents.transferSelectedData.length }}</span>人
             </span>
 
           </span>
@@ -265,7 +265,7 @@
               size="small"
               effect="plain"
             >
-              {{ item.name }} {{ item.id }}
+              {{ item.name }}
             </el-tag>
           </div>
         </transition>
@@ -421,6 +421,11 @@ export default {
         this.createForm.auth = false
         this.createForm.approval = false
         this.createForm.passwordSwitch = false
+      }
+    },
+    'createForm.auth' (newVal) {
+      if (newVal) {
+        this.createForm.studentsSwitch = false
       }
     },
     'dialogCourse.filterForm': {
@@ -723,7 +728,16 @@ export default {
         }
         .el-radio__input{display:none}
         .el-radio__label{padding-left: 6px}
-        .el-checkbox-button__inner{padding: 8px 15px}
+        .el-radio.is-bordered.is-checked{border:1px solid #ef6520}
+        .el-radio.is-bordered{border: none}
+        .el-checkbox-button__inner{border: 1px solid #fff;padding: 8px 15px}
+        .el-checkbox-button.is-checked .el-checkbox-button__inner{
+          color: #EF6520;
+          background-color: #fff;
+          border:1px solid #EF6520;
+          border-radius:3px;
+          box-shadow: none;
+        }
         .keyword-input{
           margin-bottom: 10px;
           .el-input{width:300px}

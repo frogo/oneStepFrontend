@@ -9,7 +9,7 @@
       </div>
       <div class="inline-form">
         <el-form-item label="课程名称" prop="courseName">
-          <el-input v-model="createForm.courseName" placeholder="请输入" style="width:583px" />
+          <el-input v-model="createForm.courseName" placeholder="请输入" style="width:583px" maxlength="22" show-word-limit />
         </el-form-item>
         <el-form-item label="课时" prop="hours">
           <el-input v-model.number="createForm.hours" placeholder="请输入" class="w200" /> <span>分钟</span>
@@ -25,7 +25,7 @@
       </div>
 
       <el-form-item label="课程目标" prop="">
-        <el-input v-model="createForm.target" placeholder="请输入" />
+        <el-input v-model="createForm.target" :rows="4" type="textarea" style="width:583px" />
       </el-form-item>
       <el-form-item label="标签" prop="">
         <el-button @click="dialogTagsEditorVisible = true; editMode = false" type="info" icon="el-icon-plus" plain size="small">
@@ -549,24 +549,12 @@ export default {
               this.$router.push({
                 path: '/course'
               })
-              // this.$alert(res.message, '提示', {
-              //   confirmButtonText: '确定',
-              //   callback: action => {
-              //     this.$router.push({
-              //       path: '/course'
-              //     })
-              //   }
-              // })
             })
           } else {
             addCourse(this.addCourseParam).then(res => {
-              this.$alert(res.message, '提示', {
-                confirmButtonText: '确定',
-                callback: action => {
-                  this.$router.push({
-                    path: '/course'
-                  })
-                }
+              this.$message.success(res.message)
+              this.$router.push({
+                path: '/course'
               })
             })
           }
@@ -582,6 +570,7 @@ export default {
 </script>
 <style lang="scss">
 .page-courseCreate{
+  .el-tabs {.el-tabs__content{height:140px}}
   .inline-form{
     display: flex; justify-content:flex-start;
     .el-form-item{
@@ -593,6 +582,7 @@ export default {
   }
 }
   .examinationChoose{
+    margin-top: 10vh!important;
     /*.el-table--enable-row-hover .el-table__body tr:hover > td{background: #EF6520;color:#fff}*/
     .exTable{
       margin-top: 20px;
@@ -603,5 +593,5 @@ export default {
     }
 
   }
-.el-tabs {.el-tabs__content{height:140px}}
+
 </style>

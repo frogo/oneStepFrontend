@@ -38,7 +38,7 @@
                         label="姓名"
                         width="90"
                         fixed="left"
-                        align="center"
+                        align="left"
                       />
                       <el-table-column
                         prop="number"
@@ -97,19 +97,21 @@
                         label="操作"
                         fixed="right"
                         width="160"
-                        header-align="center"
+                        header-align="right"
+                        align="right"
                       >
                         <template slot-scope="scope">
                           <el-button
                             @click="handleViewLearning(scope.$index, scope.row)"
                             size="mini"
+                            type="text"
                           >
                             查看
                           </el-button>
                           <el-button
                             @click="handleDeleteLearning(scope.$index, scope.row)"
                             size="mini"
-                            type="danger"
+                            type="text"
                           >
                             删除
                           </el-button>
@@ -134,15 +136,15 @@
                         fixed="left"
                       />
                       <el-table-column
-                        prop="student_status"
+                        prop="number"
                         label="编号"
                         width="90"
                         align="center"
                       />
                       <el-table-column
-                        prop="lesson_status"
+                        prop="student_status"
                         label="状态"
-                        width="80"
+                        width="60"
                         align="center"
                       />
                       <el-table-column
@@ -254,7 +256,14 @@
         </div>
       </div>
       <div class="exTable">
-        <ex-table ref="studentLearning_exTable" @selection-change="handleSelectionChange" :data="studentLearningTableData" :reload-method="handleStudentLearningReload" :show-pagination="false" stripe>
+        <ex-table
+          ref="studentLearning_exTable"
+          :header-cell-style="{background:'#fafafa',color:'##909399'}"
+          @selection-change="handleSelectionChange"
+          :data="studentLearningTableData"
+          :reload-method="handleStudentLearningReload"
+          :show-pagination="false" stripe
+        >
           <el-table-column
             type="selection"
             width="55"
@@ -322,7 +331,7 @@ export default {
     ExTable
   },
   data () {
-    let dataX = ['3月', '4月']
+    let dataX = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
     let dataJoin = [12, 14]
     let dataComplete = [5, 8]
     // let dataX = []
@@ -369,7 +378,11 @@ export default {
         ],
         yAxis: [
           {
-            type: 'value'
+            max: 100,
+            // min:0,
+            type: 'value',
+            minInterval: 0,
+            interval: 20 // 每次增加几个
           }
         ],
         series: [
@@ -428,7 +441,7 @@ export default {
     let _this = this
     getProjectChartData({ camp_id: GetUrlParam('id') }).then(res => {
       _this.remoteChartData = res.data
-      _this.barData.xAxis.data = _this.remoteChartData.map(_ => {
+      _this.barData.xAxis[0].data = _this.remoteChartData.map(_ => {
         return _.month + '月'
       })
       _this.barData.series[0].data = _this.remoteChartData.map(_ => {
@@ -600,6 +613,7 @@ export default {
     }
 
     .studentInfo{
+      margin-bottom: 10px;
       display: flex;justify-content: space-between;
       .name{span{font-size: 20px;color:#666;padding-left: 10px}}
       .info{span{padding: 0 10px}}

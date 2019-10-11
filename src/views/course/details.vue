@@ -11,12 +11,12 @@
         <h1>{{ courseDetails.name }}</h1>
         <ul class="some">
           <li>
-            <span style="margin-right: 30px" class="c999"><i class="el-icon-thumb" /> 158</span>
-            <span class="c999"><i class="el-icon-view" /> 358</span>
+            <span style="margin-right: 30px" class="c999"><i class="el-icon-thumb" /> {{ courseDetails.like_num }}</span>
+            <span class="c999"><i class="el-icon-view" /> {{ courseDetails.visit_num }}</span>
           </li>
-          <li><span class="c999">课程对象：</span>一般新员工</li>
-          <li><span class="c999">上传时间：</span>2019-05-13</li>
-          <li><span class="c999">标签：</span>课程、开发</li>
+          <li><span class="c999">课程对象：</span>{{ courseDetails.obj }}</li>
+          <li><span class="c999">上传时间：</span>{{ courseDetails.add_time }}</li>
+          <li><span class="c999">标签：</span> <span v-for="item in courseDetails.tags" style="padding-left: 10px">{{ item.name }}</span></li>
         </ul>
         <div>
           <el-button @click="goToEdit" type="primary">
@@ -27,32 +27,55 @@
     </div>
     <div v-if="courseDetails" class="introduction">
       <div class="course-intro">
-        <el-tabs v-model="courseActiveName">
-          <el-tab-pane label="课程介绍" name="intro">
-            {{ courseDetails.introduction }}
-          </el-tab-pane>
-          <el-tab-pane label="课程大纲" name="outline">
-            {{ courseDetails.syllabus }}
-          </el-tab-pane>
-        </el-tabs>
+        <div class="inner">
+          <el-tabs v-model="courseActiveName">
+            <el-tab-pane label="课程介绍" name="intro">
+              <!--              <div class="item">-->
+              <!--                <p class="title">课程对象：</p>-->
+              <!--                <p class="content"> {{ courseDetails.obj }}</p>-->
+              <!--              </div>-->
+              <div class="item">
+                <p class="title">
+                  课程目标：
+                </p>
+                <p class="content">
+                  {{ courseDetails.target }}
+                </p>
+              </div>
+              <div class="item">
+                <p class="title">
+                  课程简介：
+                </p>
+                <p class="content">
+                  {{ courseDetails.introduction }}
+                </p>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="课程大纲" name="outline" class="outline">
+              {{ courseDetails.syllabus }}
+            </el-tab-pane>
+          </el-tabs>
+        </div>
       </div>
       <div class="lecturer-intro">
-        <h2 class="intro">
-          讲师简介
-        </h2>
-        <div class="head">
-          <div class="avatar">
-            <el-avatar :src="courseDetails.teacher_info.pic" />
+        <div class="inner">
+          <h2 class="intro">
+            讲师简介
+          </h2>
+          <div class="head">
+            <div class="avatar">
+              <el-avatar :src="courseDetails.teacher_info.pic" />
+            </div>
+            <div class="name">
+              <p>{{ courseDetails.teacher_info.name }}</p>
+              <p style="color:#c2c2c2; margin-top: 10px;">
+                <i class="el-icon-thumb" /> 158
+              </p>
+            </div>
           </div>
-          <div class="name">
-            <p>{{ courseDetails.teacher_info.name }}</p>
-            <p style="color:#c2c2c2; margin-top: 10px;">
-              <i class="el-icon-thumb" /> 158
-            </p>
+          <div class="section">
+            {{ courseDetails.teacher_info.introduction }}
           </div>
-        </div>
-        <div class="section">
-          {{ courseDetails.teacher_info.introduction }}
         </div>
       </div>
     </div>
@@ -92,3 +115,22 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+  .page-courseDetails{
+    .introduction{
+      .course-intro{
+        .inner{
+          .outline{ font-size: 12px;color:#666}
+          .item{
+            padding: 2em 0;
+            p{
+              font-size: 12px;
+              &.title{color:#999;margin-bottom: 10px}
+              &.content{color:#666}
+            }
+          }
+        }
+      }
+    }
+  }
+</style>

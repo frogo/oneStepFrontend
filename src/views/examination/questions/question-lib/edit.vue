@@ -55,24 +55,29 @@
             prop="type"
             label="题型"
             width="90"
+            align="center"
+          />
+          <el-table-column
+            prop="creator"
+            label="创建人"
+            width="100"
+            align="center"
           />
           <el-table-column
             prop="subject"
             label="题目"
           />
-          <el-table-column
-            prop="creator"
-            label="创建人"
-            width="180"
-          />
+
           <el-table-column
             prop="add_time"
             label="创建时间"
             width="180"
+            align="center"
           />
           <el-table-column
             label="操作"
             width="180"
+            align="center"
           >
             <template slot-scope="scope">
               <el-button
