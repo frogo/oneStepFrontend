@@ -57,7 +57,7 @@
                   即将到期培训的项目
                 </p>
                 <el-badge :value="todo.project" class="item" type="primary">
-                  <el-button size="small">
+                  <el-button @click="$router.push({ path:'project',query:{ order:'end_time'}})" size="small">
                     查看项目
                   </el-button>
                 </el-badge>

@@ -64,6 +64,7 @@ export const getProjectChartData = p => get(CONFIG.PROJECT.PROJECT_CHART, p) // 
 
 // 试题
 export const getQuestionLibList = p => get(CONFIG.EXAMINATION.QUESTION.QUESTION_LIB, p) // 题库列表
+export const getQuestionLibInfo = p => get(CONFIG.EXAMINATION.QUESTION.QUESTION_LIB_INFO, p) // 题库列表
 export const addQuestionLib = p => post(CONFIG.EXAMINATION.QUESTION.ADD_QUESTION_LIB, p) // 增加题库
 export const modifyQuestionLib = p => post(CONFIG.EXAMINATION.QUESTION.MODIFY_QUESTION_LIB, p) // 修改题库名字
 export const deleteQuestionLib = p => post(CONFIG.EXAMINATION.QUESTION.DELETE_QUESTION_LIB, p) // 删除题库

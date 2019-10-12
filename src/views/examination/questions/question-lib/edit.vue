@@ -26,7 +26,7 @@
         <el-form-item label="类型：">
           <el-radio-group v-model="filterForm.type" @change="handleTypeChange">
             <el-radio :label="item.label" v-for="item in type" :key="item.label" border>
-              {{ item.name }}
+              {{ item.name }} <span v-if="item.label !== 'all'">({{ item.total }})</span>
             </el-radio>
           </el-radio-group>
         </el-form-item>
@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import { getQuestionList, deleteQuestion, modifyQuestionLib } from '@/request/api'
+import { getQuestionList, deleteQuestion, modifyQuestionLib, getQuestionLibInfo } from '@/request/api'
 import ExTable from '@/components/exTable.js'
 export default {
   components: {
@@ -147,9 +147,9 @@ export default {
       },
       type: [
         { name: '不限', label: 'all' },
-        { name: '单选', label: 'single' },
-        { name: '多选', label: 'multi' },
-        { name: '判断', label: 'trueFalse' }
+        { name: '单选', label: 'single', total: 0 },
+        { name: '多选', label: 'multi', total: 0 },
+        { name: '判断', label: 'trueFalse', total: 0 }
       ],
       questionsTableData: [],
       multipleSelection: [],
@@ -178,10 +178,12 @@ export default {
       this.bank_name = localStorage.getItem('bank_name')
     }
     this.fetchRemoteData() // 初始化数据
-    // this.$store.commit('$_setBreadCrumb', { isShow: true,
-    //   list: [
-    //     { name: '题库管理', path: '/questionLib' }, { name: '编辑题库' }
-    //   ] })
+    getQuestionLibInfo({ id: this.bank_id }).then(res => {
+      this.type.map(_ => {
+        _.total = res.data[_.label + '_total']
+        return _
+      })
+    })
   },
   methods: {
     beforeUpload (file) {

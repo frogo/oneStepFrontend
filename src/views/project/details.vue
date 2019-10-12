@@ -284,7 +284,7 @@
             align="center"
           />
           <el-table-column
-            prop="reset_score"
+            prop="retest_score"
             label="补考"
             width="70"
             align="center"
@@ -520,9 +520,9 @@ export default {
         .then(_ => {
           deleteProjectStudent({ camp_id: GetUrlParam('id'), student_id: [row.student_id] }).then(res => {
             this.$message.success(res.message)
+            this.fetchProjectStudentRemoteData()
+            this.fetchProjectStudentCourseRemoteData()
           })
-          this.fetchProjectStudentRemoteData()
-          this.fetchProjectStudentCourseRemoteData()
         })
     },
     handleExportRanking () { // 学分排行导出

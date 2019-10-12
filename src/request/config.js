@@ -42,6 +42,7 @@ export default {
     },
     QUESTION: {
       QUESTION_LIB: CONTEXTPATH + '/questionBank/list',
+      QUESTION_LIB_INFO: CONTEXTPATH + '/questionBank/info',
       ADD_QUESTION_LIB: CONTEXTPATH + '/questionBank/add',
       MODIFY_QUESTION_LIB: CONTEXTPATH + '/questionBank/modify',
       DELETE_QUESTION_LIB: CONTEXTPATH + '/questionBank/delete',

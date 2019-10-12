@@ -27,6 +27,9 @@
         </el-form>
       </div>
       <div class="project-block">
+        <span class="btn_option">
+          <el-checkbox v-model="byEndTime" @change="getProjectListByEndTime">按结束时间排序</el-checkbox>
+        </span>
         <el-tabs v-model="activeName">
           <el-tab-pane name="card">
             <span slot="label"><i class="el-icon-menu" /> </span>
@@ -257,6 +260,7 @@
 import { getProjectList, getProjectDetails, deleteProject, onLineProject, approvalProject, getApprovalList } from '@/request/api'
 import AsideMenu from '@/components/asideMenu'
 import ExTable from '@/components/exTable.js'
+import { GetUrlParam } from '@/utility'
 export default {
   components: {
     AsideMenu,
@@ -264,6 +268,7 @@ export default {
   },
   data () {
     return {
+      byEndTime: false,
       activeName: 'card',
       keyword: '',
       filterForm: {
@@ -299,19 +304,23 @@ export default {
         keyword: this.keyword,
         status: this.filterForm.status,
         offset: this.pagination.currentPage,
-        limit: this.pagination.pageSize
+        limit: this.pagination.pageSize,
+        order: this.byEndTime ? 'end_time' : ''
       }
     }
   },
   watch: {
   },
   mounted: function () {
+    if (GetUrlParam('order') && GetUrlParam('order') === 'end_time') {
+      this.byEndTime = true
+    }
     this.getProjectList()
-    // this.$store.commit('$_setBreadCrumb', { isShow: true,
-    //   list: [{ name: '培训项目管理', path: '/project' }
-    //   ] })
   },
   methods: {
+    getProjectListByEndTime () {
+      this.getProjectList()
+    },
     handleDownloadQrCode () {
       this.downloadImage(this.$refs.qrcode, '二维码')
     },
@@ -515,6 +524,8 @@ export default {
         .add-button{position: absolute;right:0;top:0}
       }
       .project-block{
+        position: relative;
+        .btn_option{position: absolute;left:80px;top:10px;z-index: 1}
         box-shadow: 0px 2px 5px #888888;
         width:99%;
         margin: 0 auto;
