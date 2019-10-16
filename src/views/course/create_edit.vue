@@ -41,7 +41,10 @@
         <el-input v-model="createForm.intro" :rows="4" type="textarea" />
       </el-form-item>
       <el-form-item label="课程大纲" prop="">
-        <el-input v-model="createForm.outline" :rows="4" type="textarea" />
+        <!--        <el-input v-model="createForm.outline" :rows="4" type="textarea" />-->
+        <el-button @click="addOutLine" type="default" icon="el-icon-plus" size="small">
+          新增一条大纲内容
+        </el-button>
       </el-form-item>
       <el-form-item label="课程封面" prop="" class="cover">
         <el-tabs v-model="createForm.activeTabName" type="card">
@@ -215,7 +218,7 @@ export default {
         hours: '',
         credit: '',
         intro: '',
-        outline: '',
+        outline: [],
         // 讲师
         lecturer: '',
         lecturerImageUrl: '',
@@ -283,24 +286,8 @@ export default {
     }
   },
   computed: {
-    // getExaminationPaperListParam: function () {
-    //   return {
-    //     type: this.typeMap[this.dialogExaminationData.type],
-    //     limit: this.dialogExaminationData.pageSize,
-    //     offset: this.dialogExaminationData.currentPage,
-    //     keyword: this.dialogExaminationData.keyword
-    //   }
-    // },
     addCourseParam: function () {
       let tags = this.createForm.tags
-      // if (this.createForm.tags && this.createForm.tags.length > 0) {
-      //   tags = this.createForm.tags.map(_ => {
-      //     return _.id
-      //   })
-      // } else {
-      //   tags = []
-      // }
-
       return {
         name: this.createForm.courseName,
         cover: (this.createForm.activeTabName === 'default') ? this.createForm.radioCover : this.createForm.coverImageUrl,
@@ -378,13 +365,11 @@ export default {
         this.defaultCover = res.data
       })
     }
-    // this.$store.commit('$_setBreadCrumb', { isShow: true,
-    //   list: [
-    //     { name: '企业课程库', path: '/course' },
-    //     { name: this.editMode ? '编辑课程' : '创建课程' }
-    //   ] })
   },
   methods: {
+    addOutLine () { // 新增大纲
+
+    },
     handleExaminationPaperReload (pagination, { currentPage, pageSize }) {
       this.fetchExaminationPaperRemoteData(pagination, currentPage, pageSize)
     },

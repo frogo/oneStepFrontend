@@ -772,6 +772,6 @@ export default {
       }
       /*.pager{ margin: 30px 20px; text-align: right}*/
     }
-
+    .el-checkbox-button{ margin-right: 10px}
   }
 </style>

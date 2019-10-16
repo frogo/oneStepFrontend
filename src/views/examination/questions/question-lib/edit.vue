@@ -58,12 +58,6 @@
             align="center"
           />
           <el-table-column
-            prop="creator"
-            label="创建人"
-            width="100"
-            align="center"
-          />
-          <el-table-column
             prop="subject"
             label="题目"
           />
@@ -72,6 +66,12 @@
             prop="add_time"
             label="创建时间"
             width="180"
+            align="center"
+          />
+          <el-table-column
+            prop="creator"
+            label="创建人"
+            width="100"
             align="center"
           />
           <el-table-column

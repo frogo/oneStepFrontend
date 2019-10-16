@@ -30,95 +30,133 @@
         <span class="base-info">选项内容</span>
       </div>
       <el-form-item prop="questionAnswer">
-        <el-table
-          ref="singleTable"
-          v-show="createForm.questionType === 'single'"
-          :data="createForm.optionsSingle.questionOptionsData"
-          style="width: 100%"
-        >
-          <el-table-column
-            label="正确"
-            width="60"
-            align="center"
+        <div v-show="createForm.questionType === 'single'" class="single">
+          <el-table
+            ref="singleTable"
+            :data="createForm.optionsSingle.questionOptionsData"
+            style="width: 100%"
           >
-            <template slot-scope="scope">
-              <el-radio v-model="createForm.optionsSingle.trueOption" :label="scope.row.number">
+            <el-table-column
+              label="正确"
+              width="60"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <el-radio v-model="createForm.optionsSingle.trueOption" :label="scope.row.number">
+                  &nbsp;
+                </el-radio>
+              </template>
+            </el-table-column>
+            <el-table-column
+              :formatter="optionFormat"
+              label="编号"
+              width="60"
+              prop="number"
+              align="center"
+            />
+            <el-table-column
+              label="描述"
+            >
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.content" type="textarea" />
+              </template>
+            </el-table-column>
+            <el-table-column
+              label=""
+            >
+              <template slot-scope="scope">
+                <el-button
+                  v-if="createForm.optionsSingle.questionOptionsData.length > 4 && createForm.optionsSingle.questionOptionsData.length === scope.row.number"
+                  @click="removeOption('single',scope.row)" type="danger" size="mini"
+                >
+                  移除
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <p class="add_btn">
+            <el-button @click="addOption('single')" type="success" icon="el-icon-circle-plus-outline">
+              增加选项
+            </el-button>
+          </p>
+        </div>
+        <div v-show="createForm.questionType === 'multi'" class="multi">
+          <el-table
+            ref="multipleTable"
+            :data="createForm.optionsMulti.questionOptionsData"
+            @selection-change="handleSelectionChange"
+            @select="handleCheckboxClick"
+            style="width: 100%"
+            class="multiTable"
+          >
+            <el-table-column
+              type="selection"
+              width="60"
+              align="center"
+            />
+            <el-table-column
+              :formatter="optionFormat"
+              label="编号"
+              width="60"
+              prop="number"
+              align="center"
+            />
+            <el-table-column
+              label="描述(请在左侧勾选正确答案)"
+            >
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.content" type="textarea" />
+              </template>
+            </el-table-column>
+            <el-table-column
+              label=""
+            >
+              <template slot-scope="scope">
+                <el-button
+                  v-if="createForm.optionsMulti.questionOptionsData.length > 4 && createForm.optionsMulti.questionOptionsData.length === scope.row.number"
+                  @click="removeOption('multi',scope.row)" type="danger" size="mini"
+                >
+                  移除
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <p class="add_btn">
+            <el-button @click="addOption('multi')" type="success" icon="el-icon-circle-plus-outline">
+              增加选项
+            </el-button>
+          </p>
+        </div>
+        <div v-show="createForm.questionType === 'trueFalse'" class="trueFalse">
+          <el-table
+            ref="trueFalseTable"
+            :data="createForm.optionsTrueFalse.questionOptionsData"
+            style="width: 100%"
+          >
+            <el-table-column
+              label="正确"
+              width="60"
+              align="center"
+            >
+              <template slot-scope="scope">
+                <el-radio v-model="createForm.optionsTrueFalse.trueOption" :label="scope.row.number">
 &nbsp;
-              </el-radio>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="编号"
-            width="60"
-            prop="number"
-            align="center"
-          />
-          <el-table-column
-            label="描述"
-          >
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.content" type="textarea" />
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <el-table
-          ref="multipleTable"
-          v-show="createForm.questionType === 'multi'"
-          :data="createForm.optionsMulti.questionOptionsData"
-          @selection-change="handleSelectionChange"
-          @select="handleCheckboxClick"
-          style="width: 100%"
-          class="multiTable"
-        >
-          <el-table-column
-            type="selection"
-            width="60"
-            align="center"
-          />
-          <el-table-column
-            label="编号"
-            width="60"
-            prop="number"
-            align="center"
-          />
-          <el-table-column
-            label="描述(请在左侧勾选正确答案)"
-          >
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.content" type="textarea" />
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <el-table
-          ref="trueFalseTable"
-          v-show="createForm.questionType === 'trueFalse'"
-          :data="createForm.optionsTrueFalse.questionOptionsData"
-          style="width: 100%"
-        >
-          <el-table-column
-            label="正确"
-            width="60"
-            align="center"
-          >
-            <template slot-scope="scope">
-              <el-radio v-model="createForm.optionsTrueFalse.trueOption" :label="scope.row.number">
-&nbsp;
-              </el-radio>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="编号"
-            width="60"
-            align="center"
-            prop="number"
-          />
-          <el-table-column
-            label="描述"
-            prop="content"
-          />
-        </el-table>
+                </el-radio>
+              </template>
+            </el-table-column>
+            <el-table-column
+              :formatter="optionFormat"
+              label="编号"
+              width="60"
+              align="center"
+              prop="number"
+            />
+            <el-table-column
+              label="描述"
+              prop="content"
+            />
+          </el-table>
+        </div>
       </el-form-item>
     </el-form>
 
@@ -150,16 +188,16 @@ export default {
         // optionsNumber: 4,
         questionName: '',
         optionsSingle: {
-          trueOption: 'A',
-          questionOptionsData: [{ number: 'A', content: '', istrue: 1 }, { number: 'B', content: '', istrue: 0 }, { number: 'C', content: '', istrue: 0 }, { number: 'D', content: '', istrue: 0 }]
+          trueOption: 1,
+          questionOptionsData: [{ number: 1, content: '', istrue: 1 }, { number: 2, content: '', istrue: 0 }, { number: 3, content: '', istrue: 0 }, { number: 4, content: '', istrue: 0 }]
         },
         optionsMulti: {
           trueOption: [],
-          questionOptionsData: [{ number: 'A', content: '', istrue: 0 }, { number: 'B', content: '', istrue: 0 }, { number: 'C', content: '', istrue: 0 }, { number: 'D', content: '', istrue: 0 }]
+          questionOptionsData: [{ number: 1, content: '', istrue: 0 }, { number: 2, content: '', istrue: 0 }, { number: 3, content: '', istrue: 0 }, { number: 4, content: '', istrue: 0 }]
         },
         optionsTrueFalse: {
-          trueOption: 'A',
-          questionOptionsData: [{ number: 'A', content: '正确', istrue: 1 }, { number: 'B', content: '错误', istrue: 0 }]
+          trueOption: 1,
+          questionOptionsData: [{ number: 1, content: '正确', istrue: 1 }, { number: 2, content: '错误', istrue: 0 }]
         }
       },
       rules: {
@@ -236,16 +274,18 @@ export default {
         this.createForm.questionName = res.data.subject
         this.createForm.questionType = res.data.type
         if (res.data.type === 'single') {
-          this.createForm.optionsSingle.questionOptionsData = res.data.options.map(item => {
-            item.number = String.fromCharCode(64 + parseInt(item.number))
-            return item
-          })
+          this.createForm.optionsSingle.questionOptionsData = res.data.options
+          // this.createForm.optionsSingle.questionOptionsData = res.data.options.map(item => {
+          //   item.number = String.fromCharCode(64 + parseInt(item.number))
+          //   return item
+          // })
           this.createForm.optionsSingle.trueOption = res.data.options.filter(item => item.istrue === 1)[0].number
         } else if (res.data.type === 'multi') {
-          this.createForm.optionsMulti.questionOptionsData = res.data.options.map(item => {
-            item.number = String.fromCharCode(64 + parseInt(item.number))
-            return item
-          })
+          this.createForm.optionsMulti.questionOptionsData = res.data.options
+          // this.createForm.optionsMulti.questionOptionsData = res.data.options.map(item => {
+          //   item.number = String.fromCharCode(64 + parseInt(item.number))
+          //   return item
+          // })
           this.createForm.optionsMulti.questionOptionsData.map(item => {
             if (item.istrue === 1) {
               this.$nextTick(() => {
@@ -254,22 +294,43 @@ export default {
             }
           })
         } else {
-          this.createForm.optionsTrueFalse.questionOptionsData = res.data.options.map(item => {
-            item.number = String.fromCharCode(64 + parseInt(item.number))
-            return item
-          })
+          this.createForm.optionsTrueFalse.questionOptionsData = res.data.options
+          // this.createForm.optionsTrueFalse.questionOptionsData = res.data.options.map(item => {
+          //   item.number = String.fromCharCode(64 + parseInt(item.number))
+          //   return item
+          // })
           this.createForm.optionsTrueFalse.trueOption = res.data.options.filter(item => item.istrue === 1)[0].number
         }
       })
     }
-    // this.$store.commit('$_setBreadCrumb', { isShow: true,
-    //   list: [
-    //     { name: '题库管理', path: '/questionLib' },
-    //     { name: '题库编辑', path: '/questionLib/edit' },
-    //     { name: this.editMode ? '编辑试题' : '创建试题' }
-    //   ] })
   },
   methods: {
+    removeOption (type, row) { // 删除选项
+      if (type === 'single') {
+        this.createForm.optionsSingle.questionOptionsData.splice(row.number - 1, 1)
+        if (this.createForm.optionsSingle.trueOption === row.number) {
+          this.createForm.optionsSingle.trueOption = row.number - 1
+        }
+      } else if (type === 'multi') {
+        this.createForm.optionsMulti.questionOptionsData.splice(row.number - 1, 1)
+        let index = this.createForm.optionsMulti.trueOption.indexOf(row.number)
+        if (index !== -1) {
+          this.createForm.optionsMulti.trueOption.splice(index, 1)
+        }
+      }
+    },
+    addOption (type) { // 增加选项
+      if (type === 'single' && this.createForm.optionsSingle.questionOptionsData.length < 26) {
+        let option = { number: this.createForm.optionsSingle.questionOptionsData.length + 1, content: '', istrue: 0 }
+        this.createForm.optionsSingle.questionOptionsData.push(option)
+      } else if (type === 'multi' && this.createForm.optionsMulti.questionOptionsData.length < 26) {
+        let option = { number: this.createForm.optionsMulti.questionOptionsData.length + 1, content: '', istrue: 0 }
+        this.createForm.optionsMulti.questionOptionsData.push(option)
+      }
+    },
+    optionFormat (row, column, cellValue, index) { // 1234转ABCD
+      return String.fromCharCode(64 + parseInt(cellValue))
+    },
     handleCheckboxClick (selection, row) {
       // let checked = false
       // let multiOptionData = this.createForm.optionsMulti.questionOptionsData
@@ -358,6 +419,7 @@ export default {
   padding: 20px;
   h2.pageName{font-size: 26px}
   .el-form.createForm{
+    .add_btn{ text-align: center; padding: 10px 0}
     .head-line{margin: 25px 0;height:1px;position:relative;background:#f3f3f3;
       span.base-info{display: inline-block;position: absolute;top:-10px;background: #fff;padding-right: 1em;color:#EF6520}
     }

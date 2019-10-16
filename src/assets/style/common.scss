@@ -437,14 +437,14 @@ a{text-decoration: none}
 
 
 .el-container.main-content{
-  width:1200px;margin: 0 auto;padding: 0  0 20px 0;min-height: calc(100vh - 148px);
+  width:1200px;margin: 0 auto;padding: 0  0 20px 0;min-height: calc(100vh - 56px);
   /*border-top: 1px solid #efefef;*/
   .el-aside{
     padding: 0 0 0px 0;
     dl{
       box-shadow: 0px 2px 5px #888888;
       padding: 0 10px;
-      width:90%;
+      width:170px;
       height:calc(100% - 100px);
       margin: 5px auto 0;
       dt{ font-size: 16px;line-height: 2em;
