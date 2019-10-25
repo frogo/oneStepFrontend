@@ -183,7 +183,7 @@
     <el-dialog
       :visible.sync="approvalProjectDialogVisible"
       title="报名审批"
-      width="38%"
+      width="50%"
       class="projectApprovalDialog"
     >
       <div class="btn-box">
@@ -199,6 +199,7 @@
         <ex-table
           ref="exTableApprovalList"
           :data="pendingTableData"
+          :header-cell-style="{background:'#fafafa',color:'#909399'}"
           @selection-change="handleSelectionChange"
           :reload-method="handleReload"
           tooltip-effect="dark"
@@ -211,7 +212,6 @@
           <el-table-column
             prop="name"
             label="学员姓名"
-            width="90"
           />
           <el-table-column
             prop="phone"
@@ -227,7 +227,8 @@
           />
           <el-table-column
             label="操作"
-            align="right"
+            align="center"
+            width="150"
           >
             <template slot-scope="scope">
               <el-button

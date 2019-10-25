@@ -52,7 +52,9 @@
               </div>
             </el-tab-pane>
             <el-tab-pane label="课程大纲" name="outline" class="outline">
-              {{ courseDetails.syllabus }}
+              <ul v-for="(item,index) in courseDetails.syllabus">
+                <li><span>{{ index+1 }}.</span> {{ item }} </li>
+              </ul>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -106,6 +108,9 @@ export default {
     let param = { id: GetUrlParam('id') }
     getCourseDetails(param).then(res => {
       this.courseDetails = res.data
+      if (this.courseDetails.syllabus) {
+        this.courseDetails.syllabus = JSON.parse(this.courseDetails.syllabus)
+      }
     })
   },
   methods: {
@@ -120,7 +125,12 @@ export default {
     .introduction{
       .course-intro{
         .inner{
-          .outline{ font-size: 12px;color:#666}
+          .outline{
+            font-size: 12px;color:#666;
+            ul li {
+              line-height: 2em;
+            }
+          }
           .item{
             padding: 2em 0;
             p{

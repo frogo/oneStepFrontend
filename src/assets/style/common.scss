@@ -484,7 +484,7 @@ a{text-decoration: none}
 
 
 .projectApprovalDialog{
-  .btn-box{ text-align: right}
+  .btn-box{ text-align: right; margin-bottom: 10px}
 }
 .examinationChoose{
   .el-dialog__body{
@@ -502,11 +502,25 @@ a{text-decoration: none}
   }
 }
 .tagsEditor{
-     .tags-box{ margin: 6px 0;}
-    .el-tag + .el-tag {
-      margin-left: 10px;
-      margin-top: 10px;
-    }
+     .tags-box{
+       margin: 6px 0 10px;
+       border-bottom: 1px dashed #ccc;
+       padding-bottom: 10px;
+       .el-tag{ margin-left: 15px;cursor: pointer}
+       .el-tag--plain{
+         background-color: transparent;
+         color: #666;
+         border: 1px solid #fff;}
+       .el-tag--dark{
+         background-color: transparent;
+         color: #ef6520;
+         .el-tag__close{color:#ef6520}
+       }
+     }
+/*    .el-tag + .el-tag {
+      margin-left: 15px;
+      !*margin-top: 10px;*!
+    }*/
     .button-new-tag {
       margin-left: 10px;
       height: 32px;

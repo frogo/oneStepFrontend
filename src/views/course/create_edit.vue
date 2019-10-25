@@ -38,13 +38,20 @@
         <!--        <span v-for="item in createForm.tags">{{item.name}}</span>-->
       </el-form-item>
       <el-form-item label="课程简介" prop="">
-        <el-input v-model="createForm.intro" :rows="4" type="textarea" />
+        <el-input v-model="createForm.intro" :rows="4" type="textarea" style="width:583px" />
       </el-form-item>
       <el-form-item label="课程大纲" prop="">
         <!--        <el-input v-model="createForm.outline" :rows="4" type="textarea" />-->
-        <el-button @click="addOutLine" type="default" icon="el-icon-plus" size="small">
+        <el-button @click="dialogOutLineVisible = true" type="default" icon="el-icon-plus" size="small">
           新增一条大纲内容
         </el-button>
+        <ul v-for="(item,index) in createForm.outline" class="outlineList">
+          <li :key="item">
+            <span class="number">{{ index+1 }}.</span> <span class="text">{{ item }}</span>
+            <i @click="handleModifyOutline(index)" class="el-icon-edit" title="修改该条" style="cursor: pointer" />
+            <i @click="handleDeleteOutline(index)" class="el-icon-delete" title="删除该条" style="cursor: pointer" />
+          </li>
+        </ul>
       </el-form-item>
       <el-form-item label="课程封面" prop="" class="cover">
         <el-tabs v-model="createForm.activeTabName" type="card">
@@ -195,6 +202,23 @@
       @getSelectedTags="getSelectedTags"
       :tagsSelectedFromParent="createForm.tags"
     />
+    <el-dialog
+      :title="outlineDialogEditMode ? '大纲修改' : '大纲添加'"
+      :visible.sync="dialogOutLineVisible"
+      width="30%"
+    >
+      <el-input
+        :rows="4"
+        v-model="outLineTextarea"
+        type="textarea"
+        placeholder="请输入大纲内容"
+      />
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogOutLineVisible = false">取 消</el-button>
+        <el-button v-if="outlineDialogEditMode" @click="handleUpdateOutLine" type="primary">更新</el-button>
+        <el-button v-else @click="handleAddOutLine" type="primary">增加</el-button>
+      </span>
+    </el-dialog>
   </el-main>
 </template>
 <script>
@@ -281,7 +305,12 @@ export default {
       dialogTagsEditorVisible: false,
       editMode: false,
       coverSettingShow: true,
-      currentStatus: '' // 当前课程状态 0，下线，1，上线中，2，草稿
+      currentStatus: '', // 当前课程状态 0，下线，1，上线中，2，草稿
+      dialogOutLineVisible: false,
+      outLineTextarea: '', // 当前大纲内容
+      // outlineList: [],
+      outlineDialogEditMode: false,
+      outlineDialogEditIndex: -1 // 当前编辑大纲的index
       // selectedTags: []
     }
   },
@@ -297,7 +326,7 @@ export default {
         target: this.createForm.target,
         tags: tags,
         introduction: this.createForm.intro,
-        syllabus: this.createForm.outline,
+        syllabus: JSON.stringify(this.createForm.outline),
         teacher_info: {
           name: this.createForm.lecturer,
           pic: this.createForm.lecturerImageUrl,
@@ -339,7 +368,7 @@ export default {
           hours: res.data.minute,
           credit: res.data.credit,
           intro: res.data.introduction,
-          outline: res.data.syllabus,
+          outline: JSON.parse(res.data.syllabus),
           cover: res.data.cover,
           activeTabName: activeTabName,
           // 讲师
@@ -367,8 +396,26 @@ export default {
     }
   },
   methods: {
-    addOutLine () { // 新增大纲
-
+    handleAddOutLine () { // 新增大纲
+      this.createForm.outline.push(this.outLineTextarea)
+      this.dialogOutLineVisible = false
+      this.outLineTextarea = ''
+    },
+    handleUpdateOutLine () { // 更新大纲
+      this.createForm.outline[this.outlineDialogEditIndex] = this.outLineTextarea
+      this.outlineDialogEditMode = false
+      this.dialogOutLineVisible = false
+      this.outLineTextarea = ''
+      this.outlineDialogEditIndex = -1
+    },
+    handleModifyOutline (index) { // 修改大纲
+      this.outlineDialogEditMode = true
+      this.dialogOutLineVisible = true
+      this.outlineDialogEditIndex = index
+      this.outLineTextarea = this.createForm.outline[index]
+    },
+    handleDeleteOutline (index) { // 删除大纲
+      this.createForm.outline.splice(index, 1)
     },
     handleExaminationPaperReload (pagination, { currentPage, pageSize }) {
       this.fetchExaminationPaperRemoteData(pagination, currentPage, pageSize)
@@ -564,6 +611,17 @@ export default {
   }
   .upload-courseFile{ position: relative;
     .el-upload-list{position: absolute;top:0px;left:100px}
+  }
+  .outlineList{
+    li{
+      color:#666;font-size: 14px;
+      span{
+        &.text{ display: inline-block;margin: 0 10px}
+      }
+      i{
+        &:hover{color:red}
+      }
+    }
   }
 }
   .examinationChoose{

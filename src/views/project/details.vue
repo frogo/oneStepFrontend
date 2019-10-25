@@ -97,8 +97,7 @@
                         label="操作"
                         fixed="right"
                         width="160"
-                        header-align="right"
-                        align="right"
+                        align="center"
                       >
                         <template slot-scope="scope">
                           <el-button
@@ -258,7 +257,7 @@
       <div class="exTable">
         <ex-table
           ref="studentLearning_exTable"
-          :header-cell-style="{background:'#fafafa',color:'##909399'}"
+          :header-cell-style="{background:'#fafafa',color:'#909399'}"
           @selection-change="handleSelectionChange"
           :data="studentLearningTableData"
           :reload-method="handleStudentLearningReload"
@@ -429,32 +428,31 @@ export default {
   watch: {
   },
   mounted: function () {
-    // this.$store.commit('$_setBreadCrumb', { isShow: true,
-    //   list: [{ name: '培训项目管理', path: '/project' }, { name: '项目详情' }
-    //   ] })
-    getProjectDetails({ id: GetUrlParam('id') }).then(res => {
-      this.projectDetails = res.data
-    })
-    getCreditRanking({ camp_id: GetUrlParam('id'), offset: 1, limit: 5 }).then(res => {
-      this.creditRanking = res.data.list
-    })
-    let _this = this
-    getProjectChartData({ camp_id: GetUrlParam('id') }).then(res => {
-      _this.remoteChartData = res.data
-      _this.barData.xAxis[0].data = _this.remoteChartData.map(_ => {
-        return _.month + '月'
-      })
-      _this.barData.series[0].data = _this.remoteChartData.map(_ => {
-        return _.join_num
-      })
-      _this.barData.series[1].data = _this.remoteChartData.map(_ => {
-        return _.finish_num
-      })
-    })
-    this.fetchProjectStudentRemoteData()
-    this.fetchProjectStudentCourseRemoteData()
+    this.initData()
   },
   methods: {
+    initData () {
+      getProjectDetails({ id: GetUrlParam('id') }).then(res => {
+        this.projectDetails = res.data
+      })
+      getCreditRanking({ camp_id: GetUrlParam('id'), offset: 1, limit: 5 }).then(res => {
+        this.creditRanking = res.data.list
+      })
+      getProjectChartData({ camp_id: GetUrlParam('id') }).then(res => {
+        this.remoteChartData = res.data
+        this.barData.xAxis[0].data = this.remoteChartData.map(_ => {
+          return _.month + '月'
+        })
+        this.barData.series[0].data = this.remoteChartData.map(_ => {
+          return _.join_num
+        })
+        this.barData.series[1].data = this.remoteChartData.map(_ => {
+          return _.finish_num
+        })
+      })
+      this.fetchProjectStudentRemoteData()
+      this.fetchProjectStudentCourseRemoteData()
+    },
     // 学员报表
     handleProjectStudentReload (pagination, { currentPage, pageSize }) {
       this.fetchProjectStudentRemoteData(pagination, currentPage, pageSize)
@@ -520,8 +518,7 @@ export default {
         .then(_ => {
           deleteProjectStudent({ camp_id: GetUrlParam('id'), student_id: [row.student_id] }).then(res => {
             this.$message.success(res.message)
-            this.fetchProjectStudentRemoteData()
-            this.fetchProjectStudentCourseRemoteData()
+            this.initData()
           })
         })
     },

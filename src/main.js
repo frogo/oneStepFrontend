@@ -11,6 +11,8 @@ import 'minireset.css/minireset.css'
 import '@/assets/style/common.scss'
 import ECharts from 'vue-echarts'
 // import { sessionVerify } from '@/request/api'
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 
 Vue.use(ElementUI)
 Vue.component('v-chart', ECharts)

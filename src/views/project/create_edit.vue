@@ -1,7 +1,7 @@
 <template lang="html">
   <el-main class="page-projectCreate">
     <h2 class="pageName">
-      创建项目
+      {{ editMode ? '编辑项目' : '创建项目' }}
     </h2>
     <el-form ref="createForm" :model="createForm" :rules="rules" label-width="100px" class="createForm">
       <div class="head-line">
@@ -183,13 +183,13 @@
               </el-radio>
             </el-radio-group>
           </el-form-item>
-          <!--          <el-form-item label="层级：">-->
-          <!--            <el-checkbox-group v-model="dialogCourse.filterForm.level">-->
-          <!--              <el-checkbox-button :label="item.id" v-for="(item, index) in dialogCourse.tags.level" :key="item + index">-->
-          <!--                {{ item.name }}-->
-          <!--              </el-checkbox-button>-->
-          <!--            </el-checkbox-group>-->
-          <!--          </el-form-item>-->
+          <el-form-item label="层级：">
+            <el-checkbox-group v-model="dialogCourse.filterForm.level">
+              <el-checkbox-button :label="item.id" v-for="(item, index) in dialogCourse.tags.level" :key="item + index">
+                {{ item.name }}
+              </el-checkbox-button>
+            </el-checkbox-group>
+          </el-form-item>
           <el-form-item label="职能：">
             <el-checkbox-group v-model="dialogCourse.filterForm.department">
               <el-checkbox-button :label="item.id" v-for="(item, index) in dialogCourse.tags.department" :key="item + index">
@@ -429,13 +429,13 @@ export default {
       }
     },
     'dialogCourse.filterForm': {
-      handler (newVal, oldVal) {
+      handler () {
         this.fetchRemoteData()
       },
       deep: true
     },
     'dialogCourse.selectedData': { // 课程选择总数计算侦听
-      handler (newVal, oldVal) {
+      handler (newVal) {
         this.dialogCourse.courseChooseTotal.credit = 0
         this.dialogCourse.courseChooseTotal.hours = 0
         newVal.map(item => {
@@ -469,13 +469,8 @@ export default {
         this.dialogCourse.selectedData = res.data.lesson_info
         // this.dialogStudents.transferSelectedData = res.data.personnel || []
         this.dialogStudents.transferSelectedData = res.data.personnel.map(item => item.id)
-        // console.log(this.dialogStudents.transferSelectedData)
       })
     }
-    // this.$store.commit('$_setBreadCrumb', { isShow: true,
-    //   list: [
-    //     { name: '培训项目管理', path: '/project' }, { name: this.editMode ? '编辑项目' : '创建项目' }
-    //   ] })
     this.getCourseList()
   },
   methods: {
