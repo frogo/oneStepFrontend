@@ -152,25 +152,26 @@
               {{ projectDetails.introduction }}
             </div>
           </li>
-          <li>
-            <div class="head">
-              包含课程：
-            </div>
-            <div class="content">
-              <div class="chapter">
-                <p v-for="(item, index) in projectDetails.lesson_info" :key="item + index">
-                  {{ item.name }}
-                </p>
+          <li style="display:flex;justify-content: space-between">
+            <div class="left" style="width:50%">
+              <div class="head">
+                包含课程：
               </div>
+              <p v-for="(item, index) in projectDetails.lesson_info" :key="item + index">
+                {{ item.name }}
+              </p>
+            </div>
+            <div class="right" style="width:150px;text-align: center">
+              <img ref="qrcode" :src="projectDetails.wx_qrcode">
+              <el-button @click="handleDownloadQrCode" type="primary" size="small">
+                下载培训项目二维码
+              </el-button>
+            </div>
+            <!--            <div class="content">
               <div class="qrCode">
-                <img ref="qrcode" :src="projectDetails.wx_qrcode">
-                <!--                <img src="http://localhost:3003/public/1568888782.jpg" ref="qrcode">-->
 
-                <el-button @click="handleDownloadQrCode" type="primary" size="small">
-                  下载培训项目二维码
-                </el-button>
               </div>
-            </div>
+            </div>-->
           </li>
           <li class="copyLink">
             <el-input id="url" :value="projectDetails.wx_url" /> <el-button @click="copyUrl2">
@@ -672,7 +673,7 @@ export default {
           .chapter{width:70%;height:200px;overflow: auto}
           .qrCode{position:absolute;top:-40px;right:0;width:22%;text-align: center;img{margin:0 auto 10px;display: block}}
         }
-        &.copyLink{display: flex;justify-content: space-between; margin-top: 20px;.el-input{width:80%}}
+        &.copyLink{display: flex;justify-content: space-between; margin-top: 20px;.el-input{padding-right: 10px}}
       }
     }
     .el-dialog__title{ font-weight: bold;font-size: 22px}

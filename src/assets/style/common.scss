@@ -493,8 +493,8 @@ a{text-decoration: none}
       justify-content:space-between;
       .left{
         display: flex;
-        .select{width:200px; margin-right: 10px}
-        .input{width:300px;}
+        .select{ margin-right: 10px}
+        .input{margin-right: 10px}
       }
     }
     .btn-box{margin-top: 30px;display: flex;justify-content: flex-end}

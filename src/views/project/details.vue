@@ -553,12 +553,13 @@ export default {
 </script>
 <style lang="scss">
   .page-projectDetails{
+    &.el-container.main-content .el-aside {dl{ height:calc(100% - 50px);}}
     .el-main{
       .main{
         width:99%;
-        margin: 0 auto;
+        margin: 0 auto 10px;
         box-shadow: 0px 2px 5px #888888;
-        height:calc(100% - 100px);
+        height:calc(100% - 50px);
         .center{ margin-top: 5px;   padding: 15px;}
         border-right:1px solid #ededed;
         padding: 0 0px 0 0;
@@ -573,7 +574,7 @@ export default {
 
       }
       .sideBar{
-        height:calc(100% - 100px);padding: 0;
+        height:calc(100% - 50px);padding: 0;
         .inner{
           h3{display: flex;justify-content: space-between; line-height: 36px}
           padding: 10px;
@@ -607,7 +608,7 @@ export default {
         /*min-height: 320px;*/
       }
       .el-table__fixed,.el-table__fixed-right{box-shadow:none}
-      .el-pagination{margin-top: 20px;text-align: right}
+      .el-pagination{margin: 20px 0 50px;text-align: right}
     }
 
     .studentInfo{
