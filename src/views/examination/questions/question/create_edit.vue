@@ -1,7 +1,7 @@
 <template>
   <el-main class="page-questionCreate">
     <h2 class="pageName">
-      创建试题
+      {{ editMode ? '编辑试题' : '创建试题' }}
     </h2>
     <el-form ref="createForm" :model="createForm" :rules="rules" label-width="100px" class="createForm">
       <div class="head-line">

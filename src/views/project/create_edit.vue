@@ -567,12 +567,12 @@ export default {
             this.addProjectParam.id = GetUrlParam('id')
             modifyProject(this.addProjectParam).then(res => {
               this.$message.success(res.message)
-              this.$router.push({ path: '/project' })
+              this.$router.push({ path: '/project', query: { id: res.data.id } })
             })
           } else {
             addProject(this.addProjectParam).then(res => {
               this.$message.success(res.message)
-              this.$router.push({ path: '/project' })
+              this.$router.push({ path: '/project', query: { id: res.data.id } })
             })
           }
         } else {

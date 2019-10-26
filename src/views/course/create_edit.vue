@@ -1,7 +1,7 @@
 <template lang="html">
   <el-main class="page-courseCreate">
     <h2 class="pageName">
-      创建课程
+      {{ editMode ? "编辑课程" : "创建课程" }}
     </h2>
     <el-form ref="createForm" :model="createForm" :rules="rules" label-width="100px" class="createForm">
       <div class="head-line">

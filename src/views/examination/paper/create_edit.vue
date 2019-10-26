@@ -1,7 +1,7 @@
 <template>
   <el-main class="page-paperCreate">
     <h2 class="pageName">
-      创建试卷
+      {{ editMode ? "编辑试卷" : "创建试卷" }}
     </h2>
     <el-form ref="createForm" :model="createForm" :rules="rules" label-position="left" label-width="120px" class="createForm">
       <div class="head-line">
@@ -79,7 +79,7 @@
       </div>
 
       <el-form-item>
-        <el-select v-model="createForm.rules" @change="handleRulesSwitch(createForm.rules)" placeholder="请选择" style="width:200px">
+        <el-select :disabled="editMode" v-model="createForm.rules" @change="handleRulesSwitch(createForm.rules)" placeholder="请选择" style="width:200px">
           <el-option
             v-for="item in paperRules"
             :key="item.value"
@@ -462,7 +462,7 @@ export default {
       let param = {
         type: this.manual.filterForm.type,
         bank_id: this.manual.currentQuestionLib.id,
-        keyword: this.questionsLib.keyword,
+        // keyword: this.questionsLib.keyword,
         offset: currentPage || 1,
         limit: pageSize || 10
       }

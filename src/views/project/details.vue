@@ -223,7 +223,7 @@
           <div class="sideBar">
             <div class="inner">
               <h3>
-                学分排行
+                <span>学分排行</span>
                 <el-button @click="handleExportRanking" type="text">
                   导出报表
                 </el-button>
@@ -575,12 +575,13 @@ export default {
       .sideBar{
         height:calc(100% - 100px);padding: 0;
         .inner{
+          h3{display: flex;justify-content: space-between; line-height: 36px}
           padding: 10px;
           margin: 5px;
           box-shadow: 0px 2px 5px #888888;
           height:100%;
         }
-        .el-button{ margin-left: 100px}
+        /*.el-button{ margin-left: 100px}*/
         ul li{ font-size: 12px;
           padding: 10px;
           i{ padding: 1px 5px;font-style: normal;

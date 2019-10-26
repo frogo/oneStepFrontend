@@ -313,6 +313,7 @@ export default {
   watch: {
   },
   mounted: function () {
+    GetUrlParam('id') && this.handleView(GetUrlParam('id'))
     if (GetUrlParam('order') && GetUrlParam('order') === 'end_time') {
       this.byEndTime = true
     }
