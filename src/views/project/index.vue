@@ -643,7 +643,7 @@ export default {
             }
 
           }
-          .el-pagination{text-align: right;margin-top: 20px}
+          .el-pagination{text-align: right;margin-top: 20px; margin-bottom: 50px}
         }
       }
     }
