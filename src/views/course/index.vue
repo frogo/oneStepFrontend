@@ -258,7 +258,7 @@ export default {
       })
     },
     handleCourseDelete (item) { // 课程删除
-      this.$confirm('您确定要删除该课程吗?', '提示', {
+      this.$confirm('所有项目中学员学习此课程的记录将被清除，您确定要删除该课程吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       }).then(() => {

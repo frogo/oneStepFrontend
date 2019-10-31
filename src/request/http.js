@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 // let loadingInstance
 const httpClient = axios.create()
 // 环境转换
@@ -88,7 +88,9 @@ export function post (url, params) {
         if (res.data.code === '1') {
           resolve(res.data)
         } else {
-          Message.error(res.data.message)
+          MessageBox.alert(res.data.message, '提示', {
+            confirmButtonText: '确定'
+          })
         }
       })
       .catch(err => {

@@ -198,6 +198,9 @@
         <el-button @click="cancelExaminationSelect" size="small">
           取消
         </el-button>
+        <el-button @click="clearExaminationSelect" type="success" size="small">
+          清空选择
+        </el-button>
         <el-button @click="confirmExaminationSelect" type="primary" size="small">
           确定
         </el-button>
@@ -318,7 +321,8 @@ export default {
       outLineTextarea: '', // 当前大纲内容
       // outlineList: [],
       outlineDialogEditMode: false,
-      outlineDialogEditIndex: -1 // 当前编辑大纲的index
+      outlineDialogEditIndex: -1, // 当前编辑大纲的index
+      originalPaper: '' // 原有的课程关联的试卷，用来对比是否有没有被删除和改变
       // selectedTags: []
     }
   },
@@ -396,6 +400,7 @@ export default {
           ] : [],
           examinationPaper: res.data.examination_info // 试卷信息
         }
+        res.data.examination_info && (this.originalPaper = res.data.examination_info)
       })
     } else { // 非编辑模式
       getDefaultCover().then(res => { // 获取默认封面
@@ -540,6 +545,7 @@ export default {
       this.fetchExaminationPaperRemoteData()
     },
     handleExaminationDialog () {
+      this.dialogExaminationData.type = 'all'
       this.dialogExaminationVisible = true
       if (this.editMode && this.createForm.examinationPaper) {
         this.dialogExaminationData.paperRadio = this.createForm.examinationPaper.id
@@ -556,8 +562,20 @@ export default {
       this.dialogExaminationData.currentRow = row
     },
     confirmExaminationSelect () {
-      this.dialogExaminationVisible = false
-      this.createForm.examinationPaper = this.dialogExaminationData.currentRow
+      if (this.originalPaper && (!this.dialogExaminationData.currentRow || this.dialogExaminationData.currentRow.id !== this.originalPaper.id)) {
+        this.$confirm('您更改了课程绑定的试卷，所有学习本课程的学员之前的考试记录将被清除，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.dialogExaminationVisible = false
+          this.createForm.examinationPaper = this.dialogExaminationData.currentRow
+        }).catch(() => {
+        })
+      } else {
+        this.dialogExaminationVisible = false
+        this.createForm.examinationPaper = this.dialogExaminationData.currentRow
+      }
     },
     cancelExaminationSelect () {
       this.dialogExaminationVisible = false
@@ -574,7 +592,7 @@ export default {
         return false
       }
       addCourseDraft(this.addCourseParam).then(res => {
-        this.$message.success(res.message)
+        // this.$message.success(res.message)
         this.$router.push({
           path: '/course'
         })
@@ -591,14 +609,14 @@ export default {
           if (this.editMode) {
             this.addCourseParam.id = GetUrlParam('id')
             modifyCourse(this.addCourseParam).then(res => {
-              this.$message.success(res.message)
+              // this.$message.success(res.message)
               this.$router.push({
                 path: '/course'
               })
             })
           } else {
             addCourse(this.addCourseParam).then(res => {
-              this.$message.success(res.message)
+              // this.$message.success(res.message)
               this.$router.push({
                 path: '/course'
               })
@@ -610,6 +628,10 @@ export default {
     gotoPaperCreate () {
       let target = this.$router.resolve({ path: '/paper/create' })
       window.open(target.href, '_blank')
+    },
+    clearExaminationSelect () {
+      this.dialogExaminationData.paperRadio = ''
+      this.dialogExaminationData.currentRow = ''
     }
   }
 }

@@ -381,7 +381,7 @@ export default {
   },
   computed: {
     addProjectParam: function () {
-      let lesson = this.dialogCourse.selectedData.map(item => {
+      let lesson = this.createForm.courseSelected.map(item => {
         return item.id
       })
       let student = this.dialogStudents.transferSelectedData
@@ -549,7 +549,7 @@ export default {
         return false
       }
       addDraftProject(this.addProjectParam).then(res => {
-        this.$message.success(res.message)
+        // this.$message.success(res.message)
         this.$router.push({ path: '/project' })
       })
       // this.$refs[formName].validate((valid) => {
@@ -575,7 +575,7 @@ export default {
     handleSaveProject (formName) { // 保存项目
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.dialogCourse.selectedData.length === 0) {
+          if (this.createForm.courseSelected.length === 0) {
             this.$message.error('请选择课程')
             return false
           }
@@ -590,13 +590,13 @@ export default {
           if (this.editMode) {
             this.addProjectParam.id = GetUrlParam('id')
             modifyProject(this.addProjectParam).then(res => {
-              this.$message.success(res.message)
-              this.$router.push({ path: '/project', query: { id: res.data.id } })
+              // this.$message.success(res.message)
+              this.$router.push({ name: 'project', params: { id: GetUrlParam('id') } })
             })
           } else {
             addProject(this.addProjectParam).then(res => {
-              this.$message.success(res.message)
-              this.$router.push({ path: '/project', query: { id: res.data.id } })
+              // this.$message.success(res.message)
+              this.$router.push({ name: 'project', params: { id: res.data.id } })
             })
           }
         } else {

@@ -133,7 +133,6 @@
     <el-dialog
       :visible.sync="viewProjectDialogVisible"
       :title="projectDetails.name"
-      width="36%"
       class="projectViewDialog"
     >
       <div class="project-view-box">
@@ -316,9 +315,11 @@ export default {
   watch: {
   },
   mounted: function () {
+    this.$route.params.id && this.handleView(this.$route.params.id)
     GetUrlParam('id') && this.handleView(GetUrlParam('id'))
-    if (GetUrlParam('order') && GetUrlParam('order') === 'end_time') {
+    if (GetUrlParam('from') && GetUrlParam('from') === 'expire') {
       this.byEndTime = true
+      this.filterForm.status = 1
     }
     this.getProjectList()
   },
@@ -484,7 +485,7 @@ export default {
       })
       let param = { id: idList, pass: 1 }
       approvalProject(param).then(res => {
-        this.$message.success(res.message)
+        // this.$message.success(res.message)
         this.fetchRemoteData()
       })
     },
@@ -660,6 +661,7 @@ export default {
 
   }
   .projectViewDialog{
+    .el-dialog{width:700px}
     /*width:680px;*/
     /*height:680px;*/
     .project-view-box{
@@ -668,7 +670,8 @@ export default {
         line-height: 2em;
         &.flex{ display: flex;justify-content: space-between;
           span{display: inline-block;width:200px;
-            &.obj{width:400px}
+            overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
+            &.obj{width:400px;}
             i{font-style: normal;color:#8c939d}
           }
         }

@@ -125,7 +125,7 @@ export default {
       this.$router.push({ path: '/paper/edit', query: { id: row.id } })
     },
     handleDelete (index, row) { // 删除
-      this.$confirm('您确定要删除吗?', '提示', {
+      this.$confirm('删除该试卷则所有参加该试卷考试的学员记录将被清除?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
