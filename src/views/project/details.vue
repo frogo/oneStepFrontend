@@ -184,14 +184,14 @@
                       />
                       <el-table-column
                         prop="completion_percent"
-                        label="完成度"
-                        width="80"
+                        label="学习进度(%)"
+                        width="120"
                         align="center"
                       />
                       <el-table-column
                         prop="finish_time"
-                        label="完成时间"
-                        width="100"
+                        label="考试完成时间"
+                        width="120"
                         align="center"
                       />
                       <el-table-column

@@ -141,6 +141,7 @@
       <div class="filter-box">
         <div class="left">
           <el-select v-model="dialogExaminationData.type" @change="handleExamRuleChange" placeholder="请选择" class="select" size="small">
+            <el-option label="全部类型" value="all" />
             <el-option label="手动出题" value="manual" />
             <el-option label="随机抽题" value="random" />
           </el-select>
@@ -165,7 +166,6 @@
           ref="exTableExaminationPaper"
           :data="dialogExaminationTableData"
           :reload-method="handleExaminationPaperReload"
-          @row-click="handleSelectionChange"
           :show-pagination="true"
           tooltip-effect="dark"
           height="480"
@@ -174,11 +174,19 @@
           <el-table-column label="选择" width="50" align="center">
             <template scope="scope">
               <el-radio
-                v-model="dialogExaminationData.courseRadio"
-                :label="scope.$index"
+                :label="scope.row.id"
+                v-model="dialogExaminationData.paperRadio"
+                @change.native="getPaperRow(scope.row.id,scope.row)"
                 class="radio"
               />
             </template>
+            <!--            <template scope="scope">-->
+            <!--              <el-radio-->
+            <!--                v-model="dialogExaminationData.courseRadio"-->
+            <!--                :label="scope.$index"-->
+            <!--                class="radio"-->
+            <!--              />-->
+            <!--            </template>-->
           </el-table-column>
           <el-table-column property="name" show-overflow-tooltip label="试卷名称" />
           <el-table-column property="add_time" show-overflow-tooltip label="创建时间" width="150" align="center" />
@@ -188,7 +196,7 @@
       </div>
       <div class="btn-box">
         <el-button @click="cancelExaminationSelect" size="small">
-          清除
+          取消
         </el-button>
         <el-button @click="confirmExaminationSelect" type="primary" size="small">
           确定
@@ -291,8 +299,8 @@ export default {
       // 试题弹窗
       dialogExaminationVisible: false,
       dialogExaminationData: { // 试题列表弹窗数据
-        courseRadio: '',
-        type: 'manual',
+        paperRadio: -1,
+        type: 'all',
         keyword: '',
         currentPage: 1,
         pageSize: 10,
@@ -423,7 +431,7 @@ export default {
     fetchExaminationPaperRemoteData (pagination, currentPage, pageSize) {
       let param = {
         // type: this.typeMap[this.dialogExaminationData.type],
-        rule: this.dialogExaminationData.type,
+        rule: this.dialogExaminationData.type === 'all' ? '' : this.dialogExaminationData.type,
         limit: pageSize || 10,
         offset: currentPage || 1,
         keyword: this.dialogExaminationData.keyword
@@ -432,15 +440,15 @@ export default {
       getExaminationPaperList(param).then(res => {
         this.dialogExaminationTableData = res.data.list
 
-        this.dialogExaminationData.courseRadio = this.dialogExaminationTableData.indexOf(this.dialogExaminationData.currentRow)
+        // this.dialogExaminationData.courseRadio = this.dialogExaminationTableData.indexOf(this.dialogExaminationData.currentRow)
 
-        let a = this.dialogExaminationTableData.map((item, index) => {
-          if (item.id === this.dialogExaminationData.currentRow.id) {
-            return index
-          }
-        })
+        // let a = this.dialogExaminationTableData.map((item, index) => {
+        //   if (item.id === this.dialogExaminationData.currentRow.id) {
+        //     return index
+        //   }
+        // })
         // console.log(a)
-        this.dialogExaminationData.courseRadio = a[0]
+        // this.dialogExaminationData.courseRadio = a[0]
         // console.log(this.dialogExaminationTableData)
         // console.log(this.dialogExaminationData.currentRow)
         // console.log(this.dialogExaminationTableData.indexOf(this.dialogExaminationData.currentRow))
@@ -533,12 +541,18 @@ export default {
     },
     handleExaminationDialog () {
       this.dialogExaminationVisible = true
+      if (this.editMode && this.createForm.examinationPaper) {
+        this.dialogExaminationData.paperRadio = this.createForm.examinationPaper.id
+      }
       this.$nextTick(() => {
         this.fetchExaminationPaperRemoteData()
       })
     },
-    handleSelectionChange (row) {
-      this.dialogExaminationData.courseRadio = this.dialogExaminationTableData.indexOf(row)
+    // handleSelectionChange (row) {
+    //   this.dialogExaminationData.courseRadio = this.dialogExaminationTableData.indexOf(row)
+    //   this.dialogExaminationData.currentRow = row
+    // },
+    getPaperRow (index, row) {
       this.dialogExaminationData.currentRow = row
     },
     confirmExaminationSelect () {
@@ -546,10 +560,10 @@ export default {
       this.createForm.examinationPaper = this.dialogExaminationData.currentRow
     },
     cancelExaminationSelect () {
-      // this.dialogExaminationVisible = false
+      this.dialogExaminationVisible = false
       // this.createForm.examinationPaper = ''
-      this.dialogExaminationData.courseRadio = ''
-      this.dialogExaminationData.currentRow = ''
+      // this.dialogExaminationData.courseRadio = ''
+      // this.dialogExaminationData.currentRow = ''
     },
     handleSaveCourseDraft (formName) { // 保存草稿
       if (GetUrlParam('id')) {

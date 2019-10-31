@@ -139,10 +139,12 @@
       <div class="project-view-box">
         <ul>
           <li class="flex">
-            <span><i>参训对象：</i>{{ projectDetails.obj }}</span> <span><i>目标人数：</i>{{ projectDetails.target_num }}</span>
+            <span class="obj"><i>参训对象：</i>{{ projectDetails.obj }}</span>
+            <span class="num"><i>目标人数：</i>{{ projectDetails.target_num }}</span>
           </li>
           <li class="flex">
-            <span><i>开始日期：</i>{{ projectDetails.start_time }}</span> <span><i>结束日期：</i>{{ projectDetails.end_time }}</span>
+            <span class="startTime"><i>开始日期：</i>{{ projectDetails.start_time }}</span>
+            <span class="endTime"><i>结束日期：</i>{{ projectDetails.end_time }}</span>
           </li>
           <li class="intro">
             <div class="head">
@@ -252,7 +254,7 @@
         </ex-table>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="approvalProjectDialogVisible = false" type="primary">退出</el-button>
+        <el-button @click="handleCloseApprovalProjectDialog" type="primary">退出</el-button>
       </span>
     </el-dialog>
   </el-container>
@@ -386,7 +388,11 @@ export default {
       window.open(target.href, '_blank')
     },
     gotoDetails (item) {
-      this.$router.push({ path: '/project/details', query: { id: item.id } })
+      if (item.is_review) {
+        this.handlePending(item)
+      } else {
+        this.$router.push({ path: '/project/details', query: { id: item.id } })
+      }
     },
     handleView (id) {
       this.viewProjectDialogVisible = true
@@ -491,6 +497,10 @@ export default {
         this.$message.success(res.message)
         this.fetchRemoteData()
       })
+    },
+    handleCloseApprovalProjectDialog () {
+      this.approvalProjectDialogVisible = false
+      this.getProjectList()
     }
   }
 }
@@ -658,6 +668,7 @@ export default {
         line-height: 2em;
         &.flex{ display: flex;justify-content: space-between;
           span{display: inline-block;width:200px;
+            &.obj{width:400px}
             i{font-style: normal;color:#8c939d}
           }
         }

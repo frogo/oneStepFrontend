@@ -13,7 +13,7 @@
           <ex-table ref="exTable" :data="tableData" :reload-method="handleReload" show-pagination stripe>
             <el-table-column
               prop="camp_name"
-              label="训练营名称"
+              label="项目名称"
             />
             <el-table-column
               prop="start_time"
@@ -82,10 +82,6 @@ export default {
   watch: {
   },
   created () {
-    // this.$store.commit('$_setBreadCrumb', { isShow: true,
-    //   list: [
-    //     { name: '培训统计', path: '/trainStatistics' }, { name: '培训统计详情', path: '/trainStatistics/details' }
-    //   ] })
   },
   mounted: function () {
     this.fetchRemoteData()

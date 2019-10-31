@@ -47,10 +47,12 @@
           <el-button @click="openCourseChooseDialog" size="mini" type="primary">
             课程设置
           </el-button>
-          <span>已选课程数 <i>{{ dialogCourse.selectedData.length }}</i> 总学分 <i>{{ dialogCourse.courseChooseTotal.credit }}</i> 总课时 <i>{{ dialogCourse.courseChooseTotal.hours }}</i></span>
+          <span>已选课程数 <i>{{ createForm.courseSelected.length }}</i>
+            总学分 <i>{{ createForm.courseChooseTotal.credit }}</i>
+            总课时 <i>{{ createForm.courseChooseTotal.hours }}</i></span>
         </div>
         <div class="courseSelected">
-          <el-tag v-for="item in dialogCourse.selectedData">
+          <el-tag v-for="item in createForm.courseSelected">
             {{ item.name }}
           </el-tag>
         </div>
@@ -271,8 +273,8 @@
         </transition>
       </div>
       <span slot="footer" class="dialog-footer">
-        <!--        <el-button @click="chooseCourseDialogVisible = false">取 消</el-button>-->
-        <el-button @click="dialogCourse.visible = false" type="primary">关闭</el-button>
+        <el-button @click="cancelCourseDialog">取 消</el-button>
+        <el-button @click="confirmCourseDialog" type="primary">确定</el-button>
       </span>
     </el-dialog>
   </el-main>
@@ -307,16 +309,20 @@ export default {
         participants: '',
         number: '',
         intro: '',
-
         auth: false,
         sign: false,
         approval: false,
         passwordSwitch: false,
         password: '',
         studentsSwitch: false,
-        students: ''
-
+        students: '',
+        courseSelected: [], // 编辑界面课程已选择
+        courseChooseTotal: { // 课程的学分统计，用于展示
+          credit: 0,
+          hours: 0
+        }
       },
+      originalCourse: [], // 已运行项目原有的课程集合，编辑页面打开后初始化，用于课程设置弹窗点击确定对比是否删除了课程
       // 验证规则
       rules: {
         projectName: [
@@ -357,11 +363,8 @@ export default {
         tableData: [], // 课程表格远程数据
         selectedData: [], // 已选择课程
         courseChecked: [], // 当前页面选择的课程数据
-        courseSelectedBoxShow: false, // 已选择课程容器开关
-        courseChooseTotal: {
-          credit: 0,
-          hours: 0
-        } // 课程的学分统计，用于展示
+        courseSelectedBoxShow: false // 已选择课程容器开关
+
       },
       // 指定参训学员弹窗信息
       dialogStudents: { // 制定参训学院弹窗信息
@@ -430,17 +433,17 @@ export default {
     },
     'dialogCourse.filterForm': {
       handler () {
-        this.fetchRemoteData()
+        this.fetchRemoteData(false)
       },
       deep: true
     },
-    'dialogCourse.selectedData': { // 课程选择总数计算侦听
+    'createForm.courseSelected': { // 课程选择总数计算侦听
       handler (newVal) {
-        this.dialogCourse.courseChooseTotal.credit = 0
-        this.dialogCourse.courseChooseTotal.hours = 0
+        this.createForm.courseChooseTotal.credit = 0
+        this.createForm.courseChooseTotal.hours = 0
         newVal.map(item => {
-          this.dialogCourse.courseChooseTotal.credit += item.credit
-          this.dialogCourse.courseChooseTotal.hours += item.minute
+          this.createForm.courseChooseTotal.credit += item.credit
+          this.createForm.courseChooseTotal.hours += item.minute
         })
       },
       deep: true
@@ -464,20 +467,35 @@ export default {
           passwordSwitch: res.data.is_pwd === 1,
           password: res.data.passwd,
           studentsSwitch: res.data.personnel && res.data.personnel.length > 0,
-          students: res.data.personnel || []
+          students: res.data.personnel || [],
+          courseSelected: [].concat(res.data.lesson_info), // 编辑界面课程已选择
+          courseChooseTotal: { // 课程的学分统计，用于展示
+            credit: () => {
+              let credit = 0
+              res.data.lesson_info.map(item => {
+                credit += item.credit
+              })
+              return credit
+            },
+            hours: () => {
+              let hours = 0
+              res.data.lesson_info.map(item => {
+                hours += item.minute
+              })
+              return hours
+            }
+          }
         }
-        this.dialogCourse.selectedData = res.data.lesson_info
-        // this.dialogStudents.transferSelectedData = res.data.personnel || []
         this.dialogStudents.transferSelectedData = res.data.personnel.map(item => item.id)
+        this.originalCourse = [].concat(res.data.lesson_info) // 保存一份项目原有的课程
       })
     }
-    this.getCourseList()
   },
   methods: {
     handleReload (pagination, { currentPage, pageSize }) { // 带翻页表格数据重载
-      this.fetchRemoteData(pagination, currentPage, pageSize)
+      this.fetchRemoteData(false, pagination, currentPage, pageSize)
     },
-    fetchRemoteData (pagination, currentPage, pageSize) { // 带翻页表格数据远程拉取
+    fetchRemoteData (isFirst, pagination, currentPage, pageSize) { // 带翻页表格数据远程拉取
       let tags = this.dialogCourse.filterForm.level.concat(this.dialogCourse.filterForm.department, this.dialogCourse.filterForm.custom)
       // tags.push(this.dialogCourse.filterForm.from, this.dialogCourse.filterForm.series, this.dialogCourse.filterForm.status)
       let param = {
@@ -488,16 +506,17 @@ export default {
         offset: currentPage || 1,
         limit: pageSize || 10
       }
+      if (!currentPage) { this.$refs.exTableCourse.pagination.currentPage = 1 } // 如果不是点击翻页刷新数据，就设置当前页面为1
       let paginationObj = pagination || this.$refs.exTableCourse.pagination
       getCourseList(param).then(res => {
         this.dialogCourse.tableData = res.data.list
         paginationObj.total = res.data.total
-
-        this.dialogCourse.tableData.map(item => { // 手动选题模式 点击题库，加载试题 遍历 已有试题数据  回显
-          // console.log(item.id)
+        if (isFirst) {
+          this.dialogCourse.selectedData = [].concat(this.createForm.courseSelected)
+        }
+        this.dialogCourse.tableData.map(item => { // 表格checkbox选中
           this.dialogCourse.selectedData.map(cItem => {
             if (item.id === cItem.id) {
-              // console.log('---------')
               this.$nextTick(() => {
                 this.$refs.exTableCourse.toggleRowSelection(item, true)
               })
@@ -507,7 +526,12 @@ export default {
       })
     },
     getCourseList () { // 选择课程 获取课程列表
-      let param = this.getCourseListParam
+      let param = {
+        keyword: '',
+        tag_id: [],
+        offset: 1,
+        limit: 10
+      }
       // console.log(param)
       getCourseList(param).then(res => {
         this.dialogCourse.tableData = res.data.list
@@ -581,7 +605,7 @@ export default {
       })
     },
     handleSearch () { // 处理课程搜索
-      this.fetchRemoteData()
+      this.fetchRemoteData(false)
     },
     handleSelectionChange (val) { // 表格多选
       this.dialogCourse.courseChecked = val
@@ -639,6 +663,9 @@ export default {
     },
     openCourseChooseDialog () {
       this.dialogCourse.visible = true
+      this.$nextTick(() => {
+        this.fetchRemoteData(true)
+      })
       getTagList().then(res => {
         this.dialogCourse.tags.source = res.data.source
         this.dialogCourse.tags.status = res.data.status
@@ -649,6 +676,37 @@ export default {
       })
     },
     handleTransferChange (item, lr, array) {
+    },
+    cancelCourseDialog () { // 取消课程设置
+      this.dialogCourse.visible = false
+    },
+    includes (arr1, arr2) {
+      return arr2.every(val => arr1.includes(val))
+    },
+    confirmCourseDialog () { // 确定选中课程
+      let original = [] // 已经运行项目原有的课程ID 集合
+      let current = [] // 项目当前修改后课程ID 集合
+      this.originalCourse.map(_ => {
+        original.push(_.id)
+      })
+      this.dialogCourse.selectedData.map(_ => {
+        current.push(_.id)
+      })
+      if (this.editMode && !this.includes(current, original)) {
+        this.$confirm('您删除了项目所含课程，项目中学员学习该课程的记录都将被清除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.dialogCourse.visible = false
+          this.createForm.courseSelected = [].concat(this.dialogCourse.selectedData)
+        }).catch(() => {
+
+        })
+      } else {
+        this.dialogCourse.visible = false
+        this.createForm.courseSelected = [].concat(this.dialogCourse.selectedData)
+      }
     }
   }
 }
