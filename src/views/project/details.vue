@@ -119,11 +119,11 @@
                     </ex-table>
                   </div>
                 </el-tab-pane>
-                <el-tab-pane label="项目详情" name="projectDetails">
+                <el-tab-pane label="学习详情" name="projectDetails">
                   <div class="exTable">
                     <div style="text-align: right;">
                       <el-button @click="handleExportStudentCourse" size="small" type="success">
-                        导出项目详情报表
+                        导出学习报表
                       </el-button>
                     </div>
 
@@ -243,7 +243,7 @@
     </el-main>
     <el-dialog
       :visible.sync="learningDetailDialogVisible"
-      title="学习详情"
+      title="考试详情"
       width="40%"
     >
       <div class="studentInfo">
@@ -273,7 +273,7 @@
           />
           <el-table-column
             prop="finish_time"
-            label="完成时间"
+            label="考试完成时间"
             width="120"
           />
           <el-table-column

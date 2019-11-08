@@ -138,7 +138,7 @@
       <div class="project-view-box">
         <ul>
           <li class="flex">
-            <span class="obj"><i>参训对象：</i>{{ projectDetails.obj }}</span>
+            <span class="obj"><i>参训对象：</i><em :title="projectDetails.obj">{{ projectDetails.obj }}</em></span>
             <span class="num"><i>目标人数：</i>{{ projectDetails.target_num }}</span>
           </li>
           <li class="flex">
@@ -671,7 +671,7 @@ export default {
         &.flex{ display: flex;justify-content: space-between;
           span{display: inline-block;width:200px;
             overflow: hidden;white-space: nowrap;text-overflow: ellipsis;
-            &.obj{width:400px;}
+            &.obj{width:400px; em{ font-style: normal}}
             i{font-style: normal;color:#8c939d}
           }
         }
