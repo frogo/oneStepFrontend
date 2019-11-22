@@ -154,7 +154,7 @@
         title="新增学员"
         width="30%"
       >
-        <el-form ref="studentAddForm" :model="studentAddForm" :rules="rules" label-width="100px" class="demo-ruleForm">
+        <el-form ref="studentAddForm" :model="studentAddForm" :rules="rules" label-width="68px" class="demo-ruleForm">
           <el-form-item label="姓名" prop="name">
             <el-input v-model="studentAddForm.name" />
           </el-form-item>
@@ -398,5 +398,6 @@ export default {
       .el-pagination{margin-top: 20px;text-align: right}
     }
     .el-upload-list__item-name{ margin-top: 15px}
+    .el-dialog__footer{ text-align: center}
   }
 </style>

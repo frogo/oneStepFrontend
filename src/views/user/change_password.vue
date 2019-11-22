@@ -1,6 +1,6 @@
 <template lang="html">
   <el-container class="main-content page-changePassword">
-    <el-aside width="160px">
+    <el-aside width="180px">
       <dl>
         <dt>账号信息</dt>
         <dd>

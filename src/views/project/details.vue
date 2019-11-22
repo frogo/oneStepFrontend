@@ -230,7 +230,7 @@
               </h3>
               <ul>
                 <li class="title">
-                  <span><i>0</i>姓名</span><span>完成课程</span><span>学分</span>
+                  <span><i style="color:#fafafa">0</i>姓名</span><span>完成课程</span><span>学分</span>
                 </li>
                 <li v-for="(item, index) in creditRanking" class="item">
                   <span><i :class="`color_${index+1}`">{{ index + 1 }}</i>{{ item.student_name }}</span><span>{{ item.lesson_count }}</span><span>{{ item.credit }}</span>
@@ -435,7 +435,7 @@ export default {
       getProjectDetails({ id: GetUrlParam('id') }).then(res => {
         this.projectDetails = res.data
       })
-      getCreditRanking({ camp_id: GetUrlParam('id'), offset: 1, limit: 5 }).then(res => {
+      getCreditRanking({ camp_id: GetUrlParam('id'), offset: 1, limit: 10 }).then(res => {
         this.creditRanking = res.data.list
       })
       getProjectChartData({ camp_id: GetUrlParam('id') }).then(res => {
@@ -587,12 +587,12 @@ export default {
           padding: 10px;
           i{ padding: 1px 5px;font-style: normal;
             margin-right: 5px;
-            color:#fff;
-           &.color_1{background: #ff4f2a}
-            &.color_2{background: #409EFF}
-            &.color_3{background:#15D1A4}
-            &.color_4{ background: #fff560}
-            &.color_5{background: #ff32ff}
+            color:#666;
+           &.color_1{background: #ff4f2a;color:#fff}
+            &.color_2{background: #409EFF;color:#fff}
+            &.color_3{background:#15D1A4;color:#fff}
+            /*&.color_4{ background: #fff560;color:#fff}*/
+            /*&.color_5{background: #ff32ff;color:#fff}*/
           }
           span{display: inline-block;width:33%;
           &:nth-child(2){text-align: center}

@@ -49,7 +49,7 @@
             </el-table-column>
             <el-table-column
               :formatter="optionFormat"
-              label="编号"
+              label="选项"
               width="60"
               prop="number"
               align="center"
@@ -75,9 +75,10 @@
             </el-table-column>
           </el-table>
           <p class="add_btn">
-            <el-button @click="addOption('single')" type="success" icon="el-icon-circle-plus-outline">
-              增加选项
-            </el-button>
+            <i @click="addOption('single')" class="el-icon-circle-plus-outline" />
+            <!--            <el-button @click="addOption('single')" type="success" icon="el-icon-circle-plus-outline">-->
+            <!--              增加选项-->
+            <!--            </el-button>-->
           </p>
         </div>
         <div v-show="createForm.questionType === 'multi'" class="multi">
@@ -96,7 +97,7 @@
             />
             <el-table-column
               :formatter="optionFormat"
-              label="编号"
+              label="选项"
               width="60"
               prop="number"
               align="center"
@@ -122,9 +123,10 @@
             </el-table-column>
           </el-table>
           <p class="add_btn">
-            <el-button @click="addOption('multi')" type="success" icon="el-icon-circle-plus-outline">
-              增加选项
-            </el-button>
+            <i @click="addOption('multi')" class="el-icon-circle-plus-outline" />
+            <!--            <el-button @click="addOption('multi')" type="success" icon="el-icon-circle-plus-outline">-->
+            <!--              增加选项-->
+            <!--            </el-button>-->
           </p>
         </div>
         <div v-show="createForm.questionType === 'trueFalse'" class="trueFalse">
@@ -146,7 +148,7 @@
             </el-table-column>
             <el-table-column
               :formatter="optionFormat"
-              label="编号"
+              label="选项"
               width="60"
               align="center"
               prop="number"
@@ -419,7 +421,10 @@ export default {
   padding: 20px;
   h2.pageName{font-size: 26px}
   .el-form.createForm{
-    .add_btn{ text-align: center; padding: 10px 0}
+    .add_btn{ padding: 10px 0;
+      i{
+       font-size: 25px;color:#666666;cursor: pointer; margin-left: 80px;
+    }}
     .head-line{margin: 25px 0;height:1px;position:relative;background:#f3f3f3;
       span.base-info{display: inline-block;position: absolute;top:-10px;background: #fff;padding-right: 1em;color:#EF6520}
     }
