@@ -180,7 +180,7 @@ export default {
       margin: 5px;
       box-shadow: 0px 2px 5px #888888;
       padding: 15px;
-      height:calc(100% - 100px)
+      height:calc(100% - 10px)
     }
     padding: 0;
     .filter-box{
