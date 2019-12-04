@@ -90,5 +90,6 @@ export default {
     EXPORT_COURSE_RANKING: CONTEXTPATH + '/importExport/ExportLessonRank',
     CAMP_STATISTICS_INFO: CONTEXTPATH + '/statistics/getCampStatisInfo',
     EXPORT_CAMP_STATISTICS_INFO: CONTEXTPATH + '/importExport/ExportCampStatisInfo'
-  }
+  },
+  ADS: CONTEXTPATH + '/ads/list'
 }

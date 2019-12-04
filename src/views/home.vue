@@ -2,22 +2,13 @@
   <el-main class="page-home">
     <div class="banner-box clearFix">
       <el-carousel trigger="click" height="260px">
-        <el-carousel-item>
-          <a href=""><img src="@/assets/img/banner01.png"></a>
-        </el-carousel-item>
-        <el-carousel-item>
-          <a href=""><img src="@/assets/img/banner01.png"></a>
-        </el-carousel-item>
-        <el-carousel-item>
-          <a href=""><img src="@/assets/img/banner01.png"></a>
-        </el-carousel-item>
-        <el-carousel-item>
-          <a href=""><img src="@/assets/img/banner01.png"></a>
+        <el-carousel-item v-for="item in ads.slider">
+          <a :href="item.link" target="_blank"><img :src="item.image"></a>
         </el-carousel-item>
       </el-carousel>
       <div class="ad-box">
-        <a href=""><img src="@/assets/img/ad01.png"></a>
-        <a href=""><img src="@/assets/img/ad02.png"></a>
+        <a :href="ads.rightOne.link" target="_blank"><img :src="ads.rightOne.image"></a>
+        <a :href="ads.rightTwo.link" target="_blank"><img :src="ads.rightTwo.image"></a>
       </div>
     </div>
     <div class="todo-wrap">
@@ -170,7 +161,7 @@
 </template>
 <script>
 // import { mapState, mapMutations } from 'vuex'
-import { getStatus, getTodo } from '@/request/api'
+import { getStatus, getTodo, getAds } from '@/request/api'
 export default {
   data () {
     return {
@@ -184,6 +175,15 @@ export default {
         approval: 0,
         project: 0,
         lesson: 0
+      },
+      ads: {
+        slider: [
+          { image: '', link: '' },
+          { image: '', link: '' },
+          { image: '', link: '' }
+        ],
+        rightOne: { image: '', link: '' },
+        rightTwo: { image: '', link: '' }
       }
     }
   },
@@ -199,6 +199,28 @@ export default {
     })
     getTodo().then(res => {
       this.todo = res.data
+    }, error => {
+      error && this.$message.error(error)
+    })
+    getAds().then(res => {
+      if (res.data && res.data.list) {
+        for (let i of res.data.list) {
+          if (i.code === 'company_right_sidebar') {
+            this.ads.rightOne.image = i.ads_list[0].image
+            this.ads.rightOne.link = i.ads_list[0].link
+          } else if (i.code === 'index_recommend_camp') {
+            this.ads.rightTwo.image = i.ads_list[0].image
+            this.ads.rightTwo.link = i.ads_list[0].link
+          } else if (i.code === 'index_slider') {
+            this.ads.slider = i.ads_list.map((item) => {
+              return {
+                image: item.image,
+                link: item.link
+              }
+            })
+          }
+        }
+      }
     }, error => {
       error && this.$message.error(error)
     })

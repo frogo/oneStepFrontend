@@ -168,7 +168,7 @@ export default {
       this.getTrainTotal()
     },
     handleGotoDetail () {
-      this.$router.push({ path: '/trainStatistics/details', query: { start_time: this.date[0], end_time: this.date[1] } })
+      this.$router.push({ path: '/trainStatistics/details', query: { start_time: this.date ? this.date[0] : '', end_time: this.date ? this.date[1] : '' } })
     }
   }
 }

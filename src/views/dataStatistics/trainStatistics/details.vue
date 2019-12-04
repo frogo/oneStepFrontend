@@ -111,8 +111,8 @@ export default {
     },
     fetchRemoteData (pagination, currentPage, pageSize) {
       let param = {
-        start_time: this.date[0],
-        end_time: this.date[1],
+        start_time: this.date ? this.date[0] : '',
+        end_time: this.date ? this.date[1] : '',
         offset: currentPage || 1,
         limit: pageSize || 10
       }

@@ -210,7 +210,6 @@ export default {
     getCourseList () {
       let param = this.getCourseListParam
       // eslint-disable-next-line no-console
-      console.log(param)
       getCourseList(param).then(res => {
         this.courseList = res.data.list
         this.total = res.data.total
