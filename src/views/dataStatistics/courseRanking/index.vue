@@ -19,16 +19,11 @@
           <li v-for="(item, index) in listData" :class="{'gray':(index+1)%2 === 0}">
             <h4>{{ item.name }}</h4>
             <div class="detail">
-              <div>
-                <span>讲师：{{ item.teacher_info.name }}</span>
-                <span>学习数：{{ item.learn_num }}</span>
-                <span>完成数：{{ item.finish_num }}</span>
-                <span><el-icon class="el-icon-thumb" />{{ item.like_num }}</span>
-              </div>
-
-              <div>
-                <span> 创建时间: {{ item.add_time }}</span>
-              </div>
+              <span>讲师：{{ item.teacher_info.name }}</span>
+              <span>学习数：{{ item.learn_num }}</span>
+              <span>完成数：{{ item.finish_num }}</span>
+              <span>点赞数：{{ item.like_num }}</span>
+              <span>创建时间: {{ item.add_time }}</span>
             </div>
           </li>
         </ul>
@@ -179,7 +174,7 @@ export default {
       span{i{color:#999;font-size: 12px;vertical-align: middle;font-style: normal}}
     }
     .block-list {
-      height: calc(100% - 231px)!important;
+      height: calc(100% - 141px)!important;
       ul.block{
         li{
           padding: 15px;
@@ -188,9 +183,9 @@ export default {
           &:hover{ background: #FFF0E9;border-bottom: 1px solid #EF6520;border-top: 1px solid #EF6520}
           h4{ font-size: 18px;color:#666; margin-bottom: 20px;font-weight: bold}
           .detail{
-            display: flex;
-            justify-content: space-between;
-            span{font-size: 14px;color:#999}
+/*            display: flex;
+            justify-content: space-between;*/
+            span{font-size: 14px;color:#999;width:19%;display: inline-block}
           }
         }
       }

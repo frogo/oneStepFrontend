@@ -115,7 +115,14 @@ export default {
   },
   methods: {
     goToEdit () {
-      this.$router.push({ path: '/course/edit', query: { id: GetUrlParam('id') } })
+      let routeData = this.$router.resolve({
+        path: '/course/edit',
+        query: {
+          id: GetUrlParam('id')
+        }
+      })
+      window.open(routeData.href, '_blank')
+      // this.$router.push({ path: '/course/edit', query: { id: GetUrlParam('id') } })
     }
   }
 }

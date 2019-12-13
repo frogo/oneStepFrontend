@@ -19,6 +19,8 @@ export const changePassword = p => post(CONFIG.USER.CHANGE_PASSWORD, p)
 // 发送手机验证码
 export const sendPhone = p => post(CONFIG.USER.SEND_PHONE, p)
 // 首页
+// 广告
+export const getAds = p => get(CONFIG.ADS, p)
 // 我的待办
 export const getTodo = p => get(CONFIG.TODO, p)
 // 状态预览

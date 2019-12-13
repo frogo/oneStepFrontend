@@ -403,7 +403,14 @@ export default {
       })
     },
     handleEdit (id) {
-      this.$router.push({ path: '/project/edit', query: { id: id } })
+      let routeData = this.$router.resolve({
+        path: '/project/edit',
+        query: {
+          id: id
+        }
+      })
+      window.open(routeData.href, '_blank')
+      // this.$router.push({ path: '/project/edit', query: { id: id } })
     },
     handleOffline (item) {
       let isOffline = 0

@@ -412,7 +412,7 @@ a{text-decoration: none}
 
     .course-intro{
       padding-left: 5px;
-      .inner{box-shadow: 0px 0px 5px #888888; padding: 10px;min-height: 560px}
+      .inner{box-shadow: 0px 0px 5px #888888; padding: 10px;min-height: 560px;margin-bottom: 20px}
       width:980px;
     }
     .lecturer-intro{
@@ -445,7 +445,8 @@ a{text-decoration: none}
       box-shadow: 0px 2px 5px #888888;
       padding: 0 10px;
       width:170px;
-      height:calc(100% - 100px);
+      /*height:calc(100% - 100px);*/
+      height:calc(100% - 10px);
       margin: 5px auto 0;
       dt{ font-size: 16px;line-height: 2em;
       &:not(:first-child){margin-top: 15px}
@@ -469,7 +470,7 @@ a{text-decoration: none}
       display: flex;justify-content: space-between;
       .el-input{width:300px;}
     }
-    .list{ height: calc(100% - 219px);
+    .list{ height: calc(100% - 130px);
       box-shadow: 0px 2px 5px #888888;
       width: 99%;
       margin: 0 auto;

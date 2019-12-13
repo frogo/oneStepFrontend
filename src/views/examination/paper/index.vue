@@ -122,7 +122,14 @@ export default {
       this.fetchRemoteData()
     },
     handleEdit (index, row) { // 编辑
-      this.$router.push({ path: '/paper/edit', query: { id: row.id } })
+      let routeData = this.$router.resolve({
+        path: '/paper/edit',
+        query: {
+          id: row.id
+        }
+      })
+      window.open(routeData.href, '_blank')
+      // this.$router.push({ path: '/paper/edit', query: { id: row.id } })
     },
     handleDelete (index, row) { // 删除
       this.$confirm('删除该试卷则所有参加该试卷考试的学员记录将被清除?', '提示', {

@@ -4,10 +4,20 @@
     <el-main>
       <div class="inner">
         <h2>培训统计详情</h2>
-        <div style="margin: 20px 0; text-align: right">
-          <el-button @click="handleExport" type="primary">
-            导出报表
-          </el-button>
+        <div class="filter-box">
+          <span>
+            <el-date-picker
+              v-model="date"
+              type="daterange"
+              range-separator="~"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              value-format="yyyy-MM-dd"
+            />
+
+            <el-button @click="handleSearch" type="primary"> 搜索</el-button>
+          </span>
+          <span><el-button @click="handleExport" type="primary">导出报表</el-button></span>
         </div>
         <div class="exTable">
           <ex-table ref="exTable" :data="tableData" :reload-method="handleReload" show-pagination stripe>
@@ -76,7 +86,8 @@ export default {
   },
   data () {
     return {
-      tableData: []
+      tableData: [],
+      date: []
     }
   },
   watch: {
@@ -84,6 +95,14 @@ export default {
   created () {
   },
   mounted: function () {
+    this.date = ['', '']
+    // let startTime = GetUrlParam('start_time')
+    // let endTime = GetUrlParam('end_time')
+    // if (startTime && endTime) {
+    //   console.log(startTime, endTime)
+    // }
+    GetUrlParam('start_time') && (this.date[0] = GetUrlParam('start_time'))
+    GetUrlParam('end_time') && (this.date[1] = GetUrlParam('end_time'))
     this.fetchRemoteData()
   },
   methods: {
@@ -92,8 +111,8 @@ export default {
     },
     fetchRemoteData (pagination, currentPage, pageSize) {
       let param = {
-        start_time: GetUrlParam('start_time'),
-        end_time: GetUrlParam('end_time'),
+        start_time: this.date ? this.date[0] : '',
+        end_time: this.date ? this.date[1] : '',
         offset: currentPage || 1,
         limit: pageSize || 10
       }
@@ -102,6 +121,9 @@ export default {
         this.tableData = res.data.list
         paginationObj.total = res.data.total
       })
+    },
+    handleSearch () {
+      this.fetchRemoteData()
     },
     handleExport () {
       exporCampStatisInfo({ start_time: GetUrlParam('start_time'), end_time: GetUrlParam('end_time') }).then(res => {
@@ -114,11 +136,18 @@ export default {
 
 <style lang="scss">
   .page-trainStatisticsDetails{
+    .filter-box{
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      padding: 15px 5px;
+      span{i{color:#999;font-size: 12px;vertical-align: middle;font-style: normal}}
+    }
     .inner{
       margin: 5px;
       box-shadow: 0px 2px 5px #888888;
       padding: 15px;
-      height:calc(100% - 100px)
+      height:calc(100% - 10px)
     }
     padding: 0;
     .exTable{
