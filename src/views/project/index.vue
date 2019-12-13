@@ -48,8 +48,8 @@
                     <p>结束时间： {{ item.end_time }}</p>
                   </div>
                   <div class="percent">
-                    <span class="person-num"><i class=" el-icon-user" /> {{ item.personnel && item.personnel.length }}</span>
-                    <el-progress :percentage="item.ratio" :stroke-width="3" />
+                    <span class="person-num"><i class=" el-icon-user" /> {{ item.join_num }}</span>
+                    <el-progress :percentage="item.join_num === 0 ? 0 : Math.round(item.complete_num / item.join_num * 100)" :stroke-width="3" />
                   </div>
                   <div class="mask">
                     <div class="operate">
@@ -97,14 +97,14 @@
               <span @click="handlePending(item)" v-if="item.is_review" class="pending">待审批</span>
               <el-row :gutter="20">
                 <el-col :span="2">
-                  <el-progress :percentage="item.ratio" :width="52" :stroke-width="4" type="circle" />
+                  <el-progress :percentage="item.join_num === 0 ? 0 : Math.round(item.complete_num / item.join_num * 100)" :width="52" :stroke-width="4" type="circle" />
                 </el-col>
                 <el-col :span="16">
                   <div class="headline">
                     <span @click="gotoDetails(item)" class="status">[{{ statusMap.txt[item.status] }}]</span>{{ item.name }}
                   </div>
                   <div class="pieces">
-                    <span>发布时间： {{ item.start_time }}</span>  <span class="end-date">结束时间： {{ item.end_time }}</span>  <span class="person-num"><i class=" el-icon-user" /> 158</span>
+                    <span>发布时间： {{ item.start_time }}</span>  <span class="end-date">结束时间： {{ item.end_time }}</span>  <span class="person-num"><i class=" el-icon-user" /> {{ item.join_num }}</span>
                   </div>
                 </el-col>
                 <el-col :span="6">

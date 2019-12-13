@@ -587,25 +587,28 @@ export default {
       }
     },
     handleQuestionClickAll (selection) { //  点击checkbox全选事件
+      let imageQuestionSelected = []
       if (selection.length > 0) { // 全选
         if (this.manual.questionSelected.length > 0) { // 已选择课程长度大于0
           for (let i = 0; i < selection.length; i++) {
             for (let j = 0; j < this.manual.questionSelected.length; j++) {
               if (selection[i].id === this.manual.questionSelected[j].id) {
-                this.manual.questionSelected.splice(j, 1)
+                imageQuestionSelected.push(this.manual.questionSelected[j])
               }
             }
           }
         }
+        this.manual.questionSelected = this.manual.questionSelected.filter(item => !imageQuestionSelected.some(ele => ele.id === item.id))
         this.manual.questionSelected = this.manual.questionSelected.concat(selection)
       } else {
-        for (let i = 0; i < this.manual.questionSelected.length; i++) { // 取消全选
-          for (let j = 0; j < this.manual.questionTableData.length; j++) {
-            if (this.manual.questionSelected[i].id === this.manual.questionTableData[j].id) {
-              this.manual.questionSelected.splice(i, 1)
+        for (let l = 0; l < this.manual.questionSelected.length; l++) { // 取消全选
+          for (let m = 0; m < this.manual.questionTableData.length; m++) {
+            if (this.manual.questionSelected[l].id === this.manual.questionTableData[m].id) {
+              imageQuestionSelected.push(this.manual.questionSelected[l])
             }
           }
         }
+        this.manual.questionSelected = this.manual.questionSelected.filter(item => !imageQuestionSelected.some(ele => ele.id === item.id))
       }
 
       // console.log(selection)
