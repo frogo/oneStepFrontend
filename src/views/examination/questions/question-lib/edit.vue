@@ -69,7 +69,7 @@
             align="center"
           />
           <el-table-column
-            prop="creator"
+            prop="username"
             label="创建人"
             width="100"
             align="center"
@@ -114,7 +114,7 @@
         <el-button slot="trigger" size="small" type="primary">
           选取文件
         </el-button>
-        <a href="/res/importTemp/question.xlsx" rel="external nofollow" download="模板"><el-button size="small" type="success">下载模板</el-button></a>
+        <a href="/v1/res/importTemp/question.xlsx" rel="external nofollow" download="模板"><el-button size="small" type="success">下载模板</el-button></a>
         <!-- <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button> -->
         <div slot="tip" class="el-upload__tip">
           只能上传excel文件，且不超过5MB

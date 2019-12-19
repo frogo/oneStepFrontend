@@ -328,7 +328,28 @@ export default {
       this.getProjectList()
     },
     handleDownloadQrCode () {
-      this.downloadImage(this.$refs.qrcode, '二维码')
+      this.downloadImage1(this.$refs.qrcode, '二维码')
+    },
+    downloadImage1 (el, name) {
+      // ES6 语法
+      // let src = 'https://fenmul.github.io/Sin.gtihub.io/images/qrcode.bmp'
+      let canvas = document.createElement('canvas')
+      let img = document.createElement('img')
+      img.onload = function (e) {
+        canvas.width = img.width
+        canvas.height = img.height
+        let context = canvas.getContext('2d')
+        context.drawImage(img, 0, 0, img.width, img.height)
+        canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height)
+        canvas.toBlob((blob) => {
+          let link = document.createElement('a')
+          link.href = window.URL.createObjectURL(blob)
+          link.download = name
+          link.click()
+        }, '')
+      }
+      img.setAttribute('crossOrigin', 'Anonymous')
+      img.src = el.src
     },
     downloadImage (selector, name) {
       let image = new Image()
