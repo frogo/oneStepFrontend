@@ -126,7 +126,7 @@ export default {
       this.fetchRemoteData()
     },
     handleExport () {
-      exporCampStatisInfo({ start_time: GetUrlParam('start_time'), end_time: GetUrlParam('end_time') }).then(res => {
+      exporCampStatisInfo({ start_time: this.date ? this.date[0] : '', end_time: this.date ? this.date[1] : '' }).then(res => {
         window.location.href = res.data.url
       })
     }
