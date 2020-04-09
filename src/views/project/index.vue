@@ -328,28 +328,29 @@ export default {
       this.getProjectList()
     },
     handleDownloadQrCode () {
-      this.downloadImage1(this.$refs.qrcode, '二维码')
+      this.downloadImage1(this.$refs.qrcode.src, '二维码')
     },
-    downloadImage1 (el, name) {
-      // ES6 语法
-      // let src = 'https://fenmul.github.io/Sin.gtihub.io/images/qrcode.bmp'
-      let canvas = document.createElement('canvas')
-      let img = document.createElement('img')
-      img.onload = function (e) {
-        canvas.width = img.width
+    async downloadImage1 (url, name) {
+      var canvas = document.createElement('canvas')
+      var ctx = canvas.getContext('2d')
+      var img = new Image()
+      img.crossOrigin = 'Anonymous'
+      img.onload = function () {
         canvas.height = img.height
-        let context = canvas.getContext('2d')
-        context.drawImage(img, 0, 0, img.width, img.height)
-        canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height)
-        canvas.toBlob((blob) => {
-          let link = document.createElement('a')
-          link.href = window.URL.createObjectURL(blob)
-          link.download = name
-          link.click()
-        }, '')
+        canvas.width = img.width
+        ctx.drawImage(img, 0, 0)
+        var dataURL = canvas.toDataURL('image/png')
+        let a = document.createElement('a')
+        a.href = dataURL
+        a.download = name
+        document.body.appendChild(a)
+        a.click()
+        setTimeout(() => {
+          document.body.removeChild(a)
+          canvas = null
+        }, 1000)
       }
-      img.setAttribute('crossOrigin', 'Anonymous')
-      img.src = el.src
+      img.src = url
     },
     downloadImage (selector, name) {
       let image = new Image()

@@ -28,7 +28,7 @@
         <el-input v-model="createForm.target" :rows="4" type="textarea" style="width:583px" />
       </el-form-item>
       <el-form-item label="标签" prop="">
-        <el-button @click="dialogTagsEditorVisible = true; editMode = false" type="info" icon="el-icon-plus" plain size="small">
+        <el-button @click="dialogTagsEditorVisible = true; " type="info" icon="el-icon-plus" plain size="small">
           选择标签
         </el-button>
         <!--        <el-button @click="dialogTagsEditorVisible = true; editMode = true" type="primary" plain size="small">-->
