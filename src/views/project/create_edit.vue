@@ -752,7 +752,7 @@ export default {
     }
 
     .chooseStudents{
-      width:800px;
+      width:900px;
       .el-transfer{
         margin: 0 auto;
         .el-transfer-panel{width:320px}

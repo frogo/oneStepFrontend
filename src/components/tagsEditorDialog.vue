@@ -109,9 +109,19 @@ export default {
           item.selected = []
           let _this = this
           item.child.map(tag => {
-            if (_this.tagsSelectedFromParent && _this.tagsSelectedFromParent.length > 0 && _this.tagsSelectedFromParent.indexOf(tag.id) > -1) {
-              tag.active = true
-              this.tagsSelected.push(tag)
+            let isContain = false
+            if (_this.tagsSelectedFromParent && _this.tagsSelectedFromParent.length > 0) {
+              isContain = _this.tagsSelectedFromParent.some(item => {
+                if (item.id === tag.id) {
+                  return true
+                }
+              })
+              if (isContain) {
+                tag.active = true
+                this.tagsSelected.push(tag)
+              } else {
+                tag.active = false
+              }
             } else {
               tag.active = false
             }

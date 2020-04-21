@@ -328,7 +328,9 @@ export default {
   },
   computed: {
     addCourseParam: function () {
-      let tags = this.createForm.tags
+      let tags = this.createForm.tags.map(_ => {
+        return _.id
+      })
       return {
         name: this.createForm.courseName,
         cover: (this.createForm.activeTabName === 'default') ? this.createForm.radioCover : this.createForm.coverImageUrl,
@@ -463,9 +465,10 @@ export default {
       })
     },
     getSelectedTags (tags) {
-      this.createForm.tags = tags.map(_ => {
-        return _.id
-      })
+      this.createForm.tags = tags
+      // this.createForm.tags = tags.map(_ => {
+      //   return _.id
+      // })
     },
     // handleTabClick (tab, event) {
     //   // console.log(tab, event)

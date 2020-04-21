@@ -270,9 +270,10 @@ export default {
     handleTagsEdit (item) { // 课程标签编辑
       this.currentCourseTagsEditId = item.id // 当前编辑标签的课程ID
       getCourseTags({ lesson_id: item.id }).then(res => { // 获取课程标签
-        this.currentEditCourseTags = res.data.map(_ => {
-          return _.id
-        })
+        this.currentEditCourseTags = res.data
+        // this.currentEditCourseTags = res.data.map(_ => {
+        //   return _.id
+        // })
         this.dialogTagsEditorVisible = true
       })
     },
